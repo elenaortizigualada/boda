@@ -30,11 +30,11 @@ export function HeroSection() {
       {/* Contrast layers to preserve readability on any photo */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-b from-black/72 via-black/45 to-black/80"
+        className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/28 to-black/65"
       />
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(0,0,0,0.42)_100%)]"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_35%,rgba(0,0,0,0.28)_100%)]"
       />
 
       {/* Minimal geometric accent */}
@@ -53,60 +53,50 @@ export function HeroSection() {
         />
       </div>
 
-      <div className="container mx-auto container-mobile text-center relative z-10">
-        <div className="mx-auto max-w-3xl rounded-xl border border-white/15 bg-black/26 backdrop-blur-[2px] px-4 sm:px-8 py-7 sm:py-12">
+      <div className="container mx-auto container-mobile relative z-10 flex flex-col justify-between min-h-[100svh] sm:min-h-[100dvh] pt-28 sm:pt-32 pb-12 sm:pb-16">
+          {/* Etiqueta superior */}
           <motion.p
             initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: reduceMotion ? 0.2 : MOTION_CONFIG.duration.section, delay: reduceMotion ? 0 : 0.22, ease: MOTION_CONFIG.easing.smooth }}
-            className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.34em] text-white/85 mb-5 sm:mb-12"
+            className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.28em] text-white/70"
           >
-            Nos casamos
+            10 de abril de 2027
           </motion.p>
 
+          {/* Nombres */}
           <motion.h1
-            initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reduceMotion ? 0.2 : MOTION_CONFIG.duration.hero, delay: reduceMotion ? 0 : 0.38, ease: MOTION_CONFIG.easing.premium }}
-            className="font-serif text-[clamp(2.7rem,14vw,8rem)] font-light tracking-[0.015em] leading-[0.9] mb-10 sm:mb-16 text-white drop-shadow-[0_10px_24px_rgba(0,0,0,0.45)]"
+            className="font-serif text-[clamp(3.8rem,19vw,12rem)] font-light tracking-[0.01em] leading-[0.86] text-white"
           >
-            Elena & Fran
+            Elena<br />&amp; Fran
           </motion.h1>
 
-          <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduceMotion ? 0.2 : MOTION_CONFIG.duration.section, delay: reduceMotion ? 0 : 0.62, ease: MOTION_CONFIG.easing.smooth }}
-            className="space-y-4"
-          >
-            <p className="font-serif text-[clamp(1.5rem,7vw,2.6rem)] font-light tracking-[0.06em] text-white drop-shadow-[0_6px_16px_rgba(0,0,0,0.45)]">
-              10.04.2027
-            </p>
-            <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.18em] sm:tracking-[0.24em] text-white/85">
-              Jardines del Negralejo, Madrid
-            </p>
-          </motion.div>
-
+          {/* Fila inferior */}
           <motion.div
             initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: reduceMotion ? 0.2 : MOTION_CONFIG.duration.section, delay: reduceMotion ? 0 : 0.92, ease: MOTION_CONFIG.easing.smooth }}
-            className="mt-10 sm:mt-20"
+            transition={{ duration: reduceMotion ? 0.2 : MOTION_CONFIG.duration.section, delay: reduceMotion ? 0 : 0.72, ease: MOTION_CONFIG.easing.smooth }}
+            className="flex items-end justify-between gap-8"
           >
+            <p className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-white/70">
+              Jardines del Negralejo · Madrid
+            </p>
             <a
               href="#story"
-              className="tap-target group inline-flex flex-col items-center justify-center gap-2 font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.26em] text-white/85 hover:text-white transition-colors duration-500 touch-manipulation"
+              className="tap-target group inline-flex flex-col items-center justify-center gap-2 touch-manipulation"
+              aria-label="Ir al contenido"
             >
-              <span>Desliza</span>
               <motion.span
                 animate={reduceMotion ? { opacity: 1 } : { y: [0, 6, 0] }}
                 transition={reduceMotion ? { duration: 0 } : { duration: 2.8, repeat: Infinity, ease: MOTION_CONFIG.easing.subtle }}
-                className="w-px h-7 bg-current"
+                className="w-px h-8 bg-white/60 group-hover:bg-white transition-colors duration-500"
               />
             </a>
-          </motion.div>
-        </div>
-      </div>
-    </section>
+              </motion.div>
+          </div>
+            </section>
   )
 }

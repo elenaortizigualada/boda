@@ -53,7 +53,7 @@ export function RSVPSection() {
   }, [guests])
 
   return (
-    <section id="rsvp" className="scroll-mt-24 sm:scroll-mt-28 section-mobile bg-foreground text-background">
+    <section id="rsvp" className="scroll-mt-24 sm:scroll-mt-28 section-mobile bg-foreground text-background invitation-texture">
       <div className="container mx-auto container-mobile">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-22">
           {/* Left column - Header */}
@@ -71,11 +71,11 @@ export function RSVPSection() {
             </h2>
             <p className="font-sans text-[15px] sm:text-base text-background/82 leading-relaxed mb-8 max-w-[58ch]">
               Queremos saber si podrás celebrar con nosotros.
-              Por favor, responde antes del 1 de diciembre de 2026.
+              {` ${MESSAGES.rsvp.deadline}`}
             </p>
             <div className="hidden lg:block">
               <p className="font-serif text-2xl sm:text-3xl italic text-background/65">
-                Elena & Fran
+                {WEDDING_CONFIG.couple.weddingName}
               </p>
             </div>
           </motion.div>

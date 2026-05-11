@@ -1,9 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
-import { WEDDING_CONFIG } from "@/lib/constants"
-import { MOTION_CONFIG } from "@/lib/constants"
+import { WEDDING_CONFIG, MOTION_CONFIG } from "@/lib/constants"
 
 const navItems = [
   { label: "Nuestra historia", href: "#story" },
@@ -17,6 +16,8 @@ const navItems = [
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const mobileDialogRef = useRef<HTMLDivElement | null>(null)
+  const lastFocusedElementRef = useRef<HTMLElement | null>(null)
   const reduceMotion = useReducedMotion()
   const brideInitial = WEDDING_CONFIG.couple.bride.charAt(0).toUpperCase()
   const groomInitial = WEDDING_CONFIG.couple.groom.charAt(0).toUpperCase()
@@ -42,15 +43,55 @@ export function Navigation() {
   }, [isMobileMenuOpen])
 
   useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
+    if (!isMobileMenuOpen) return
+
+    lastFocusedElementRef.current = document.activeElement as HTMLElement | null
+
+    const dialog = mobileDialogRef.current
+    if (!dialog) return
+
+    const focusableSelector =
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+    const focusableElements = Array.from(
+      dialog.querySelectorAll<HTMLElement>(focusableSelector)
+    )
+
+    focusableElements[0]?.focus()
+
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setIsMobileMenuOpen(false)
+        return
+      }
+
+      if (event.key !== "Tab") return
+
+      const currentFocusable = Array.from(
+        dialog.querySelectorAll<HTMLElement>(focusableSelector)
+      )
+
+      if (currentFocusable.length === 0) return
+
+      const first = currentFocusable[0]
+      const last = currentFocusable[currentFocusable.length - 1]
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
       }
     }
 
-    window.addEventListener("keydown", handleEscape)
-    return () => window.removeEventListener("keydown", handleEscape)
-  }, [])
+    document.addEventListener("keydown", handleKeyDown)
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown)
+      lastFocusedElementRef.current?.focus()
+    }
+  }, [isMobileMenuOpen])
 
   return (
     <>
@@ -67,7 +108,7 @@ export function Navigation() {
         <nav className="container mx-auto container-mobile py-4 sm:py-6">
           <div className="flex items-center justify-between">
             <a
-              href="#"
+              href="#main-content"
               className="tap-target inline-flex items-center font-serif text-[1.65rem] sm:text-3xl font-light tracking-[0.08em] text-foreground touch-manipulation"
             >
               {initials}
@@ -117,6 +158,7 @@ export function Navigation() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
+            ref={mobileDialogRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

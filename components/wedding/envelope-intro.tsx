@@ -1,14 +1,17 @@
 "use client"
 
 import { useState, useCallback, useEffect, useRef } from "react"
-import { motion, AnimatePresence, useMotionValue, useTransform, useReducedMotion } from "framer-motion"
+import { motion, AnimatePresence, animate, useMotionValue, useTransform, useReducedMotion } from "framer-motion"
 import { useGuests, findGuestByCode, findGuestByName } from "@/hooks/use-guests"
+import { WEDDING_CONFIG } from "@/lib/constants"
 
 
 
 interface EnvelopeIntroProps {
   onComplete: () => void
 }
+
+type EnvelopePhase = "idle" | "unsealing" | "opening" | "revealing" | "exiting"
 
 export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
   const { guests } = useGuests()
@@ -87,18 +90,36 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
   }, [guests])
   const prefersReducedMotion = useReducedMotion()
   
-  const [phase, setPhase] = useState<"idle" | "unsealing" | "opening" | "revealing" | "exiting">("idle")
+  const [phase, setPhase] = useState<EnvelopePhase>("idle")
+  const phaseRef = useRef<EnvelopePhase>("idle")
   const hasCompletedRef = useRef(false)
   const transitionTimerRef = useRef<number | null>(null)
+  const cardProgress = useMotionValue(0)
   
   // For subtle parallax on mobile tilt
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
   const rotateX = useTransform(mouseY, [-200, 200], [2, -2])
   const rotateY = useTransform(mouseX, [-200, 200], [-2, 2])
+  const cardY = useTransform(
+    cardProgress,
+    [0,      0.12,    0.38,    0.65,    1],
+    ["-40%", "-41%",  "-52%",  "-74%",  "-90%"],
+  )
+  const cardOpacity = useTransform(cardProgress, [0, 0.14, 0.38, 0.65, 1], [0, 0, 0.55, 1, 0.92])
+  const cardScale   = useTransform(cardProgress, [0, 0.38, 1],             [1, 0.988, 0.964])
+  const cardRotateX = useTransform(cardProgress, [0, 0.42, 0.65, 1],       [0, -0.3, -2.6, -3.8])
+  const cardBoxShadow = useTransform(cardProgress, [0, 0.35, 0.65, 1], [
+    "0 2px 4px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.01)",
+    "0 8px 22px rgba(0,0,0,0.07), 0 3px 8px rgba(0,0,0,0.04)",
+    "0 18px 44px rgba(0,0,0,0.13), 0 7px 18px rgba(0,0,0,0.09)",
+    "0 24px 56px rgba(0,0,0,0.15), 0 9px 24px rgba(0,0,0,0.10)",
+  ])
   const cinematicEase = [0.22, 1, 0.36, 1] as const
   const cinematicEaseOut = [0.19, 1, 0.22, 1] as const
   const isIdleAnimated = phase === "idle" && !prefersReducedMotion
+  const flapOpen = phase === "opening" || phase === "revealing" || phase === "exiting"
+  const sealInitials = `${WEDDING_CONFIG.couple.bride.charAt(0)}&${WEDDING_CONFIG.couple.groom.charAt(0)}`
 
   const completeOnce = useCallback(() => {
     if (hasCompletedRef.current) return
@@ -107,9 +128,8 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
   }, [onComplete])
 
   const startExit = useCallback(() => {
-    if (phase === "exiting") return
-    setPhase("exiting")
-  }, [phase])
+    setPhase((current) => (current === "exiting" ? current : "exiting"))
+  }, [])
 
   const handleInteraction = useCallback(() => {
     if (phase !== "idle") return
@@ -119,8 +139,15 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
       return
     }
 
+    // Un único animate de 0→1 que corre sin interrupciones, independiente de las fases
+    animate(cardProgress, 1, {
+      type: "tween",
+      duration: 2.8,
+      ease: [0.12, 1, 0.28, 1],
+    })
+
     setPhase("unsealing")
-  }, [phase, prefersReducedMotion, startExit])
+  }, [phase, prefersReducedMotion, startExit, cardProgress])
 
   const handleSkip = useCallback(() => {
     if (phase === "exiting") return
@@ -128,25 +155,39 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
   }, [phase, startExit])
 
   useEffect(() => {
+    phaseRef.current = phase
+  }, [phase])
+
+  useEffect(() => {
+    const queuePhaseTransition = (expected: EnvelopePhase, next: EnvelopePhase, delay: number) => {
+      transitionTimerRef.current = window.setTimeout(() => {
+        setPhase((current) => (current === expected ? next : current))
+      }, delay)
+    }
+
     if (transitionTimerRef.current) {
       window.clearTimeout(transitionTimerRef.current)
       transitionTimerRef.current = null
     }
 
     if (phase === "unsealing") {
-      transitionTimerRef.current = window.setTimeout(() => setPhase("opening"), 420)
+      queuePhaseTransition("unsealing", "opening", 300)
     }
 
     if (phase === "opening") {
-      transitionTimerRef.current = window.setTimeout(() => setPhase("revealing"), 1250)
+      queuePhaseTransition("opening", "revealing", 1400)
     }
 
     if (phase === "revealing") {
-      transitionTimerRef.current = window.setTimeout(() => setPhase("exiting"), 1900)
+      queuePhaseTransition("revealing", "exiting", 600)
     }
 
     if (phase === "exiting") {
-      transitionTimerRef.current = window.setTimeout(() => completeOnce(), prefersReducedMotion ? 220 : 1100)
+      transitionTimerRef.current = window.setTimeout(() => {
+        if (phaseRef.current === "exiting") {
+          completeOnce()
+        }
+      }, prefersReducedMotion ? 220 : 1100)
     }
 
     return () => {
@@ -218,27 +259,11 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
           rotateY: phase === "idle" && !prefersReducedMotion ? rotateY : 0,
         }}
         animate={{
-          scale:
-            phase === "unsealing"
-              ? 0.992
-              : phase === "exiting"
-              ? 0.93
-              : isIdleAnimated
-              ? [1, 1.005, 1]
-              : 1,
-          y:
-            phase === "unsealing"
-              ? 2
-              : phase === "exiting"
-              ? -22
-              : isIdleAnimated
-              ? [0, -1, 0]
-              : 0,
+          scale: isIdleAnimated ? [1, 1.005, 1] : 1,
+          y: isIdleAnimated ? [0, -1, 0] : 0,
         }}
         transition={
-          phase === "exiting"
-            ? { duration: prefersReducedMotion ? 0.2 : 0.7, ease: cinematicEaseOut }
-            : isIdleAnimated
+          isIdleAnimated
             ? { duration: 3.8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }
             : { duration: prefersReducedMotion ? 0.2 : 0.35, ease: cinematicEase }
         }
@@ -322,6 +347,30 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
               }}
             />
 
+            {/* Dark interior liner — the inside of the envelope, revealed when the flap opens */}
+            <motion.div
+              className="absolute inset-x-0 top-0 pointer-events-none"
+              style={{
+                height: "52%",
+                zIndex: 23,
+                background: "linear-gradient(180deg, #1B1308 0%, #2D1F10 45%, #3A2B18 70%, transparent 100%)",
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: flapOpen ? 1 : 0 }}
+              transition={{ duration: 0.55, delay: flapOpen ? 0.08 : 0, ease: "easeOut" }}
+            />
+
+            {/* Fold crease — subtle shadow line at the hinge of the flap */}
+            <div
+              className="absolute inset-x-0 pointer-events-none"
+              style={{
+                top: "49.5%",
+                height: "2px",
+                zIndex: 24,
+                background: "linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.07) 18%, rgba(0,0,0,0.13) 50%, rgba(0,0,0,0.07) 82%, transparent 100%)",
+              }}
+            />
+
             <motion.div
               className="absolute left-1/2 -translate-x-1/2 top-[8.5%] sm:top-[10%] text-center pointer-events-none w-[84%] sm:w-[78%]"
               initial={false}
@@ -392,14 +441,20 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
             animate={{
               rotateX:
                 phase === "unsealing"
-                  ? -10
+                  ? -8
                   : phase === "opening" || phase === "revealing" || phase === "exiting"
-                  ? -176
+                  ? -190
                   : 0,
             }}
             transition={{ 
-              duration: prefersReducedMotion ? 0.35 : phase === "unsealing" ? 0.35 : 1.25,
-              ease: cinematicEaseOut,
+              duration: prefersReducedMotion 
+                ? 0.35 
+                : phase === "unsealing" 
+                ? 0.26 
+                : phase === "opening"
+                ? 1.28
+                : 0.3,
+              ease: phase === "opening" ? [0.14, 1, 0.32, 1] : cinematicEaseOut,
             }}
           >
             {/* Front of flap */}
@@ -409,6 +464,9 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
                 clipPath: "polygon(0 0, 50% 95%, 100% 0)",
                 background: "linear-gradient(180deg, #F7F3EC 0%, #F0E9DE 60%, #E8E0D4 100%)",
                 backfaceVisibility: "hidden",
+                boxShadow: phase === "opening" || phase === "revealing" || phase === "exiting"
+                  ? "0 -8px 24px rgba(0,0,0,0.12) inset"
+                  : "none",
               }}
             >
               {/* Paper texture on flap */}
@@ -444,9 +502,12 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
               className="absolute inset-0"
               style={{
                 clipPath: "polygon(0 0, 50% 95%, 100% 0)",
-                background: "linear-gradient(180deg, #E5DCD0 0%, #DDD4C6 100%)",
+                background: "linear-gradient(180deg, #DDD4C6 0%, #D5CCC0 100%)",
                 transform: "rotateX(180deg)",
                 backfaceVisibility: "hidden",
+                boxShadow: phase === "opening" || phase === "revealing" || phase === "exiting"
+                  ? "0 8px 20px rgba(0,0,0,0.08)"
+                  : "none",
               }}
             >
               {!prefersReducedMotion && (
@@ -465,12 +526,16 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
             {phase === "idle" && (
               <motion.div
                 className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-30"
-                exit={{ 
-                  scale: 0.8, 
+                initial={{ scale: 0.72, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{
+                  scale: 1.28,
                   opacity: 0,
-                  y: 10,
+                  rotate: -8,
+                  y: -8,
+                  transition: { duration: 0.26, ease: [0.4, 0, 0.88, 1] },
                 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
+                transition={{ duration: 0.52, ease: [0.34, 1.48, 0.64, 1] }}
               >
                 <div 
                   className="relative w-12 h-12 sm:w-14 sm:h-14"
@@ -505,7 +570,7 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
                       textShadow: "0 1px 2px rgba(0,0,0,0.2)",
                     }}
                   >
-                    E&F
+                    {sealInitials}
                   </span>
                 </div>
               </motion.div>
@@ -517,23 +582,16 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
         <motion.div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 w-[82vw] max-w-[300px] aspect-[1.5/1] sm:w-[74vw] sm:max-w-[330px] md:max-w-[370px] pointer-events-none"
           style={{
-            background: "linear-gradient(180deg, #FFFEFB 0%, #FAF8F4 100%)",
+            y: cardY,
+            opacity: cardOpacity,
+            scale: cardScale,
+            rotateX: cardRotateX,
+            boxShadow: cardBoxShadow,
+            background: "linear-gradient(165deg, #FFFEFB 0%, #FAF7F3 60%, #F5F1EB 100%)",
             transformStyle: "preserve-3d",
             zIndex: 32,
-            boxShadow: phase === "revealing" || phase === "exiting"
-              ? "0 12px 34px rgba(0,0,0,0.10), 0 3px 10px rgba(0,0,0,0.05)"
-              : "0 1px 3px rgba(0,0,0,0.02)",
           }}
-          initial={{ y: "-40%", opacity: 0 }}
-          animate={{
-            y: phase === "revealing" || phase === "exiting" ? "-66%" : "-40%",
-            opacity: phase === "revealing" || phase === "exiting" ? 1 : 0,
-            rotateX: phase === "revealing" ? -1.4 : 0,
-          }}
-          transition={{
-            duration: prefersReducedMotion ? 0.35 : 1.35,
-            ease: cinematicEaseOut,
-          }}
+          initial={false}
         >
           {!prefersReducedMotion && (
             <div
@@ -544,32 +602,42 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
             />
           )}
 
-          <div className="relative h-full flex flex-col items-center justify-center p-4 sm:p-6">
-            <div className="w-8 h-px bg-[#C9B896] mb-3 sm:mb-4" />
+          <div className="relative h-full flex flex-col items-center justify-center p-5 sm:p-7">
             <p
-              className="text-[9px] sm:text-[10px] uppercase tracking-[0.25em] sm:tracking-[0.35em] mb-2 sm:mb-3"
-              style={{ color: "#9A8B75" }}
+              className="font-sans text-[8px] sm:text-[9px] uppercase tracking-[0.3em] sm:tracking-[0.38em] mb-4 sm:mb-5"
+              style={{ color: "#B09F84" }}
             >
-              Celébralo con nosotros
+              os invitamos a nuestra boda
             </p>
             <h2
-              className="font-serif text-xl sm:text-2xl md:text-3xl text-center leading-tight"
+              className="font-serif text-[clamp(1.05rem,4.8vw,1.6rem)] text-center leading-[1.2] sm:leading-[1.18]"
               style={{ color: "#3D352A", fontWeight: 300, letterSpacing: "0.01em" }}
             >
-              Elena & Fran
+              {WEDDING_CONFIG.couple.weddingName}
             </h2>
+            <div className="w-10 sm:w-14 h-px bg-[#C9B896]/70 my-3 sm:my-4" />
             <p
-              className="font-serif text-xs sm:text-sm mt-2 sm:mt-3"
-              style={{ color: "#6B5D4D", fontWeight: 300 }}
+              className="font-serif text-[11px] sm:text-[13px] italic text-center leading-[1.55]"
+              style={{ color: "#6B5D4D", fontWeight: 300, letterSpacing: "0.02em" }}
             >
               10 de abril de 2027
             </p>
-            <div className="w-8 h-px bg-[#C9B896] mt-3 sm:mt-4" />
+            <p
+              className="font-sans text-[8px] sm:text-[9px] uppercase tracking-[0.18em] mt-1"
+              style={{ color: "#9A8B75" }}
+            >
+              {WEDDING_CONFIG.location.name}
+            </p>
           </div>
 
+          {/* Double border frame — premium invitation signature */}
           <div
-            className="absolute inset-2 sm:inset-3"
-            style={{ border: "1px solid rgba(201,184,150,0.25)" }}
+            className="absolute pointer-events-none"
+            style={{ inset: "8px", border: "1px solid rgba(201,184,150,0.22)" }}
+          />
+          <div
+            className="absolute pointer-events-none"
+            style={{ inset: "12px", border: "0.5px solid rgba(201,184,150,0.12)" }}
           />
         </motion.div>
 

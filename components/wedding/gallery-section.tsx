@@ -61,7 +61,9 @@ function GalleryImage({
   const isInView = useInView(ref, { once: true, margin: "-50px" })
 
   // Create varied heights for editorial feel
-  const heightClass = index % 3 === 1 ? "aspect-square" : "aspect-[4/5]"
+  // Proporciones curadas manualmente para un grid editorial no mecánico
+  const aspectRatios = ["aspect-[3/4]", "aspect-[4/5]", "aspect-square", "aspect-[4/5]", "aspect-square", "aspect-[3/4]"]
+  const heightClass = aspectRatios[index] ?? "aspect-[4/5]"
 
   return (
     <motion.div

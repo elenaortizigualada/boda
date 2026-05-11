@@ -2,13 +2,13 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
-import { MOTION_CONFIG } from "@/lib/constants"
+import { MOTION_CONFIG, WEDDING_CONFIG } from "@/lib/constants"
 
 const details = [
   {
     number: "01",
     title: "Fecha",
-    content: "Sábado, 10 de abril de 2027",
+    content: WEDDING_CONFIG.dateLong,
   },
   {
     number: "02",
@@ -18,7 +18,7 @@ const details = [
   {
     number: "03",
     title: "Lugar",
-    content: "Jardines del Negralejo, Madrid",
+    content: WEDDING_CONFIG.location.shortLabel,
   },
   {
     number: "04",

@@ -4,7 +4,7 @@ import { motion, useInView } from "framer-motion"
 import Image from "next/image"
 import { useRef } from "react"
 import { ArrowUpRight } from "lucide-react"
-import { MOTION_CONFIG } from "@/lib/constants"
+import { MOTION_CONFIG, WEDDING_CONFIG } from "@/lib/constants"
 
 export function VenueSection() {
   const ref = useRef(null)
@@ -43,17 +43,14 @@ export function VenueSection() {
               El lugar
             </p>
             <h2 className="font-serif text-[clamp(2rem,9vw,4.2rem)] font-light leading-[1.06] tracking-wide mb-5 text-balance">
-              Jardines del Negralejo
+              {WEDDING_CONFIG.location.name}
             </h2>
             <div className="space-y-6 mb-10">
               <p className="font-sans text-[15px] sm:text-base text-background/80 leading-relaxed max-w-[58ch]">
-                Jardines del Negralejo es un
-                magnífico lugar que ha sido testigo de siglos de
-                elegancia y belleza.
+                Jardines del Negralejo es una finca en las afueras de Madrid rodeada de jardines exuberantes, diseñada para celebraciones al aire libre con capacidad para grandes fiestas.
               </p>
               <p className="font-sans text-[15px] sm:text-base text-background/80 leading-relaxed max-w-[58ch]">
-                Con sus jardines exuberantes y vistas impresionantes, es el escenario perfecto para nuestra
-                celebración de amor.
+                Sus espacios exteriores, arbolado centenario y luz natural en cualquier estación lo convierten en el escenario que siempre tuvimos en mente.
               </p>
             </div>
 
@@ -63,14 +60,14 @@ export function VenueSection() {
                   Dirección
                 </p>
                 <p className="font-sans text-[15px] sm:text-base text-background/92 leading-relaxed">
-                  Carr. de Mejorada, km 2,5<br />
-                  28522 Rivas-Vaciamadrid, Madrid, España
+                  {WEDDING_CONFIG.location.addressLine1}<br />
+                  {WEDDING_CONFIG.location.addressLine2}
                 </p>
               </div>
             </div>
 
             <a
-              href="https://maps.app.goo.gl/aywsjxhHfkAXqHAz8"
+              href={WEDDING_CONFIG.location.mapUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="tap-target group inline-flex items-center gap-3 font-sans text-[11px] uppercase tracking-[0.16em] text-background hover:opacity-70 transition-opacity duration-300 ease-out touch-manipulation"

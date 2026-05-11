@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
+import type { KeyboardEvent as ReactKeyboardEvent } from "react"
 import { Plus } from "lucide-react"
 import { MOTION_CONFIG } from "@/lib/constants"
 
@@ -40,8 +41,35 @@ const faqs = [
 
 export function FAQSection() {
   const ref = useRef(null)
+  const questionButtonRefs = useRef<Array<HTMLButtonElement | null>>([])
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+
+  const handleQuestionKeyDown = (index: number, event: ReactKeyboardEvent<HTMLButtonElement>) => {
+    const total = faqs.length
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault()
+      const nextIndex = (index + 1) % total
+      questionButtonRefs.current[nextIndex]?.focus()
+    }
+
+    if (event.key === "ArrowUp") {
+      event.preventDefault()
+      const previousIndex = (index - 1 + total) % total
+      questionButtonRefs.current[previousIndex]?.focus()
+    }
+
+    if (event.key === "Home") {
+      event.preventDefault()
+      questionButtonRefs.current[0]?.focus()
+    }
+
+    if (event.key === "End") {
+      event.preventDefault()
+      questionButtonRefs.current[total - 1]?.focus()
+    }
+  }
 
   return (
     <section id="faq" className="scroll-mt-24 sm:scroll-mt-28 section-mobile bg-secondary">
@@ -64,11 +92,15 @@ export function FAQSection() {
         <div className="max-w-3xl mx-auto">
           {faqs.map((faq, index) => (
             <FAQItem
-              key={index}
+              key={faq.question}
               faq={faq}
               index={index}
               isOpen={openIndex === index}
               onToggle={() => setOpenIndex(openIndex === index ? null : index)}
+              onKeyDown={(event) => handleQuestionKeyDown(index, event)}
+              buttonRef={(element) => {
+                questionButtonRefs.current[index] = element
+              }}
             />
           ))}
         </div>
@@ -82,14 +114,20 @@ function FAQItem({
   index,
   isOpen,
   onToggle,
+  onKeyDown,
+  buttonRef,
 }: {
   faq: (typeof faqs)[0]
   index: number
   isOpen: boolean
   onToggle: () => void
+  onKeyDown: (event: ReactKeyboardEvent<HTMLButtonElement>) => void
+  buttonRef: (element: HTMLButtonElement | null) => void
 }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-50px" })
+  const contentId = `faq-answer-${index}`
+  const buttonId = `faq-question-${index}`
 
   return (
     <motion.div
@@ -99,18 +137,28 @@ function FAQItem({
       transition={{ duration: MOTION_CONFIG.duration.reveal, delay: index * MOTION_CONFIG.stagger.tight, ease: MOTION_CONFIG.easing.premium }}
       className="border-b border-border/80"
     >
-      <button
-        onClick={onToggle}
-        className="tap-target w-full py-7 sm:py-9 flex items-start justify-between gap-6 text-left touch-manipulation group"
-      >
-        <span className="font-serif text-[clamp(1.25rem,5vw,1.8rem)] leading-[1.15] font-light group-hover:translate-x-1 transition-transform duration-300 ease-out text-balance">
-          {faq.question}
-        </span>
-        <span className={`flex-shrink-0 mt-1 transition-transform duration-300 ease-out ${isOpen ? "rotate-45" : ""}`}>
-          <Plus className="w-5 h-5 text-muted-foreground" />
-        </span>
-      </button>
+      <h3 className="font-serif">
+        <button
+          onClick={onToggle}
+          id={buttonId}
+          aria-expanded={isOpen}
+          aria-controls={contentId}
+          onKeyDown={onKeyDown}
+          ref={buttonRef}
+          className="tap-target w-full py-7 sm:py-9 flex items-start justify-between gap-6 text-left touch-manipulation group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40 focus-visible:ring-offset-2 focus-visible:ring-offset-secondary"
+        >
+          <span className="text-[clamp(1.25rem,5vw,1.8rem)] leading-[1.15] md:leading-[1.24] lg:leading-[1.33] font-light group-hover:translate-x-1 transition-transform duration-300 ease-out text-balance">
+            {faq.question}
+          </span>
+          <span className={`flex-shrink-0 mt-1 transition-transform duration-300 ease-out ${isOpen ? "rotate-45" : ""}`}>
+            <Plus className="w-5 h-5 text-muted-foreground" />
+          </span>
+        </button>
+      </h3>
       <motion.div
+        id={contentId}
+        role="region"
+        aria-labelledby={buttonId}
         initial={false}
         animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
         transition={{ duration: MOTION_CONFIG.duration.reveal, ease: MOTION_CONFIG.easing.premium }}

@@ -27,6 +27,7 @@ export function MainWebsite({ isVisible }: MainWebsiteProps) {
       animate={{ opacity: 1 }}
       transition={{ duration: MOTION_CONFIG.duration.page, ease: MOTION_CONFIG.easing.premium }}
     >
+      <div aria-hidden="true" className="page-grain" />
       <main id="main-content" className="min-h-screen" tabIndex={-1}>
         <Navigation />
         <HeroSection />

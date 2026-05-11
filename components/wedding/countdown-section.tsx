@@ -31,9 +31,11 @@ function calculateTimeLeft(): TimeLeft {
 export function CountdownSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const [mounted, setMounted] = useState(false)
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 })
 
   useEffect(() => {
+    setMounted(true)
     setTimeLeft(calculateTimeLeft())
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft())
@@ -73,8 +75,8 @@ export function CountdownSection() {
                 transition={{ duration: MOTION_CONFIG.duration.reveal, delay: index * MOTION_CONFIG.stagger.tight, ease: MOTION_CONFIG.easing.premium }}
                 className="text-center"
               >
-                <span className="font-serif text-[clamp(2.1rem,8vw,5.2rem)] font-light text-foreground block mb-3 leading-[1.02]">
-                  {unit.value.toString().padStart(2, "0")}
+                <span className="font-serif text-[clamp(2.1rem,8vw,5.2rem)] font-light text-foreground block mb-3 leading-[1.02] md:leading-[1.04] lg:leading-[1.06]">
+                  {mounted ? unit.value.toString().padStart(2, "0") : "--"}
                 </span>
                 <span className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.16em] sm:tracking-[0.24em] text-muted-foreground">
                   {unit.label}

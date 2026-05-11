@@ -6,15 +6,20 @@ export const WEDDING_CONFIG = {
   // Información general
   date: "2027-04-10",
   time: "12:00",
+  dateLong: "Sábado, 10 de abril de 2027",
+  dateShort: "10.04.2027",
   dateTime: new Date("2027-04-10T12:00:00"),
   
   // Ubicación
   location: {
     name: "Jardines del Negralejo",
+    shortLabel: "Jardines del Negralejo, Madrid",
     city: "Madrid",
     country: "España",
-    lat: 40.4168,
-    lng: -3.7038,
+    addressLine1: "Carr. de Mejorada, km 2,5",
+    addressLine2: "28522 Rivas-Vaciamadrid, Madrid, España",
+    lat: 40.3089,
+    lng: -3.5276,
     mapUrl: "https://maps.app.goo.gl/aywsjxhHfkAXqHAz8",
   },
 

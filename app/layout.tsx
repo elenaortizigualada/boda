@@ -47,7 +47,6 @@ export default function RootLayout({
           Saltar al contenido principal
         </a>
         <div aria-hidden="true" className="page-atmosphere" />
-        <div aria-hidden="true" className="page-grain" />
         <div className="relative z-10">{children}</div>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
