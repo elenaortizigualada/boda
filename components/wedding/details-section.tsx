@@ -6,22 +6,18 @@ import { MOTION_CONFIG, WEDDING_CONFIG } from "@/lib/constants"
 
 const details = [
   {
-    number: "01",
     title: "Fecha",
     content: WEDDING_CONFIG.dateLong,
   },
   {
-    number: "02",
     title: "Hora",
     content: "La ceremonia comienza a las 12:00",
   },
   {
-    number: "03",
     title: "Lugar",
     content: WEDDING_CONFIG.location.shortLabel,
   },
   {
-    number: "04",
     title: "Código de vestimenta",
     content: "Etiqueta opcional",
   },
@@ -77,9 +73,6 @@ function DetailCard({
       transition={{ duration: MOTION_CONFIG.duration.reveal, delay: index * MOTION_CONFIG.stagger.tight, ease: MOTION_CONFIG.easing.premium }}
       className="bg-background p-7 sm:p-9 lg:p-11 text-center group hover:bg-secondary transition-colors duration-300 ease-out"
     >
-      <span className="font-sans text-[10px] tracking-[0.16em] text-muted-foreground/70 block mb-5">
-        {detail.number}
-      </span>
       <h3 className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.18em] sm:tracking-[0.24em] text-muted-foreground mb-3">
         {detail.title}
       </h3>

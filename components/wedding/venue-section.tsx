@@ -14,22 +14,24 @@ export function VenueSection() {
     <section id="venue" ref={ref} className="scroll-mt-24 sm:scroll-mt-28 section-mobile bg-foreground text-background">
       <div className="container mx-auto container-mobile">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-14 lg:gap-24 items-center">
-          {/* Venue Image Placeholder */}
+          {/* Venue Image */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -24 }}
             transition={{ duration: MOTION_CONFIG.duration.section, ease: MOTION_CONFIG.easing.premium }}
-            className="relative aspect-[3/4] overflow-hidden order-2 lg:order-1"
+            className="relative h-[340px] sm:h-[420px] lg:h-[500px] max-w-[560px] w-full mx-auto lg:mx-0 overflow-hidden rounded-xl order-2 lg:order-1 bg-secondary/20"
           >
             <Image
-              src="/images/venue.jpeg" 
+              src="/images/jardines.jpg" 
               alt="Jardines del Negralejo"
               fill
-              sizes="(max-width: 1024px) 92vw, 46vw"
-              className="absolute inset-0 w-full h-full object-cover"
+              sizes="(max-width: 640px) 92vw, (max-width: 1024px) 80vw, 40vw"
+              quality={100}
+              priority
+              className="absolute inset-0 w-full h-full object-cover object-center"
             />
             {/* Decorative frame */}
-            <div className="absolute inset-4 sm:inset-6 border border-background/20 pointer-events-none" />
+            <div className="absolute inset-0 rounded-xl border border-background/10 pointer-events-none" />
           </motion.div>
 
           {/* Venue Details */}
