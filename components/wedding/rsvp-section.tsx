@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
+import { useForm, ValidationError } from "@formspree/react"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
@@ -10,13 +11,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 export function RSVPSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [state, handleSubmit] = useForm("xzdokovr")
   const [attendance, setAttendance] = useState("yes")
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitted(true)
-  }
 
   return (
     <section id="rsvp" className="scroll-mt-24 sm:scroll-mt-28 py-20 sm:py-32 lg:py-40 bg-foreground text-background">
@@ -52,7 +48,7 @@ export function RSVPSection() {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {isSubmitted ? (
+            {state.succeeded ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -78,9 +74,11 @@ export function RSVPSection() {
                     </Label>
                     <Input
                       id="firstName"
+                      name="firstName"
                       required
                       className="bg-transparent border-background/20 focus:border-background text-background placeholder:text-background/30 h-14 text-base"
                     />
+                    <ValidationError field="firstName" errors={state.errors} />
                   </div>
                   <div className="space-y-3">
                     <Label
@@ -91,9 +89,11 @@ export function RSVPSection() {
                     </Label>
                     <Input
                       id="lastName"
+                      name="lastName"
                       required
                       className="bg-transparent border-background/20 focus:border-background text-background placeholder:text-background/30 h-14 text-base"
                     />
+                    <ValidationError field="lastName" errors={state.errors} />
                   </div>
                 </div>
 
@@ -106,10 +106,12 @@ export function RSVPSection() {
                   </Label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     required
                     className="bg-transparent border-background/20 focus:border-background text-background placeholder:text-background/30 h-14 text-base"
                   />
+                  <ValidationError field="email" errors={state.errors} />
                 </div>
 
                 <div className="space-y-4">
@@ -126,6 +128,7 @@ export function RSVPSection() {
                       <Label htmlFor="yes" className="font-serif text-lg cursor-pointer touch-manipulation text-background">
                         Sí, encantado
                       </Label>
+                      <input type="hidden" name="attendance" value={attendance} />
                     </div>
                     <div className="flex items-center gap-4">
                       <RadioGroupItem value="no" id="no" className="w-5 h-5 border-background/30 text-background" />
@@ -152,12 +155,14 @@ export function RSVPSection() {
                       </Label>
                       <Input
                         id="guests"
+                        name="guests"
                         type="number"
                         min="1"
                         max="5"
                         defaultValue="1"
                         className="bg-transparent border-background/20 focus:border-background text-background h-14 text-base w-full sm:max-w-32"
                       />
+                      <ValidationError field="guests" errors={state.errors} />
                     </div>
 
                     <div className="space-y-3">
@@ -169,9 +174,11 @@ export function RSVPSection() {
                       </Label>
                       <Textarea
                         id="dietary"
+                        name="dietary"
                         placeholder="Indícanos alergias o restricciones alimentarias..."
                         className="bg-transparent border-background/20 focus:border-background text-background placeholder:text-background/30 min-h-28 text-base"
                       />
+                      <ValidationError field="dietary" errors={state.errors} />
                     </div>
                   </motion.div>
                 )}
@@ -185,16 +192,23 @@ export function RSVPSection() {
                   </Label>
                   <Textarea
                     id="message"
+                    name="message"
                     placeholder="Comparte tus buenos deseos..."
                     className="bg-transparent border-background/20 focus:border-background text-background placeholder:text-background/30 min-h-32 text-base"
                   />
+                  <ValidationError field="message" errors={state.errors} />
                 </div>
+
+                {/* Formspree hidden fields */}
+                <input type="hidden" name="_subject" value="Nueva RSVP - Boda Elena & Fran" />
+                <input type="hidden" name="_replyto" value="tu-email@example.com" />
 
                 <button
                   type="submit"
-                  className="w-full py-5 border border-background text-background hover:bg-background hover:text-foreground transition-all duration-500 font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.12em] sm:tracking-[0.2em] touch-manipulation"
+                  disabled={state.isSubmitting}
+                  className="w-full py-5 border border-background text-background hover:bg-background hover:text-foreground transition-all duration-500 font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.12em] sm:tracking-[0.2em] touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Enviar respuesta
+                  {state.isSubmitting ? "Enviando..." : "Enviar respuesta"}
                 </button>
               </form>
             )}
