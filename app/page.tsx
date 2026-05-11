@@ -6,11 +6,15 @@ import { MainWebsite } from "@/components/wedding/main-website"
 
 function WeddingContent() {
   const [showMainSite, setShowMainSite] = useState(false)
+  const [showIntro, setShowIntro] = useState(true)
 
   return (
     <>
-      {!showMainSite && (
-        <EnvelopeIntro onComplete={() => setShowMainSite(true)} />
+      {showIntro && (
+        <EnvelopeIntro
+          onRevealMain={() => setShowMainSite(true)}
+          onComplete={() => setShowIntro(false)}
+        />
       )}
       <MainWebsite isVisible={showMainSite} />
     </>

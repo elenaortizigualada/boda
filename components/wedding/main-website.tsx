@@ -19,15 +19,25 @@ interface MainWebsiteProps {
 }
 
 export function MainWebsite({ isVisible }: MainWebsiteProps) {
-  if (!isVisible) return null
-
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: MOTION_CONFIG.duration.page, ease: MOTION_CONFIG.easing.premium }}
+      initial={false}
+      animate={
+        isVisible
+          ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px) saturate(1)" }
+          : { opacity: 0, y: 12, scale: 0.992, filter: "blur(6px) saturate(0.96)" }
+      }
+      transition={{ duration: isVisible ? 1.02 : 0.32, ease: MOTION_CONFIG.easing.premium }}
+      style={{ pointerEvents: isVisible ? "auto" : "none" }}
+      aria-hidden={!isVisible}
     >
-      <div aria-hidden="true" className="page-grain" />
+      <motion.div
+        aria-hidden="true"
+        className="page-grain"
+        initial={false}
+        animate={{ opacity: isVisible ? 1 : 0 }}
+        transition={{ duration: isVisible ? 1.1 : 0.2, ease: MOTION_CONFIG.easing.smooth }}
+      />
       <main id="main-content" className="min-h-screen" tabIndex={-1}>
         <Navigation />
         <HeroSection />

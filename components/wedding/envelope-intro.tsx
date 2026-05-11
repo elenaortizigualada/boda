@@ -1,19 +1,20 @@
 "use client"
 
 import { useState, useCallback, useEffect, useRef } from "react"
-import { motion, AnimatePresence, animate, useMotionValue, useTransform, useReducedMotion } from "framer-motion"
+import { motion, AnimatePresence, animate, useMotionValue, useMotionTemplate, useTransform, useReducedMotion } from "framer-motion"
 import { useGuests, findGuestByCode, findGuestByName } from "@/hooks/use-guests"
 import { WEDDING_CONFIG } from "@/lib/constants"
 
 
 
 interface EnvelopeIntroProps {
+  onRevealMain: () => void
   onComplete: () => void
 }
 
 type EnvelopePhase = "idle" | "unsealing" | "opening" | "revealing" | "exiting"
 
-export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
+export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) {
   const { guests } = useGuests()
   const [guestName, setGuestName] = useState("Nombre del invitado")
 
@@ -93,8 +94,10 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
   const [phase, setPhase] = useState<EnvelopePhase>("idle")
   const phaseRef = useRef<EnvelopePhase>("idle")
   const hasCompletedRef = useRef(false)
+  const hasRevealedMainRef = useRef(false)
   const transitionTimerRef = useRef<number | null>(null)
   const cardProgress = useMotionValue(0)
+  const exitProgress = useMotionValue(0)
   
   // For subtle parallax on mobile tilt
   const mouseX = useMotionValue(0)
@@ -103,29 +106,54 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
   const rotateY = useTransform(mouseX, [-200, 200], [-2, 2])
   const cardY = useTransform(
     cardProgress,
-    [0,      0.12,    0.38,    0.65,    1],
-    ["-40%", "-41%",  "-52%",  "-74%",  "-90%"],
+    [0,      0.18,    0.45,    0.72,    1],
+    ["-40%", "-40.5%", "-50%",  "-67%",  "-84%"],
   )
-  const cardOpacity = useTransform(cardProgress, [0, 0.14, 0.38, 0.65, 1], [0, 0, 0.55, 1, 0.92])
-  const cardScale   = useTransform(cardProgress, [0, 0.38, 1],             [1, 0.988, 0.964])
-  const cardRotateX = useTransform(cardProgress, [0, 0.42, 0.65, 1],       [0, -0.3, -2.6, -3.8])
+  const cardOpacity = useTransform(cardProgress, [0, 0.18, 0.45, 0.72, 1], [0, 0, 0.42, 0.9, 1])
+  const cardScale   = useTransform(cardProgress, [0, 0.45, 1],             [1, 0.994, 0.982])
+  const cardRotateX = useTransform(cardProgress, [0, 0.5, 0.72, 1],        [0, -0.2, -1.8, -2.6])
   const cardBoxShadow = useTransform(cardProgress, [0, 0.35, 0.65, 1], [
     "0 2px 4px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.01)",
     "0 8px 22px rgba(0,0,0,0.07), 0 3px 8px rgba(0,0,0,0.04)",
     "0 18px 44px rgba(0,0,0,0.13), 0 7px 18px rgba(0,0,0,0.09)",
     "0 24px 56px rgba(0,0,0,0.15), 0 9px 24px rgba(0,0,0,0.10)",
   ])
+  const frontOccluderOpacity = useTransform(cardProgress, [0, 0.7, 0.9, 1], [1, 1, 0.84, 0.25])
+  const frontOccluderY = useTransform(cardProgress, [0, 0.78, 1], [0, 0, -2])
+  const exitCardRotateY = useTransform(exitProgress, [0, 1], [0, 176])
+  const exitCardRotateZ = useTransform(exitProgress, [0, 1], [0, 180])
+  const exitCardY = useTransform(exitProgress, [0, 1], ["-84%", "-106%"])
+  const exitCardScale = useTransform(exitProgress, [0, 0.55, 1], [1, 1.008, 1.03])
+  const exitCardOpacity = useTransform(exitProgress, [0, 0.72, 1], [1, 0.97, 0.24])
+  const exitCardBlur = useTransform(exitProgress, [0, 0.65, 1], ["blur(0px)", "blur(0.35px)", "blur(1.8px)"])
+  const exitCardSaturate = useTransform(exitProgress, [0, 1], ["saturate(1)", "saturate(0.92)"])
+  const exitCardFilter = useMotionTemplate`${exitCardBlur} ${exitCardSaturate}`
+  const exitCardFrontSheenOpacity = useTransform(exitProgress, [0, 0.25, 0.6, 1], [0, 0.18, 0.3, 0])
+  const overlayOpacity = useTransform(exitProgress, [0, 0.35, 1], [1, 0.84, 0])
+  const overlayBlur = useTransform(exitProgress, [0, 1], ["blur(0px)", "blur(1.2px)"])
   const cinematicEase = [0.22, 1, 0.36, 1] as const
   const cinematicEaseOut = [0.19, 1, 0.22, 1] as const
   const isIdleAnimated = phase === "idle" && !prefersReducedMotion
   const flapOpen = phase === "opening" || phase === "revealing" || phase === "exiting"
   const sealInitials = `${WEDDING_CONFIG.couple.bride.charAt(0)}&${WEDDING_CONFIG.couple.groom.charAt(0)}`
+  const timeline = {
+    unsealingMs: 520,
+    openingMs: 1800,
+    revealingMs: 360,
+    exitMs: 1100,
+  } as const
 
   const completeOnce = useCallback(() => {
     if (hasCompletedRef.current) return
     hasCompletedRef.current = true
     onComplete()
   }, [onComplete])
+
+  const revealMainOnce = useCallback(() => {
+    if (hasRevealedMainRef.current) return
+    hasRevealedMainRef.current = true
+    onRevealMain()
+  }, [onRevealMain])
 
   const startExit = useCallback(() => {
     setPhase((current) => (current === "exiting" ? current : "exiting"))
@@ -140,14 +168,15 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
     }
 
     // Un único animate de 0→1 que corre sin interrupciones, independiente de las fases
+    exitProgress.set(0)
     animate(cardProgress, 1, {
       type: "tween",
-      duration: 2.8,
-      ease: [0.12, 1, 0.28, 1],
+      duration: (timeline.unsealingMs + timeline.openingMs + timeline.revealingMs) / 1000,
+      ease: [0.2, 0.95, 0.25, 1],
     })
 
     setPhase("unsealing")
-  }, [phase, prefersReducedMotion, startExit, cardProgress])
+  }, [phase, prefersReducedMotion, startExit, cardProgress, exitProgress, timeline.openingMs, timeline.revealingMs, timeline.unsealingMs])
 
   const handleSkip = useCallback(() => {
     if (phase === "exiting") return
@@ -171,23 +200,32 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
     }
 
     if (phase === "unsealing") {
-      queuePhaseTransition("unsealing", "opening", 300)
+      queuePhaseTransition("unsealing", "opening", timeline.unsealingMs)
     }
 
     if (phase === "opening") {
-      queuePhaseTransition("opening", "revealing", 1400)
+      queuePhaseTransition("opening", "revealing", timeline.openingMs)
     }
 
     if (phase === "revealing") {
-      queuePhaseTransition("revealing", "exiting", 600)
+      revealMainOnce()
+      queuePhaseTransition("revealing", "exiting", timeline.revealingMs)
     }
 
     if (phase === "exiting") {
+      if (!prefersReducedMotion) {
+        animate(exitProgress, 1, {
+          type: "tween",
+          duration: timeline.exitMs / 1000,
+          ease: [0.16, 1, 0.3, 1],
+        })
+      }
+
       transitionTimerRef.current = window.setTimeout(() => {
         if (phaseRef.current === "exiting") {
           completeOnce()
         }
-      }, prefersReducedMotion ? 220 : 1100)
+      }, prefersReducedMotion ? 220 : timeline.exitMs)
     }
 
     return () => {
@@ -196,7 +234,7 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
         transitionTimerRef.current = null
       }
     }
-  }, [phase, completeOnce, prefersReducedMotion])
+  }, [phase, completeOnce, exitProgress, prefersReducedMotion, revealMainOnce, timeline.exitMs, timeline.openingMs, timeline.revealingMs, timeline.unsealingMs])
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -229,11 +267,12 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center overflow-visible"
       initial={{ opacity: 1 }}
-      animate={{ opacity: phase === "exiting" ? 0 : 1 }}
-      transition={{ duration: prefersReducedMotion ? 0.2 : 0.75, ease: cinematicEaseOut }}
       style={{
+        opacity: phase === "exiting" ? overlayOpacity : 1,
+        filter: phase === "exiting" ? overlayBlur : "none",
         background: "#F6F3EE",
       }}
+      transition={{ duration: prefersReducedMotion ? 0.2 : 0.98, ease: [0.18, 1, 0.28, 1] }}
     >
       {/* Ambient light gradient - subtle top-down lighting */}
       <div 
@@ -291,9 +330,23 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
         />
 
         {/* Main envelope container */}
-        <div 
+        <motion.div 
           className="relative w-[90vw] max-w-[420px] aspect-[1.45/1] sm:w-[82vw] sm:max-w-[380px] md:w-[420px]"
           style={{ transformStyle: "preserve-3d" }}
+          animate={{
+            y:
+              phase === "unsealing"
+                ? 0.8
+                : phase === "opening"
+                ? [0.8, 0.3, 0]
+                : 0,
+            scaleX: phase === "unsealing" ? 0.999 : 1,
+            scaleY: phase === "unsealing" ? 0.998 : 1,
+          }}
+          transition={{
+            duration: phase === "opening" ? timeline.openingMs / 1000 : 0.28,
+            ease: [0.18, 1, 0.32, 1],
+          }}
         >
           {/* === ENVELOPE BODY === */}
           <div 
@@ -441,20 +494,22 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
             animate={{
               rotateX:
                 phase === "unsealing"
-                  ? -8
-                  : phase === "opening" || phase === "revealing" || phase === "exiting"
-                  ? -190
+                  ? -6
+                  : phase === "opening"
+                  ? -172
+                  : phase === "revealing" || phase === "exiting"
+                  ? -176
                   : 0,
             }}
             transition={{ 
               duration: prefersReducedMotion 
                 ? 0.35 
                 : phase === "unsealing" 
-                ? 0.26 
+                ? 0.4 
                 : phase === "opening"
-                ? 1.28
-                : 0.3,
-              ease: phase === "opening" ? [0.14, 1, 0.32, 1] : cinematicEaseOut,
+                ? timeline.openingMs / 1000
+                : 0.45,
+              ease: phase === "opening" ? [0.2, 0.95, 0.25, 1] : cinematicEaseOut,
             }}
           >
             {/* Front of flap */}
@@ -529,13 +584,12 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
                 initial={{ scale: 0.72, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{
-                  scale: 1.28,
+                  scale: 1.08,
                   opacity: 0,
-                  rotate: -8,
-                  y: -8,
-                  transition: { duration: 0.26, ease: [0.4, 0, 0.88, 1] },
+                  y: -2,
+                  transition: { duration: 0.34, ease: [0.2, 0.9, 0.22, 1] },
                 }}
-                transition={{ duration: 0.52, ease: [0.34, 1.48, 0.64, 1] }}
+                transition={{ duration: 0.58, ease: [0.22, 1.2, 0.5, 1] }}
               >
                 <div 
                   className="relative w-12 h-12 sm:w-14 sm:h-14"
@@ -576,69 +630,121 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
+
+        {/* Front occluder - keeps the card visually inside the envelope mouth while emerging */}
+        <motion.div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 pointer-events-none w-[90vw] max-w-[420px] aspect-[1.45/1] sm:w-[82vw] sm:max-w-[380px] md:w-[420px]"
+          style={{
+            y: frontOccluderY,
+            opacity: frontOccluderOpacity,
+            zIndex: 34,
+          }}
+        >
+          <div
+            className="absolute inset-x-0 bottom-0 h-[45%]"
+            style={{
+              clipPath: "polygon(0 100%, 50% 10%, 100% 100%)",
+              background: "linear-gradient(0deg, #F5EFE6 0%, #EEE6DB 100%)",
+              boxShadow: "inset 0 10px 20px rgba(0,0,0,0.04)",
+            }}
+          />
+        </motion.div>
 
         {/* === INVITATION CARD (overlay layer) === */}
         <motion.div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 w-[82vw] max-w-[300px] aspect-[1.5/1] sm:w-[74vw] sm:max-w-[330px] md:max-w-[370px] pointer-events-none"
           style={{
-            y: cardY,
-            opacity: cardOpacity,
-            scale: cardScale,
+            y: phase === "exiting" ? exitCardY : cardY,
+            opacity: phase === "exiting" ? exitCardOpacity : cardOpacity,
+            scale: phase === "exiting" ? exitCardScale : cardScale,
             rotateX: cardRotateX,
+            rotateY: phase === "exiting" ? exitCardRotateY : 0,
             boxShadow: cardBoxShadow,
+            rotateZ: phase === "exiting" ? exitCardRotateZ : 0,
+            filter: phase === "exiting" ? exitCardFilter : "none",
             background: "linear-gradient(165deg, #FFFEFB 0%, #FAF7F3 60%, #F5F1EB 100%)",
             transformStyle: "preserve-3d",
             zIndex: 32,
           }}
           initial={false}
         >
-          {!prefersReducedMotion && (
-            <div
-              className="absolute inset-0 opacity-20"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='card'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='3' seed='5'/%3E%3CfeDiffuseLighting in='SourceGraphic' lighting-color='%23FFF' surfaceScale='1'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23card)'/%3E%3C/svg%3E")`,
-              }}
-            />
-          )}
+          <div className="absolute inset-0" style={{ backfaceVisibility: "hidden", transformStyle: "preserve-3d" }}>
+            {!prefersReducedMotion && (
+              <div
+                className="absolute inset-0 opacity-20"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='card'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='3' seed='5'/%3E%3CfeDiffuseLighting in='SourceGraphic' lighting-color='%23FFF' surfaceScale='1'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23card)'/%3E%3C/svg%3E")`,
+                }}
+              />
+            )}
 
-          <div className="relative h-full flex flex-col items-center justify-center p-5 sm:p-7">
-            <p
-              className="font-sans text-[8px] sm:text-[9px] uppercase tracking-[0.3em] sm:tracking-[0.38em] mb-4 sm:mb-5"
-              style={{ color: "#B09F84" }}
-            >
-              os invitamos a nuestra boda
-            </p>
-            <h2
-              className="font-serif text-[clamp(1.05rem,4.8vw,1.6rem)] text-center leading-[1.2] sm:leading-[1.18]"
-              style={{ color: "#3D352A", fontWeight: 300, letterSpacing: "0.01em" }}
-            >
-              {WEDDING_CONFIG.couple.weddingName}
-            </h2>
-            <div className="w-10 sm:w-14 h-px bg-[#C9B896]/70 my-3 sm:my-4" />
-            <p
-              className="font-serif text-[11px] sm:text-[13px] italic text-center leading-[1.55]"
-              style={{ color: "#6B5D4D", fontWeight: 300, letterSpacing: "0.02em" }}
-            >
-              10 de abril de 2027
-            </p>
-            <p
-              className="font-sans text-[8px] sm:text-[9px] uppercase tracking-[0.18em] mt-1"
-              style={{ color: "#9A8B75" }}
-            >
-              {WEDDING_CONFIG.location.name}
-            </p>
+            {!prefersReducedMotion && (
+              <motion.div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  opacity: phase === "exiting" ? exitCardFrontSheenOpacity : 0,
+                  background:
+                    "linear-gradient(122deg, transparent 22%, rgba(255,255,255,0.44) 46%, rgba(255,255,255,0.18) 58%, transparent 74%)",
+                }}
+              />
+            )}
+
+            <div className="relative h-full flex flex-col items-center justify-center p-5 sm:p-7">
+              <p
+                className="font-sans text-[8px] sm:text-[9px] uppercase tracking-[0.3em] sm:tracking-[0.38em] mb-4 sm:mb-5"
+                style={{ color: "#B09F84" }}
+              >
+                os invitamos a nuestra boda
+              </p>
+              <h2
+                className="font-serif text-[clamp(1.05rem,4.8vw,1.6rem)] text-center leading-[1.2] sm:leading-[1.18]"
+                style={{ color: "#3D352A", fontWeight: 300, letterSpacing: "0.01em" }}
+              >
+                {WEDDING_CONFIG.couple.weddingName}
+              </h2>
+              <div className="w-10 sm:w-14 h-px bg-[#C9B896]/70 my-3 sm:my-4" />
+              <p
+                className="font-serif text-[11px] sm:text-[13px] italic text-center leading-[1.55]"
+                style={{ color: "#6B5D4D", fontWeight: 300, letterSpacing: "0.02em" }}
+              >
+                10 de abril de 2027
+              </p>
+              <p
+                className="font-sans text-[8px] sm:text-[9px] uppercase tracking-[0.18em] mt-1"
+                style={{ color: "#9A8B75" }}
+              >
+                {WEDDING_CONFIG.location.name}
+              </p>
+            </div>
+
+            {/* Double border frame — premium invitation signature */}
+            <div
+              className="absolute pointer-events-none"
+              style={{ inset: "8px", border: "1px solid rgba(201,184,150,0.22)" }}
+            />
+            <div
+              className="absolute pointer-events-none"
+              style={{ inset: "12px", border: "0.5px solid rgba(201,184,150,0.12)" }}
+            />
           </div>
 
-          {/* Double border frame — premium invitation signature */}
           <div
-            className="absolute pointer-events-none"
-            style={{ inset: "8px", border: "1px solid rgba(201,184,150,0.22)" }}
-          />
-          <div
-            className="absolute pointer-events-none"
-            style={{ inset: "12px", border: "0.5px solid rgba(201,184,150,0.12)" }}
-          />
+            className="absolute inset-0 flex items-center justify-center"
+            style={{
+              transform: "rotateY(180deg)",
+              backfaceVisibility: "hidden",
+              background: "linear-gradient(165deg, #f4f1eb 0%, #ebe4d7 100%)",
+              border: "1px solid rgba(90,77,62,0.12)",
+            }}
+          >
+            <p
+              className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.28em]"
+              style={{ color: "rgba(74,62,49,0.65)" }}
+            >
+              Bienvenidos
+            </p>
+          </div>
         </motion.div>
 
         {/* Minimal tap indicator */}
