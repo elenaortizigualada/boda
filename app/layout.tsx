@@ -21,21 +21,7 @@ export const metadata: Metadata = {
   description: 'Estás cordialmente invitado a celebrar la boda de Elena y Fran',
   generator: 'v0.app',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/icon.svg',
   },
 }
 
@@ -47,6 +33,12 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${inter.variable} ${cormorant.variable} bg-background`}>
       <body className="font-sans antialiased">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-foreground focus:shadow-lg"
+        >
+          Saltar al contenido principal
+        </a>
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

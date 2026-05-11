@@ -7,17 +7,17 @@ const details = [
   {
     number: "01",
     title: "Fecha",
-    content: "Domingo, 21 de septiembre de 2025",
+    content: "Sábado, 10 de abril de 2027",
   },
   {
     number: "02",
     title: "Hora",
-    content: "La ceremonia comienza a las 16:00",
+    content: "La ceremonia comienza a las 12:00",
   },
   {
     number: "03",
     title: "Lugar",
-    content: "Villa Balbiano, Lago de Como, Italia",
+    content: "Jardines del Negralejo, Madrid",
   },
   {
     number: "04",
@@ -31,27 +31,29 @@ export function DetailsSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="details" className="scroll-mt-24 sm:scroll-mt-28 py-20 sm:py-32 lg:py-40 bg-background">
+    <section id="details" className="scroll-mt-24 sm:scroll-mt-28 section-rhythm bg-background">
       <div className="container mx-auto px-6 sm:px-8 lg:px-12">
         <motion.div
           ref={ref}
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 1 }}
-          className="mb-20 sm:mb-28 lg:mb-36 text-center"
+          className="mb-16 sm:mb-24 lg:mb-28"
         >
-          <p className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-8">
+          <p className="typo-eyebrow mb-6">
             Detalles
           </p>
-          <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-wide">
+          <h2 className="typo-title max-w-3xl">
             Todo lo que necesitas saber
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border max-w-6xl mx-auto">
+        <div className="max-w-5xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 lg:gap-x-24">
           {details.map((detail, index) => (
             <DetailCard key={detail.title} detail={detail} index={index} />
           ))}
+          </div>
         </div>
       </div>
     </section>
@@ -74,15 +76,15 @@ function DetailCard({
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="bg-background p-8 sm:p-10 lg:p-12 text-center group hover:bg-secondary transition-colors duration-700"
+      className="py-8 sm:py-10 border-b border-border/70"
     >
-      <span className="font-sans text-[10px] tracking-[0.2em] text-muted-foreground/50 block mb-8">
+      <span className="typo-meta text-muted-foreground block mb-3">
         {detail.number}
       </span>
-      <h3 className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-4">
+      <h3 className="typo-meta text-muted-foreground mb-4">
         {detail.title}
       </h3>
-      <p className="font-serif text-lg sm:text-xl lg:text-2xl font-light text-foreground leading-snug">
+      <p className="typo-subtitle text-foreground max-w-md">
         {detail.content}
       </p>
     </motion.div>

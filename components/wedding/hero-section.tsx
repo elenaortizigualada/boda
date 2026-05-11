@@ -4,94 +4,83 @@ import { motion } from "framer-motion"
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[100dvh] pt-24 sm:pt-20 lg:pt-0 flex items-center justify-center overflow-hidden">
-      {/* Minimal geometric accent */}
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          initial={{ scaleY: 0 }}
-          animate={{ scaleY: 1 }}
-          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute left-8 sm:left-16 lg:left-24 top-0 w-px h-full bg-border origin-top"
-        />
-        <motion.div
-          initial={{ scaleY: 0 }}
-          animate={{ scaleY: 1 }}
-          transition={{ duration: 1.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute right-8 sm:right-16 lg:right-24 top-0 w-px h-full bg-border origin-top"
-        />
-      </div>
+    <section className="relative min-h-[100dvh] pt-24 sm:pt-20 lg:pt-0 flex items-center justify-center overflow-hidden bg-black">
+      <motion.div
+        initial={{ scale: 1.04, opacity: 0.9 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute inset-0"
+        style={{
+          backgroundImage: "url(/images/hero-bg.jpeg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+
+      {/* Contrast layers to preserve readability on any photo */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-gradient-to-b from-black/72 via-black/42 to-black/78"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(0,0,0,0.4)_100%)]"
+      />
 
       <div className="container mx-auto px-6 sm:px-8 lg:px-12 text-center relative z-10">
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.22em] sm:tracking-[0.4em] text-muted-foreground mb-8 sm:mb-16"
-        >
-          Nos casamos
-        </motion.p>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.95, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="font-serif text-[15vw] sm:text-[12vw] md:text-[10vw] lg:text-[8vw] font-light tracking-[0.02em] leading-[0.85] mb-4"
-        >
-          Elena
-        </motion.h1>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          className="flex items-center justify-center gap-6 sm:gap-10 my-6 sm:my-8"
-        >
-          <span className="w-16 sm:w-24 lg:w-32 h-px bg-foreground/20" />
-          <span className="font-serif text-xl sm:text-2xl text-muted-foreground">&</span>
-          <span className="w-16 sm:w-24 lg:w-32 h-px bg-foreground/20" />
-        </motion.div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.95, delay: 0.85, ease: [0.22, 1, 0.36, 1] }}
-          className="font-serif text-[15vw] sm:text-[12vw] md:text-[10vw] lg:text-[8vw] font-light tracking-[0.02em] leading-[0.85] mb-16 sm:mb-20"
-        >
-          Fran
-        </motion.h1>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.5 }}
-          className="space-y-6"
-        >
-          <p className="font-serif text-2xl sm:text-3xl md:text-4xl font-light tracking-wide">
-            21.09.2025
-          </p>
-          <p className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.22em] sm:tracking-[0.3em] text-muted-foreground">
-            Villa Balbiano, Lago de Como
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2 }}
-          className="mt-14 sm:mt-24"
-        >
-          <a
-            href="#story"
-            className="group inline-flex flex-col items-center gap-3 font-sans text-[10px] uppercase tracking-[0.22em] sm:tracking-[0.3em] text-muted-foreground hover:text-foreground transition-colors duration-500 touch-manipulation"
+        <div className="mx-auto max-w-3xl px-2 sm:px-0 py-10 sm:py-14">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="typo-eyebrow text-white/82 mb-8 sm:mb-12"
           >
-            <span>Desliza</span>
-            <motion.span
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="w-px h-8 bg-current"
-            />
-          </a>
-        </motion.div>
+            Nos casamos
+          </motion.p>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="typo-display text-white drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)]"
+          >
+            Elena & Fran
+          </motion.h1>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="space-y-5 mt-8 sm:mt-10"
+          >
+            <div className="mx-auto w-16 h-px bg-white/45" />
+            <p className="typo-subtitle tracking-[0.06em] text-white drop-shadow-[0_6px_16px_rgba(0,0,0,0.45)]">
+              10.04.2027
+            </p>
+            <p className="typo-meta text-white/82">
+              Jardines del Negralejo, Madrid
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.9, delay: 1.1 }}
+            className="mt-14 sm:mt-18"
+          >
+            <a
+              href="#story"
+              className="group inline-flex flex-col items-center gap-3 typo-meta text-white/78 hover:text-white transition-colors duration-500 touch-manipulation"
+            >
+              <span>Desliza</span>
+              <motion.span
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 2.3, repeat: Infinity, ease: "easeInOut" }}
+                className="w-px h-7 bg-current"
+              />
+            </a>
+          </motion.div>
+        </div>
       </div>
     </section>
   )

@@ -2,15 +2,89 @@
 
 import { useState, useCallback, useEffect, useRef } from "react"
 import { motion, AnimatePresence, useMotionValue, useTransform, useReducedMotion } from "framer-motion"
-import { useSearchParams } from "next/navigation"
+import { useGuests, findGuestByCode, findGuestByName } from "@/hooks/use-guests"
+
+
 
 interface EnvelopeIntroProps {
   onComplete: () => void
 }
 
 export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
-  const searchParams = useSearchParams()
-  const guestName = searchParams.get("guest")?.replace(/\+/g, " ") || "Nombre del invitado"
+  const { guests } = useGuests()
+  const [guestName, setGuestName] = useState("Nombre del invitado")
+
+  const formatGuestNameForEnvelope = useCallback((name: string) => {
+    const normalized = name.trim().replace(/\s+/g, " ")
+
+    if (normalized.length <= 22) {
+      return [normalized]
+    }
+
+    const words = normalized.split(" ")
+    if (words.length === 1) {
+      return [normalized]
+    }
+
+    const maxPerLine = 22
+    const lines: string[] = []
+    let currentLine: string[] = []
+
+    for (const word of words) {
+      const candidate = [...currentLine, word].join(" ")
+      if (candidate.length <= maxPerLine || currentLine.length === 0) {
+        currentLine.push(word)
+      } else {
+        lines.push(currentLine.join(" "))
+        currentLine = [word]
+      }
+    }
+    if (currentLine.length > 0) lines.push(currentLine.join(" "))
+
+    // Limitar visualmente a 3 líneas sin cortar palabras ni apellidos
+    if (lines.length > 3) {
+      const mergedLast = lines.slice(2).join(" ")
+      return [lines[0], lines[1], mergedLast]
+    }
+
+    return lines
+  }, [])
+
+  const guestNameLines = formatGuestNameForEnvelope(guestName)
+  const lineCount = guestNameLines.length
+  const longestLineLength = guestNameLines.reduce((max, line) => Math.max(max, line.length), 0)
+  const guestNameFontClass =
+    lineCount >= 3 || longestLineLength > 24
+      ? "text-[clamp(0.85rem,3.7vw,1.1rem)]"
+      : lineCount === 2 || longestLineLength > 18
+      ? "text-[clamp(0.95rem,4.2vw,1.3rem)]"
+      : "text-[clamp(1.05rem,5vw,1.625rem)]"
+
+  // Cargar nombre del invitado desde URL parámetros
+  useEffect(() => {
+    if (typeof window === "undefined" || guests.length === 0) return
+
+    const urlParams = new URLSearchParams(window.location.search)
+    const code = urlParams.get("code")
+    const guestParam = urlParams.get("guest")
+
+    if (code) {
+      const guest = findGuestByCode(guests, code)
+      if (guest) {
+        setGuestName(guest.name)
+        return
+      }
+    }
+
+    if (guestParam) {
+      const guest = findGuestByName(guests, guestParam.replace(/\+/g, " "))
+      if (guest) {
+        setGuestName(guest.name)
+      } else {
+        setGuestName(guestParam.replace(/\+/g, " "))
+      }
+    }
+  }, [guests])
   const prefersReducedMotion = useReducedMotion()
   
   const [phase, setPhase] = useState<"idle" | "unsealing" | "opening" | "revealing" | "exiting">("idle")
@@ -132,7 +206,7 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
       <motion.button
         type="button"
         aria-label="Abrir invitación"
-        className="relative cursor-pointer select-none bg-transparent border-0 p-0 touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5A4D3E]/40"
+        className="relative cursor-pointer select-none bg-transparent border-0 p-0 touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5A4D3E] focus-visible:ring-2 focus-visible:ring-[#5A4D3E]/30"
         onClick={handleInteraction}
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
@@ -193,7 +267,7 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
 
         {/* Main envelope container */}
         <div 
-          className="relative w-[92vw] max-w-[340px] aspect-[1.45/1] sm:w-[82vw] sm:max-w-[380px] md:w-[420px]"
+          className="relative w-[90vw] max-w-[420px] aspect-[1.45/1] sm:w-[82vw] sm:max-w-[380px] md:w-[420px]"
           style={{ transformStyle: "preserve-3d" }}
         >
           {/* === ENVELOPE BODY === */}
@@ -256,17 +330,17 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
               style={{ zIndex: 26 }}
             >
               <p
-                className="text-[clamp(1rem,5.2vw,1.625rem)] leading-tight -rotate-[1.4deg] sm:-rotate-[1deg] break-words"
+                className={`leading-[1.15] break-words whitespace-pre-line ${guestNameFontClass}`}
                 style={{
                   fontFamily: '"Cormorant Garamond", "Times New Roman", serif',
-                  fontStyle: "italic",
+                  fontStyle: "normal",
                   color: "#4C3F31",
                   fontWeight: 500,
                   letterSpacing: "0.02em",
                   textShadow: "0 1px 0 rgba(255,255,255,0.35), 0 0.5px 0.8px rgba(76,63,49,0.16)",
                 }}
               >
-                {guestName}
+                {guestNameLines.join("\n")}
               </p>
             </motion.div>
           </div>
@@ -476,7 +550,7 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
               className="text-[9px] sm:text-[10px] uppercase tracking-[0.25em] sm:tracking-[0.35em] mb-2 sm:mb-3"
               style={{ color: "#9A8B75" }}
             >
-              Te invitamos a celebrar
+              Celébralo con nosotros
             </p>
             <h2
               className="font-serif text-xl sm:text-2xl md:text-3xl text-center leading-tight"
@@ -488,7 +562,7 @@ export function EnvelopeIntro({ onComplete }: EnvelopeIntroProps) {
               className="font-serif text-xs sm:text-sm mt-2 sm:mt-3"
               style={{ color: "#6B5D4D", fontWeight: 300 }}
             >
-              21 de septiembre de 2025
+              10 de abril de 2027
             </p>
             <div className="w-8 h-px bg-[#C9B896] mt-3 sm:mt-4" />
           </div>

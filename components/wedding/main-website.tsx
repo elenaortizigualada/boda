@@ -26,7 +26,7 @@ export function MainWebsite({ isVisible }: MainWebsiteProps) {
       animate={{ opacity: 1 }}
       transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
     >
-      <main className="min-h-screen">
+      <main id="main-content" className="min-h-screen" tabIndex={-1}>
         <Navigation />
         <HeroSection />
         <StorySection />

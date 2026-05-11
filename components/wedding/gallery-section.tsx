@@ -4,12 +4,12 @@ import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
 
 const galleryImages = [
-  { id: 1, title: "París, 2019" },
-  { id: 2, title: "Costa Amalfitana" },
-  { id: 3, title: "Londres" },
-  { id: 4, title: "Venecia" },
-  { id: 5, title: "Santorini" },
-  { id: 6, title: "La pedida" },
+  { id: 1, title: "París, 2019", image: "/images/gallery/paris-2019.jpeg" },
+  { id: 2, title: "Costa Amalfitana", image: "/images/gallery/amalfi-coast.jpeg" },
+  { id: 3, title: "Londres", image: "/images/gallery/london.jpeg" },
+  { id: 4, title: "Venecia", image: "/images/gallery/venice.jpeg" },
+  { id: 5, title: "Santorini", image: "/images/gallery/santorini.jpeg" },
+  { id: 6, title: "La pedida", image: "/images/gallery/proposal.jpeg" },
 ]
 
 export function GallerySection() {
@@ -38,7 +38,7 @@ export function GallerySection() {
         </motion.div>
 
         {/* Editorial grid layout */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {galleryImages.map((image, index) => (
             <GalleryImage key={image.id} image={image} index={index} />
           ))}
@@ -73,10 +73,20 @@ function GalleryImage({
       transition={{ duration: 0.8, delay: index * 0.1 }}
       className={`relative overflow-hidden bg-secondary group cursor-pointer ${heightClass}`}
     >
-      {/* Placeholder Content */}
+      {/* Background Image */}
+      <img 
+        src={image.image} 
+        alt={image.title}
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+
+      {/* Gradient overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+      {/* Text Overlay */}
       <div className="absolute inset-0 flex items-end p-6 sm:p-8">
         <div className="w-full">
-          <p className="font-serif text-lg sm:text-xl font-light text-foreground/80 group-hover:text-foreground transition-colors duration-500">
+          <p className="font-serif text-lg sm:text-xl font-light text-white group-hover:text-white transition-colors duration-500">
             {image.title}
           </p>
         </div>
@@ -87,8 +97,8 @@ function GalleryImage({
       
       {/* Corner accent on hover */}
       <div className="absolute top-6 right-6 w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-        <span className="absolute top-0 right-0 w-full h-px bg-foreground/50" />
-        <span className="absolute top-0 right-0 w-px h-full bg-foreground/50" />
+        <span className="absolute top-0 right-0 w-full h-px bg-white/50" />
+        <span className="absolute top-0 right-0 w-px h-full bg-white/50" />
       </div>
     </motion.div>
   )

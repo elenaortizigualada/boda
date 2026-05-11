@@ -2,8 +2,8 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef, useState, useEffect } from "react"
+import { WEDDING_CONFIG } from "@/lib/constants"
 
-const WEDDING_DATE = new Date("2025-09-21T16:00:00")
 
 interface TimeLeft {
   days: number
@@ -13,7 +13,7 @@ interface TimeLeft {
 }
 
 function calculateTimeLeft(): TimeLeft {
-  const difference = +WEDDING_DATE - +new Date()
+  const difference = +WEDDING_CONFIG.dateTime - +new Date()
 
   if (difference > 0) {
     return {
@@ -30,11 +30,10 @@ function calculateTimeLeft(): TimeLeft {
 export function CountdownSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft())
-  const [mounted, setMounted] = useState(false)
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 })
 
   useEffect(() => {
-    setMounted(true)
+    setTimeLeft(calculateTimeLeft())
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft())
     }, 1000)
@@ -42,9 +41,6 @@ export function CountdownSection() {
     return () => clearInterval(timer)
   }, [])
 
-  if (!mounted) {
-    return null
-  }
 
   const timeUnits = [
     { value: timeLeft.days, label: "Días" },
@@ -63,7 +59,7 @@ export function CountdownSection() {
           transition={{ duration: 1 }}
           className="text-center"
         >
-          <p className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.22em] sm:tracking-[0.3em] text-muted-foreground mb-16 sm:mb-20">
+          <p className="font-sans text-[11px] sm:text-[12px] uppercase tracking-[0.22em] sm:tracking-[0.3em] text-muted-foreground mb-16 sm:mb-20">
             Cuenta atrás
           </p>
 
@@ -79,7 +75,7 @@ export function CountdownSection() {
                 <span className="font-serif text-3xl sm:text-6xl md:text-7xl lg:text-8xl font-light text-foreground block mb-4">
                   {unit.value.toString().padStart(2, "0")}
                 </span>
-                <span className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.22em] sm:tracking-[0.3em] text-muted-foreground">
+                <span className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.22em] sm:tracking-[0.3em] text-muted-foreground">
                   {unit.label}
                 </span>
               </motion.div>

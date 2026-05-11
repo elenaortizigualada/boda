@@ -9,24 +9,28 @@ const storyMilestones = [
     title: "Nuestro Primer Encuentro",
     description:
       "Nos conocimos en la inauguración de una galería en París. Fran derramó champán sobre el vestido favorito de Elena, y el resto es historia.",
+    image: "/images/story/2019.jpeg",
   },
   {
     year: "2020",
     title: "Primer viaje juntos",
     description:
       "Nuestra primera aventura nos llevó a la Costa Amalfitana. Entre limoneros y cenas al atardecer, supimos que era algo especial.",
+    image: "/images/story/2020.jpeg",
   },
   {
     year: "2022",
     title: "Nos Fuimos a Vivir Juntos",
     description:
       "Encontramos el piso de nuestros sueños en Londres, con un pequeño jardín y espacio para los libros de Elena y los vinilos de Fran.",
+    image: "/images/story/2022.jpeg",
   },
   {
     year: "2024",
     title: "La pedida",
     description:
       "En una tarde tranquila en Santorini, frente a la caldera al atardecer, Fran se arrodilló. Entre lágrimas de felicidad, Elena dijo que sí.",
+    image: "/images/story/2024.jpeg",
   },
 ]
 
@@ -87,6 +91,16 @@ function StoryMilestone({
       transition={{ duration: 0.8, delay: index * 0.15 }}
       className="group"
     >
+      {/* Image */}
+      <div className="relative aspect-square overflow-hidden mb-6 sm:mb-8">
+        <img 
+          src={milestone.image} 
+          alt={milestone.title}
+          className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+        />
+      </div>
+
+      {/* Content */}
       <div className="flex items-start gap-6 sm:gap-8">
         <span className="font-serif text-6xl sm:text-7xl lg:text-8xl font-light text-muted-foreground/30 leading-none">
           {milestone.year.slice(-2)}

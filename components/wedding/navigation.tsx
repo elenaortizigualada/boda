@@ -2,19 +2,23 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { WEDDING_CONFIG } from "@/lib/constants"
 
 const navItems = [
-  { label: "Historia", href: "#story" },
-  { label: "Detalles", href: "#details" },
-  { label: "Lugar", href: "#venue" },
-  { label: "Horario", href: "#timeline" },
+  { label: "Nuestra historia", href: "#story" },
+  { label: "Detalles del día", href: "#details" },
+  { label: "El lugar", href: "#venue" },
+  { label: "Cronograma", href: "#timeline" },
   { label: "Galería", href: "#gallery" },
-  { label: "Preguntas", href: "#faq" },
+  { label: "Preguntas frecuentes", href: "#faq" },
 ]
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const brideInitial = WEDDING_CONFIG.couple.bride.charAt(0).toUpperCase()
+  const groomInitial = WEDDING_CONFIG.couple.groom.charAt(0).toUpperCase()
+  const initials = `${brideInitial}&${groomInitial}`
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,6 +39,17 @@ export function Navigation() {
     }
   }, [isMobileMenuOpen])
 
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMobileMenuOpen(false)
+      }
+    }
+
+    window.addEventListener("keydown", handleEscape)
+    return () => window.removeEventListener("keydown", handleEscape)
+  }, [])
+
   return (
     <>
       <motion.header
@@ -53,7 +68,7 @@ export function Navigation() {
               href="#"
               className="font-serif text-2xl sm:text-3xl font-light tracking-[0.1em] text-foreground touch-manipulation"
             >
-              E&F
+              {initials}
             </a>
 
             {/* Desktop Navigation */}
@@ -84,6 +99,8 @@ export function Navigation() {
               onClick={() => setIsMobileMenuOpen(true)}
               className="lg:hidden p-2 -mr-2 text-foreground touch-manipulation"
               aria-label="Abrir menú"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation-menu"
             >
               <div className="w-6 flex flex-col gap-1.5">
                 <span className="w-full h-px bg-foreground" />
@@ -101,38 +118,66 @@ export function Navigation() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className="fixed inset-0 z-50 bg-background lg:hidden"
+            transition={{ duration: 0.35 }}
+            id="mobile-navigation-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menú de navegación móvil"
+            className="fixed inset-0 z-50 overflow-hidden lg:hidden"
           >
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: "url(/images/hero-bg.jpeg)" }}
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/55 to-black/75"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,184,150,0.18),transparent_42%)]"
+            />
             <div className="flex flex-col h-full">
-              <div className="flex items-center justify-between px-6 sm:px-8 py-5 sm:py-6">
-                <span className="font-serif text-2xl sm:text-3xl font-light tracking-[0.1em]">
-                  E&F
+              <div className="relative z-10 flex items-center justify-between px-6 sm:px-8 py-5 sm:py-6">
+                <span className="font-serif text-2xl sm:text-3xl font-light tracking-[0.1em] text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.5)]">
+                  {initials}
                 </span>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-2 -mr-2 text-foreground touch-manipulation"
-                  aria-label="Cerrar menú"
+                  className="p-2 -mr-2 text-white/95 touch-manipulation"
+                  aria-label="Cerrar menú de navegación"
                 >
                   <div className="w-6 h-6 relative">
-                    <span className="absolute top-1/2 left-0 w-full h-px bg-foreground rotate-45" />
-                    <span className="absolute top-1/2 left-0 w-full h-px bg-foreground -rotate-45" />
+                    <span className="absolute top-1/2 left-0 w-full h-px bg-current rotate-45" />
+                    <span className="absolute top-1/2 left-0 w-full h-px bg-current -rotate-45" />
                   </div>
                 </button>
               </div>
-              <nav className="flex-1 flex items-center justify-center px-6">
-                <ul className="flex flex-col items-center gap-7 sm:gap-8">
+              <nav className="relative z-10 flex-1 flex items-center justify-center px-6">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0"
+                />
+                <motion.ul
+                  initial={{ opacity: 0, y: 22, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 12, scale: 0.98 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="relative z-10 w-full max-w-md rounded-2xl border border-white/20 bg-black/35 backdrop-blur-md px-6 py-10 sm:px-10 sm:py-12 flex flex-col items-center gap-7 sm:gap-8 shadow-[0_24px_80px_rgba(0,0,0,0.45)]"
+                >
                   {navItems.map((item, index) => (
                     <motion.li
                       key={item.href}
                       initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1, duration: 0.5 }}
+                      className="w-full text-center"
                     >
                       <a
                         href={item.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="font-serif text-[2rem] sm:text-4xl leading-none font-light text-foreground hover:opacity-50 transition-opacity duration-500 touch-manipulation block"
+                        className="font-serif text-[1.75rem] sm:text-[2rem] leading-none font-light text-white hover:text-white/70 transition-colors duration-500 touch-manipulation block"
                       >
                         {item.label}
                       </a>
@@ -147,12 +192,12 @@ export function Navigation() {
                     <a
                       href="#rsvp"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="inline-flex items-center justify-center px-8 sm:px-12 py-3.5 sm:py-4 border border-foreground text-foreground font-sans text-xs sm:text-sm uppercase tracking-[0.16em] sm:tracking-[0.2em] touch-manipulation"
+                      className="inline-flex items-center justify-center px-8 sm:px-12 py-3.5 sm:py-4 border border-white/80 text-white hover:bg-white hover:text-black transition-colors duration-500 font-sans text-xs sm:text-sm uppercase tracking-[0.16em] sm:tracking-[0.2em] touch-manipulation"
                     >
                       Confirmar asistencia
                     </a>
                   </motion.li>
-                </ul>
+                </motion.ul>
               </nav>
             </div>
           </motion.div>

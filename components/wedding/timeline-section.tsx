@@ -5,34 +5,29 @@ import { useRef } from "react"
 
 const timelineEvents = [
   {
-    time: "15:30",
-    title: "Llegada de invitados",
-    description: "Bebidas de bienvenida y aperitivos en el jardín",
+    time: "12:00",
+    title: "Ceremonia",
+    description: "Intercambio de votos en la iglesia",
   },
   {
-    time: "16:00",
-    title: "Ceremonia",
-    description: "Intercambio de votos en la terraza junto al lago",
+    time: "13:30",
+    title: "Cóctel",
+    description: "Cerveza y aperitivos en el jardín",
+  },
+  {
+    time: "15:00",
+    title: "Banquete",
+    description: "Menú en el gran salón",
   },
   {
     time: "17:00",
-    title: "Cóctel",
-    description: "Champán y bocados junto a la fuente",
-  },
-  {
-    time: "18:30",
-    title: "Banquete",
-    description: "Menú italiano de cinco platos en el gran salón",
-  },
-  {
-    time: "21:00",
     title: "Primer baile",
-    description: "Después, baile bajo las estrellas",
+    description: "Intento de primer baile sin pisarnos y comienzo de la fiesta",
   },
   {
     time: "00:00",
     title: "Despedida",
-    description: "Salida con bengalas y recena",
+    description: "Salida de la fiesta y despedida de los invitados",
   },
 ]
 
