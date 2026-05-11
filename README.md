@@ -1,2 +1,2 @@
 # boda
-Web de invitación a boda Elena y Fran
+Web de invitación a la boda de Elena y Fran.
