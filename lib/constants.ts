@@ -77,3 +77,33 @@ export const ANIMATION_TIMINGS = {
   countdownUpdateInterval: 1000,
   formSubmitDelay: 300,
 } as const;
+
+/**
+ * Motion system editorial
+ */
+export const MOTION_CONFIG = {
+  easing: {
+    premium: [0.16, 1, 0.3, 1],
+    smooth: [0.22, 1, 0.36, 1],
+    rise: [0.19, 1, 0.22, 1],
+    subtle: [0.25, 0.1, 0.25, 1],
+  },
+  duration: {
+    page: 1.15,
+    hero: 1.25,
+    section: 0.8,
+    reveal: 0.7,
+    micro: 0.25,
+    slow: 1.5,
+  },
+  stagger: {
+    tight: 0.04,
+    medium: 0.08,
+    relaxed: 0.12,
+  },
+  distance: {
+    small: 12,
+    medium: 20,
+    large: 32,
+  },
+} as const;

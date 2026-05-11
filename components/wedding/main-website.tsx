@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { MOTION_CONFIG } from "@/lib/constants"
 import { Navigation } from "./navigation"
 import { HeroSection } from "./hero-section"
 import { StorySection } from "./story-section"
@@ -24,7 +25,7 @@ export function MainWebsite({ isVisible }: MainWebsiteProps) {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: MOTION_CONFIG.duration.page, ease: MOTION_CONFIG.easing.premium }}
     >
       <main id="main-content" className="min-h-screen" tabIndex={-1}>
         <Navigation />

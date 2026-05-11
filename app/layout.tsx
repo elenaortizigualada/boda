@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import type { Viewport } from 'next'
 import { Inter, Cormorant_Garamond } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
@@ -25,6 +26,12 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -32,14 +39,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${inter.variable} ${cormorant.variable} bg-background`}>
-      <body className="font-sans antialiased">
+      <body className="relative isolate overflow-x-hidden font-sans antialiased">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-foreground focus:shadow-lg"
         >
           Saltar al contenido principal
         </a>
-        {children}
+        <div aria-hidden="true" className="page-atmosphere" />
+        <div aria-hidden="true" className="page-grain" />
+        <div className="relative z-10">{children}</div>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
+import { MOTION_CONFIG } from "@/lib/constants"
 
 const timelineEvents = [
   {
@@ -36,19 +37,19 @@ export function TimelineSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="timeline" className="scroll-mt-24 sm:scroll-mt-28 py-20 sm:py-32 lg:py-40 bg-background">
-      <div className="container mx-auto px-6 sm:px-8 lg:px-12">
+    <section id="timeline" className="scroll-mt-24 sm:scroll-mt-28 section-mobile bg-background">
+      <div className="container mx-auto container-mobile">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 1 }}
-          className="mb-20 sm:mb-28 lg:mb-36 text-center"
+          initial={{ opacity: 0, y: 16 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          transition={{ duration: MOTION_CONFIG.duration.section, ease: MOTION_CONFIG.easing.premium }}
+          className="mb-12 sm:mb-18 lg:mb-28"
         >
-          <p className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-8">
+          <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-muted-foreground mb-6">
             Horario
           </p>
-          <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-wide">
+          <h2 className="font-serif text-[clamp(2rem,9vw,4.4rem)] font-light leading-[1.06] tracking-wide max-w-3xl text-balance">
             Orden del día
           </h2>
         </motion.div>
@@ -78,23 +79,23 @@ function TimelineEvent({
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
+      initial={{ opacity: 0, y: 16 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+      transition={{ duration: MOTION_CONFIG.duration.reveal, delay: index * MOTION_CONFIG.stagger.tight, ease: MOTION_CONFIG.easing.premium }}
       className={`relative grid grid-cols-1 sm:grid-cols-[120px_1fr] md:grid-cols-[180px_1fr] gap-3 sm:gap-8 md:gap-12 ${
         !isLast ? "pb-12 sm:pb-16 border-b border-border mb-12 sm:mb-16" : ""
       }`}
     >
       <div className="text-left sm:text-right">
-        <span className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-foreground">
+        <span className="font-serif text-[clamp(1.7rem,6vw,2.8rem)] font-light text-foreground leading-[1.05]">
           {event.time}
         </span>
       </div>
       <div>
-        <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-light mb-2 sm:mb-3">
+        <h3 className="font-serif text-[clamp(1.35rem,5vw,2rem)] font-light mb-2 sm:mb-3 leading-[1.12]">
           {event.title}
         </h3>
-        <p className="font-sans text-sm sm:text-base text-muted-foreground">
+        <p className="font-sans text-[15px] sm:text-base text-muted-foreground leading-relaxed max-w-[56ch]">
           {event.description}
         </p>
       </div>

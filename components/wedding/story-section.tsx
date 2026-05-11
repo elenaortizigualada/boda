@@ -1,7 +1,9 @@
 "use client"
 
 import { motion, useInView } from "framer-motion"
+import Image from "next/image"
 import { useRef } from "react"
+import { MOTION_CONFIG } from "@/lib/constants"
 
 const storyMilestones = [
   {
@@ -39,27 +41,27 @@ export function StorySection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="story" className="scroll-mt-24 sm:scroll-mt-28 py-20 sm:py-32 lg:py-40 bg-secondary">
-      <div className="container mx-auto px-6 sm:px-8 lg:px-12">
+    <section id="story" className="scroll-mt-24 sm:scroll-mt-28 section-mobile bg-secondary">
+      <div className="container mx-auto container-mobile">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 1 }}
-          className="mb-20 sm:mb-28 lg:mb-36"
+          initial={{ opacity: 0, y: 16 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          transition={{ duration: MOTION_CONFIG.duration.section, ease: MOTION_CONFIG.easing.premium }}
+          className="mb-12 sm:mb-18 lg:mb-28"
         >
-          <div className="flex items-center gap-6 mb-8">
+          <div className="flex items-center gap-5 mb-6">
             <span className="w-12 sm:w-20 h-px bg-foreground/20" />
-            <p className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
+            <p className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
               Nuestra historia
             </p>
           </div>
-          <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-wide max-w-3xl">
+          <h2 className="font-serif text-[clamp(2rem,9vw,4.4rem)] font-light leading-[1.06] tracking-wide max-w-3xl text-balance">
             Una historia de amor escrita en las estrellas
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-x-20 lg:gap-y-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-x-16 lg:gap-y-20">
           {storyMilestones.map((milestone, index) => (
             <StoryMilestone
               key={milestone.year}
@@ -86,33 +88,35 @@ function StoryMilestone({
   return (
     <motion.article
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      transition={{ duration: 0.8, delay: index * 0.15 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: MOTION_CONFIG.duration.reveal, delay: index * MOTION_CONFIG.stagger.tight, ease: MOTION_CONFIG.easing.premium }}
       className="group"
     >
       {/* Image */}
-      <div className="relative aspect-square overflow-hidden mb-6 sm:mb-8">
-        <img 
+      <div className="relative aspect-[4/5] overflow-hidden mb-6 sm:mb-8">
+        <Image
           src={milestone.image} 
           alt={milestone.title}
-          className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          fill
+          sizes="(max-width: 768px) 90vw, (max-width: 1200px) 42vw, 34vw"
+          className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
         />
       </div>
 
       {/* Content */}
       <div className="flex items-start gap-6 sm:gap-8">
-        <span className="font-serif text-6xl sm:text-7xl lg:text-8xl font-light text-muted-foreground/30 leading-none">
+        <span className="font-serif text-5xl sm:text-6xl lg:text-7xl font-light text-muted-foreground/30 leading-none">
           {milestone.year.slice(-2)}
         </span>
         <div className="flex-1 pt-2 sm:pt-4">
-          <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-3">
+          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
             {milestone.year}
           </p>
-          <h3 className="font-serif text-2xl sm:text-3xl font-light mb-4 group-hover:translate-x-2 transition-transform duration-500">
+          <h3 className="font-serif text-[clamp(1.6rem,5.6vw,2.2rem)] font-light mb-3 leading-[1.12] group-hover:translate-x-1 transition-transform duration-300 ease-out">
             {milestone.title}
           </h3>
-          <p className="font-sans text-sm sm:text-base text-muted-foreground leading-relaxed max-w-md">
+          <p className="font-sans text-[15px] sm:text-base text-muted-foreground leading-relaxed max-w-[58ch]">
             {milestone.description}
           </p>
         </div>
