@@ -64,6 +64,8 @@ export const WEDDING_CONFIG = {
     displayDate: "17 de abril de 2027",
     heroLocation: "Jardines del Negralejo · Madrid",
     invitationLead: "os invitamos a nuestra boda",
+    introTapHint: "Toca para abrir",
+    introSkipLabel: "Saltar introducción",
     busDescription:
       "Habrá un autobús que nos lleve de la iglesia a la finca. También habrá un autobús desde la finca a Boadilla del Monte, con parada en Vallecas.",
   },
@@ -195,6 +197,8 @@ export const MESSAGES = {
     deadline: `Por favor, responde antes del 1 de diciembre de 2026.`,
     successTitle: "Gracias",
     successMessage: "Hemos recibido tu respuesta.\nNos encantará celebrarlo contigo.",
+    successCalendarCta: "Añadir al calendario",
+    successMapsCta: "Cómo llegar al lugar",
   },
   errors: {
     loadingGuests: "Error cargando datos de invitados",

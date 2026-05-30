@@ -21,7 +21,7 @@ export function GallerySection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="gallery" className="scroll-mt-24 sm:scroll-mt-28 section-mobile bg-background">
+    <section id="gallery" className="scroll-mt-24 sm:scroll-mt-28 section-mobile-relaxed section-divider-top bg-background">
       <div className="container mx-auto container-mobile">
         <motion.div
           ref={ref}

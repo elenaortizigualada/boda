@@ -15,6 +15,9 @@ const navItems = [
 
 export function Navigation({ isVisible }: { isVisible: boolean }) {
   const [isScrolled, setIsScrolled] = useState(false)
+  const [showMobileRsvpCta, setShowMobileRsvpCta] = useState(false)
+  const [activeSection, setActiveSection] = useState<string>(navItems[0].href)
+  const [isRsvpSectionVisible, setIsRsvpSectionVisible] = useState(false)
   const [isDesktop, setIsDesktop] = useState(
     () => typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches
   )
@@ -22,6 +25,7 @@ export function Navigation({ isVisible }: { isVisible: boolean }) {
   const mobileDialogRef = useRef<HTMLDivElement | null>(null)
   const lastFocusedElementRef = useRef<HTMLElement | null>(null)
   const reduceMotion = useReducedMotion()
+  const activeSectionLabel = navItems.find((item) => item.href === activeSection)?.label ?? "Inicio"
 
   useEffect(() => {
     const mql = window.matchMedia("(min-width: 1024px)")
@@ -32,7 +36,9 @@ export function Navigation({ isVisible }: { isVisible: boolean }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+      const currentY = window.scrollY
+      setIsScrolled(currentY > 50)
+      setShowMobileRsvpCta(currentY > 620)
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
@@ -100,6 +106,53 @@ export function Navigation({ isVisible }: { isVisible: boolean }) {
     }
   }, [isMobileMenuOpen])
 
+  useEffect(() => {
+    const sectionIds = navItems.map((item) => item.href.replace("#", ""))
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((section): section is HTMLElement => Boolean(section))
+
+    if (sections.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+
+        if (visibleEntries.length > 0) {
+          setActiveSection(`#${visibleEntries[0].target.id}`)
+        }
+      },
+      {
+        root: null,
+        rootMargin: "-35% 0px -45% 0px",
+        threshold: [0.2, 0.4, 0.65],
+      }
+    )
+
+    sections.forEach((section) => observer.observe(section))
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const rsvpSection = document.getElementById("rsvp")
+    if (!rsvpSection) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        setIsRsvpSectionVisible(entry.isIntersecting)
+      },
+      {
+        threshold: 0.2,
+      }
+    )
+
+    observer.observe(rsvpSection)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <>
       <motion.header
@@ -131,10 +184,19 @@ export function Navigation({ isVisible }: { isVisible: boolean }) {
                 <li key={item.href}>
                   <a
                     href={item.href}
-                    className="font-sans text-[11px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors duration-500 relative group"
+                    className={`font-sans text-[11px] uppercase tracking-[0.2em] transition-colors duration-500 relative group ${
+                      activeSection === item.href
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                    aria-current={activeSection === item.href ? "location" : undefined}
                   >
                     {item.label}
-                    <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-full" />
+                    <span
+                      className={`absolute -bottom-1 left-0 h-px bg-foreground transition-all duration-300 ${
+                        activeSection === item.href ? "w-full" : "w-0 group-hover:w-full"
+                      }`}
+                    />
                   </a>
                 </li>
               ))}
@@ -219,6 +281,11 @@ export function Navigation({ isVisible }: { isVisible: boolean }) {
                   transition={{ duration: reduceMotion ? 0.15 : MOTION_CONFIG.duration.micro, ease: MOTION_CONFIG.easing.premium }}
                   className="relative z-10 w-full max-w-md rounded-2xl border border-white/20 bg-black/40 backdrop-blur-md px-5 py-6 sm:px-8 sm:py-10 flex flex-col items-center gap-1 shadow-[0_24px_80px_rgba(0,0,0,0.45)]"
                 >
+                  <li className="mb-2 inline-flex items-center gap-2 border border-white/20 rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] text-white/75">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#E8D8BF]" aria-hidden="true" />
+                    <span>Ahora viendo</span>
+                    <span className="text-white">{activeSectionLabel}</span>
+                  </li>
                   {navItems.map((item, index) => (
                     <motion.li
                       key={item.href}
@@ -230,7 +297,10 @@ export function Navigation({ isVisible }: { isVisible: boolean }) {
                       <a
                         href={item.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="tap-target font-serif text-[1.45rem] sm:text-[1.9rem] leading-none font-light text-white hover:text-white/70 transition-colors duration-300 touch-manipulation flex items-center justify-center py-2"
+                        className={`tap-target font-serif text-[1.45rem] sm:text-[1.9rem] leading-none font-light transition-colors duration-300 touch-manipulation flex items-center justify-center py-2 ${
+                          activeSection === item.href ? "text-[#E8D8BF]" : "text-white hover:text-white/70"
+                        }`}
+                        aria-current={activeSection === item.href ? "location" : undefined}
                       >
                         {item.label}
                       </a>
@@ -254,6 +324,22 @@ export function Navigation({ isVisible }: { isVisible: boolean }) {
               </nav>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {!isDesktop && isVisible && !isMobileMenuOpen && showMobileRsvpCta && !isRsvpSectionVisible && (
+          <motion.a
+            href="#rsvp"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: reduceMotion ? 0.15 : MOTION_CONFIG.duration.micro }}
+            className="lg:hidden fixed left-1/2 -translate-x-1/2 bottom-[calc(env(safe-area-inset-bottom)+0.85rem)] z-40 inline-flex items-center justify-center px-6 py-3 border border-foreground/30 bg-background/90 backdrop-blur-md text-foreground font-sans text-[10px] uppercase tracking-[0.18em] shadow-[0_10px_24px_rgba(0,0,0,0.12)]"
+            aria-label="Confirmar asistencia"
+          >
+            Confirmar asistencia
+          </motion.a>
         )}
       </AnimatePresence>
     </>

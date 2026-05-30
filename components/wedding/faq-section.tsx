@@ -39,7 +39,7 @@ export function FAQSection() {
   }
 
   return (
-    <section id="faq" className="scroll-mt-24 sm:scroll-mt-28 section-mobile bg-secondary">
+    <section id="faq" className="scroll-mt-24 sm:scroll-mt-28 section-mobile-relaxed section-divider-top bg-secondary">
       <div className="container mx-auto container-mobile">
         <motion.div
           ref={ref}

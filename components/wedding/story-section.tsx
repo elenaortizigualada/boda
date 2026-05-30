@@ -10,7 +10,7 @@ export function StorySection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="story" className="scroll-mt-24 sm:scroll-mt-28 section-mobile bg-secondary">
+    <section id="story" className="scroll-mt-24 sm:scroll-mt-28 section-mobile-relaxed bg-secondary">
       <div className="container mx-auto container-mobile">
         <motion.div
           ref={ref}
@@ -30,7 +30,7 @@ export function StorySection() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-x-16 lg:gap-y-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-14 lg:gap-x-16 lg:gap-y-20">
           {WEDDING_CONFIG.storyMilestones.map((milestone, index) => (
             <StoryMilestone
               key={milestone.year}

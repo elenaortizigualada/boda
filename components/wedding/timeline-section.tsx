@@ -9,7 +9,7 @@ export function TimelineSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="timeline" className="scroll-mt-24 sm:scroll-mt-28 section-mobile bg-background">
+    <section id="timeline" className="scroll-mt-24 sm:scroll-mt-28 section-mobile-relaxed section-divider-top bg-background">
       <div className="container mx-auto container-mobile">
         <motion.div
           ref={ref}
@@ -54,8 +54,8 @@ function TimelineEvent({
       initial={{ opacity: 0, y: 16 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
       transition={{ duration: MOTION_CONFIG.duration.reveal, delay: index * MOTION_CONFIG.stagger.tight, ease: MOTION_CONFIG.easing.premium }}
-      className={`relative grid grid-cols-1 sm:grid-cols-[120px_1fr] md:grid-cols-[180px_1fr] gap-3 sm:gap-8 md:gap-12 ${
-        !isLast ? "pb-12 sm:pb-16 border-b border-border mb-12 sm:mb-16" : ""
+      className={`relative grid grid-cols-1 sm:grid-cols-[120px_1fr] md:grid-cols-[180px_1fr] gap-4 sm:gap-8 md:gap-12 ${
+        !isLast ? "pb-14 sm:pb-16 border-b border-border mb-14 sm:mb-16" : ""
       }`}
     >
       <div className="text-left sm:text-right">

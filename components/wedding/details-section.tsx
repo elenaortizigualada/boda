@@ -45,7 +45,7 @@ export function DetailsSection() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border max-w-6xl mx-auto mt-2 sm:mt-4">
           {details.map((detail, index) => (
             <DetailCard key={detail.title} detail={detail} index={index} />
           ))}

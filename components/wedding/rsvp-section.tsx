@@ -22,6 +22,45 @@ export function RSVPSection() {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
 
+  const formatIcsDate = (date: Date) =>
+    date
+      .toISOString()
+      .replace(/[-:]/g, "")
+      .replace(/\.\d{3}/, "")
+
+  const handleAddToCalendar = () => {
+    const start = new Date(WEDDING_CONFIG.dateTime)
+    const end = new Date(start)
+    end.setHours(end.getHours() + 10)
+
+    const lines = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//Elena y Fran//Invitacion//ES",
+      "CALSCALE:GREGORIAN",
+      "BEGIN:VEVENT",
+      `UID:wedding-${start.getTime()}@elenayfran`,
+      `DTSTAMP:${formatIcsDate(new Date())}`,
+      `DTSTART:${formatIcsDate(start)}`,
+      `DTEND:${formatIcsDate(end)}`,
+      `SUMMARY:Boda ${WEDDING_CONFIG.couple.weddingName}`,
+      `DESCRIPTION:${WEDDING_CONFIG.texts.invitationLead}`,
+      `LOCATION:${WEDDING_CONFIG.location.name}, ${WEDDING_CONFIG.location.city}`,
+      "END:VEVENT",
+      "END:VCALENDAR",
+    ]
+
+    const blob = new Blob([lines.join("\r\n")], { type: "text/calendar;charset=utf-8" })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "boda-elena-fran.ics"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
   // Pre-llenar datos del invitado
   useEffect(() => {
     if (typeof window === "undefined" || guests.length === 0) return
@@ -51,9 +90,9 @@ export function RSVPSection() {
   }, [guests])
 
   return (
-    <section id="rsvp" className="scroll-mt-24 sm:scroll-mt-28 section-mobile bg-foreground text-background invitation-texture">
+    <section id="rsvp" className="scroll-mt-24 sm:scroll-mt-28 section-mobile-relaxed bg-foreground text-background invitation-texture">
       <div className="container mx-auto container-mobile">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-22">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-22">
           {/* Left column - Header */}
           <motion.div
             ref={ref}
@@ -90,9 +129,9 @@ export function RSVPSection() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="h-full flex items-center justify-center text-center py-20"
               >
-                <div>
+                <div className="max-w-md">
                   <p className="font-serif text-3xl sm:text-4xl font-light mb-5">{MESSAGES.rsvp.successTitle}</p>
-                  <p className="font-sans text-sm text-background/80 leading-relaxed">
+                  <p className="font-sans text-sm text-background/80 leading-relaxed mb-7">
                     {MESSAGES.rsvp.successMessage.split("\n").map((line, i) => (
                       <span key={i}>
                         {line}
@@ -100,6 +139,24 @@ export function RSVPSection() {
                       </span>
                     ))}
                   </p>
+
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
+                    <button
+                      type="button"
+                      onClick={handleAddToCalendar}
+                      className="tap-target w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-background text-background hover:bg-background hover:text-foreground transition-all duration-300 font-sans text-[10px] uppercase tracking-[0.16em]"
+                    >
+                      {MESSAGES.rsvp.successCalendarCta}
+                    </button>
+                    <a
+                      href={WEDDING_CONFIG.location.mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="tap-target w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-background/45 text-background/90 hover:border-background hover:text-background transition-all duration-300 font-sans text-[10px] uppercase tracking-[0.16em]"
+                    >
+                      {MESSAGES.rsvp.successMapsCta}
+                    </a>
+                  </div>
                 </div>
               </motion.div>
             ) : (
@@ -212,7 +269,7 @@ export function RSVPSection() {
                         <Label className="font-sans text-[10px] uppercase tracking-[0.2em] text-background/75 block mb-2">
                           ¿Necesitas autobús?
                         </Label>
-                        <p className="font-sans text-[12px] text-background/60 leading-relaxed">
+                        <p className="font-sans text-[13px] sm:text-[14px] text-background/68 leading-relaxed max-w-[60ch]">
                           {WEDDING_CONFIG.texts.busDescription}
                         </p>
                       </div>

@@ -50,12 +50,12 @@ export function VenueSection() {
       </div>
 
       {/* Descripción */}
-      <p className="font-sans text-[13px] sm:text-[14px] text-background/70 leading-relaxed">
+      <p className="font-sans text-[14px] sm:text-[15px] text-background/72 leading-relaxed max-w-[62ch]">
         {venue.description}
       </p>
 
       {/* Dirección */}
-      <div className="pt-4 border-t border-background/20">
+      <div className="pt-5 border-t border-background/20">
         <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-background/55 mb-2">
           Dirección
         </p>

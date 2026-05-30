@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useEffect, useRef } from "react"
+import { useState, useCallback, useEffect, useMemo, useRef } from "react"
 import { motion, AnimatePresence, animate, useMotionValue, useMotionTemplate, useTransform, useReducedMotion } from "framer-motion"
 import { useGuests, findGuestByCode, findGuestByName } from "@/hooks/use-guests"
 import { WEDDING_CONFIG } from "@/lib/constants"
@@ -13,10 +13,13 @@ interface EnvelopeIntroProps {
 }
 
 type EnvelopePhase = "idle" | "unsealing" | "opening" | "revealing" | "exiting"
+const INTRO_SEEN_KEY = "wedding_intro_seen"
 
 export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) {
   const { guests } = useGuests()
   const [guestName, setGuestName] = useState("Nombre del invitado")
+  const [isMobileViewport, setIsMobileViewport] = useState(false)
+  const [hasSeenIntro, setHasSeenIntro] = useState(false)
 
   const formatGuestNameForEnvelope = useCallback((name: string) => {
     const normalized = name.trim().replace(/\s+/g, " ")
@@ -133,13 +136,17 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
   const cinematicEase = [0.22, 1, 0.36, 1] as const
   const cinematicEaseOut = [0.19, 1, 0.22, 1] as const
   const isIdleAnimated = phase === "idle" && !prefersReducedMotion
+  const canUseTilt = isIdleAnimated && !isMobileViewport
   const flapOpen = phase === "opening" || phase === "revealing" || phase === "exiting"
-  const timeline = {
-    unsealingMs: 520,
-    openingMs: 1800,
-    revealingMs: 360,
-    exitMs: 1100,
-  } as const
+  const timeline = useMemo(() => {
+    const speedMultiplier = isMobileViewport ? 0.72 : 1
+    return {
+      unsealingMs: Math.round(520 * speedMultiplier),
+      openingMs: Math.round(1800 * speedMultiplier),
+      revealingMs: Math.round(360 * speedMultiplier),
+      exitMs: Math.round(1100 * speedMultiplier),
+    } as const
+  }, [isMobileViewport])
 
   const completeOnce = useCallback(() => {
     if (hasCompletedRef.current) return
@@ -153,12 +160,38 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
     onRevealMain()
   }, [onRevealMain])
 
-  const startExit = useCallback(() => {
-    setPhase((current) => (current === "exiting" ? current : "exiting"))
+  const markIntroAsSeen = useCallback(() => {
+    if (typeof window === "undefined") return
+    window.localStorage.setItem(INTRO_SEEN_KEY, "1")
   }, [])
+
+  const startExit = useCallback(() => {
+    markIntroAsSeen()
+    setPhase((current) => (current === "exiting" ? current : "exiting"))
+  }, [markIntroAsSeen])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    setHasSeenIntro(window.localStorage.getItem(INTRO_SEEN_KEY) === "1")
+
+    const mediaQuery = window.matchMedia("(max-width: 767px)")
+    const syncViewport = () => setIsMobileViewport(mediaQuery.matches)
+    syncViewport()
+    mediaQuery.addEventListener("change", syncViewport)
+    return () => mediaQuery.removeEventListener("change", syncViewport)
+  }, [])
+
+  useEffect(() => {
+    if (!hasSeenIntro) return
+    revealMainOnce()
+    completeOnce()
+  }, [completeOnce, hasSeenIntro, revealMainOnce])
 
   const handleInteraction = useCallback(() => {
     if (phase !== "idle") return
+
+    markIntroAsSeen()
 
     if (prefersReducedMotion) {
       startExit()
@@ -174,7 +207,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
     })
 
     setPhase("unsealing")
-  }, [phase, prefersReducedMotion, startExit, cardProgress, exitProgress, timeline.openingMs, timeline.revealingMs, timeline.unsealingMs])
+  }, [phase, markIntroAsSeen, prefersReducedMotion, startExit, cardProgress, exitProgress, timeline.openingMs, timeline.revealingMs, timeline.unsealingMs])
 
   const handleSkip = useCallback(() => {
     if (phase === "exiting") return
@@ -246,7 +279,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
   }, [handleSkip])
 
   const handleMove = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    if (phase !== "idle" || prefersReducedMotion) return
+    if (!canUseTilt) return
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
     const clientX = "touches" in e ? e.touches[0].clientX : e.clientX
     const clientY = "touches" in e ? e.touches[0].clientY : e.clientY
@@ -254,12 +287,16 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
     const y = clientY - rect.top - rect.height / 2
     mouseX.set(x)
     mouseY.set(y)
-  }, [phase, mouseX, mouseY, prefersReducedMotion])
+  }, [canUseTilt, mouseX, mouseY])
 
   const handleLeave = useCallback(() => {
     mouseX.set(0)
     mouseY.set(0)
   }, [mouseX, mouseY])
+
+  if (hasSeenIntro) {
+    return null
+  }
 
   return (
     <motion.div
@@ -280,6 +317,16 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
         }}
       />
 
+      {phase === "idle" && (
+        <button
+          type="button"
+          onClick={handleSkip}
+          className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[60] border border-[#5A4D3E]/35 bg-[#F6F3EE]/80 px-4 py-2 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-[#5A4D3E] backdrop-blur-sm transition-colors hover:bg-[#F6F3EE]"
+        >
+          {WEDDING_CONFIG.texts.introSkipLabel}
+        </button>
+      )}
+
       {/* Envelope assembly */}
       <motion.button
         type="button"
@@ -288,12 +335,12 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
         onClick={handleInteraction}
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
-        onTouchMove={handleMove}
-        onTouchEnd={handleLeave}
+        onTouchMove={canUseTilt ? handleMove : undefined}
+        onTouchEnd={canUseTilt ? handleLeave : undefined}
         style={{
           perspective: 1200,
-          rotateX: phase === "idle" && !prefersReducedMotion ? rotateX : 0,
-          rotateY: phase === "idle" && !prefersReducedMotion ? rotateY : 0,
+          rotateX: canUseTilt ? rotateX : 0,
+          rotateY: canUseTilt ? rotateY : 0,
         }}
         animate={{
           scale: isIdleAnimated ? [1, 1.005, 1] : 1,
@@ -751,7 +798,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ delay: 1.2, duration: 0.6 }}
+              transition={{ delay: 0.08, duration: 0.4 }}
             >
               <motion.p
                 className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-center mb-3"
@@ -763,7 +810,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
                     : { duration: 3.4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }
                 }
               >
-                Pulsa para abrir
+                {WEDDING_CONFIG.texts.introTapHint}
               </motion.p>
             </motion.div>
           )}
