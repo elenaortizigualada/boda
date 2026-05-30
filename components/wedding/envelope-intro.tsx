@@ -160,8 +160,9 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
   }, [onRevealMain])
 
   const startExit = useCallback(() => {
+    revealMainOnce()
     setPhase((current) => (current === "exiting" ? current : "exiting"))
-  }, [])
+  }, [revealMainOnce])
 
   useEffect(() => {
     if (typeof window === "undefined") return
