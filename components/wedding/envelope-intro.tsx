@@ -193,11 +193,6 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
     setPhase("unsealing")
   }, [phase, prefersReducedMotion, startExit, cardProgress, exitProgress, timeline.openingMs, timeline.revealingMs, timeline.unsealingMs])
 
-  const handleSkip = useCallback(() => {
-    if (phase === "exiting") return
-    startExit()
-  }, [phase, startExit])
-
   useEffect(() => {
     phaseRef.current = phase
   }, [phase])
@@ -251,17 +246,6 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
     }
   }, [phase, completeOnce, exitProgress, prefersReducedMotion, revealMainOnce, timeline.exitMs, timeline.openingMs, timeline.revealingMs, timeline.unsealingMs])
 
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        handleSkip()
-      }
-    }
-
-    window.addEventListener("keydown", handleEscape)
-    return () => window.removeEventListener("keydown", handleEscape)
-  }, [handleSkip])
-
   const handleMove = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (!canUseTilt) return
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
@@ -296,16 +280,6 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
           background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,255,255,0.4) 0%, transparent 60%)",
         }}
       />
-
-      {phase === "idle" && (
-        <button
-          type="button"
-          onClick={handleSkip}
-          className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[60] border border-[#5A4D3E]/35 bg-[#F6F3EE]/80 px-4 py-2 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-[#5A4D3E] backdrop-blur-sm transition-colors hover:bg-[#F6F3EE]"
-        >
-          {WEDDING_CONFIG.texts.introSkipLabel}
-        </button>
-      )}
 
       {/* Envelope assembly */}
       <motion.button

@@ -15,9 +15,7 @@ const navItems = [
 
 export function Navigation({ isVisible }: { isVisible: boolean }) {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [showMobileRsvpCta, setShowMobileRsvpCta] = useState(false)
   const [activeSection, setActiveSection] = useState<string>(navItems[0].href)
-  const [isRsvpSectionVisible, setIsRsvpSectionVisible] = useState(false)
   const [isDesktop, setIsDesktop] = useState(
     () => typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches
   )
@@ -38,7 +36,6 @@ export function Navigation({ isVisible }: { isVisible: boolean }) {
     const handleScroll = () => {
       const currentY = window.scrollY
       setIsScrolled(currentY > 50)
-      setShowMobileRsvpCta(currentY > 620)
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
@@ -132,24 +129,6 @@ export function Navigation({ isVisible }: { isVisible: boolean }) {
     )
 
     sections.forEach((section) => observer.observe(section))
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    const rsvpSection = document.getElementById("rsvp")
-    if (!rsvpSection) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0]
-        setIsRsvpSectionVisible(entry.isIntersecting)
-      },
-      {
-        threshold: 0.2,
-      }
-    )
-
-    observer.observe(rsvpSection)
     return () => observer.disconnect()
   }, [])
 
@@ -327,21 +306,6 @@ export function Navigation({ isVisible }: { isVisible: boolean }) {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {!isDesktop && isVisible && !isMobileMenuOpen && showMobileRsvpCta && !isRsvpSectionVisible && (
-          <motion.a
-            href="#rsvp"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
-            transition={{ duration: reduceMotion ? 0.15 : MOTION_CONFIG.duration.micro }}
-            className="lg:hidden fixed left-1/2 -translate-x-1/2 bottom-[calc(env(safe-area-inset-bottom)+0.85rem)] z-40 inline-flex items-center justify-center px-6 py-3 border border-foreground/30 bg-background/90 backdrop-blur-md text-foreground font-sans text-[10px] uppercase tracking-[0.18em] shadow-[0_10px_24px_rgba(0,0,0,0.12)]"
-            aria-label="Confirmar asistencia"
-          >
-            Confirmar asistencia
-          </motion.a>
-        )}
-      </AnimatePresence>
     </>
   )
 }
