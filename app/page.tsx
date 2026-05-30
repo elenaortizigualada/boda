@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, Suspense } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { EnvelopeIntro } from "@/components/wedding/envelope-intro"
 import { MainWebsite } from "@/components/wedding/main-website"
 
@@ -8,11 +8,25 @@ function WeddingContent() {
   const [showMainSite, setShowMainSite] = useState(false)
   const [showIntro, setShowIntro] = useState(true)
 
+  // Desactivar scroll restoration del navegador para que la página
+  // siempre empiece desde arriba, independientemente del scroll al refrescar
+  useEffect(() => {
+    if (typeof window !== "undefined" && "scrollRestoration" in history) {
+      history.scrollRestoration = "manual"
+    }
+    window.scrollTo(0, 0)
+  }, [])
+
+  const handleRevealMain = () => {
+    window.scrollTo(0, 0)
+    setShowMainSite(true)
+  }
+
   return (
     <>
       {showIntro && (
         <EnvelopeIntro
-          onRevealMain={() => setShowMainSite(true)}
+          onRevealMain={handleRevealMain}
           onComplete={() => setShowIntro(false)}
         />
       )}
