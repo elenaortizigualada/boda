@@ -1,4 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="E y F">
-  <rect width="64" height="64" rx="12" fill="#F6F3EE"/>
-  <text x="32" y="38" text-anchor="middle" fill="#2C2926" font-size="22" font-family="serif">E&amp;F</text>
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Definir estilos -->
+  <defs>
+    <style>
+      .logo-circle {
+        fill: none;
+        stroke: #8b7355;
+        stroke-width: 2;
+      }
+      .logo-text {
+        font-family: 'Georgia', 'Times New Roman', serif;
+        font-size: 70px;
+        font-weight: 300;
+        fill: #8b7355;
+        letter-spacing: 8px;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      .logo-ampersand {
+        font-family: 'Georgia', 'Times New Roman', serif;
+        font-size: 50px;
+        font-weight: 300;
+        fill: #8b7355;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      .logo-decoration {
+        fill: none;
+        stroke: #8b7355;
+        stroke-width: 1;
+        opacity: 0.5;
+      }
+    </style>
+  </defs>
+
+  <!-- Círculo exterior elegante -->
+  <circle cx="100" cy="100" r="95" class="logo-circle"/>
+  
+  <!-- Círculo interior decorativo -->
+  <circle cx="100" cy="100" r="88" class="logo-decoration"/>
+
+  <!-- Elementos decorativos (pequeños puntos en los cuadrantes) -->
+  <circle cx="100" cy="30" r="2" fill="#8b7355" opacity="0.4"/>
+  <circle cx="100" cy="170" r="2" fill="#8b7355" opacity="0.4"/>
+  <circle cx="30" cy="100" r="2" fill="#8b7355" opacity="0.4"/>
+  <circle cx="170" cy="100" r="2" fill="#8b7355" opacity="0.4"/>
+
+  <!-- Iniciales E&F -->
+  <text x="85" y="105" class="logo-text">E</text>
+  <text x="115" y="105" class="logo-ampersand">&amp;</text>
+  <text x="145" y="105" class="logo-text">F</text>
+
+  <!-- Línea decorativa horizontal fina -->
+  <line x1="45" y1="65" x2="155" y2="65" class="logo-decoration"/>
+  <line x1="45" y1="135" x2="155" y2="135" class="logo-decoration"/>
 </svg>

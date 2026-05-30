@@ -7,8 +7,6 @@ import { WEDDING_CONFIG, MOTION_CONFIG } from "@/lib/constants"
 export function Footer() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-50px" })
-  const brideInitial = WEDDING_CONFIG.couple.bride.charAt(0).toUpperCase()
-  const groomInitial = WEDDING_CONFIG.couple.groom.charAt(0).toUpperCase()
 
   return (
     <footer className="section-mobile bg-background">
@@ -36,14 +34,14 @@ export function Footer() {
           Gracias por estar con nosotros
         </motion.p>
 
-        <motion.h2
+        <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
           transition={{ duration: MOTION_CONFIG.duration.reveal, delay: MOTION_CONFIG.stagger.tight, ease: MOTION_CONFIG.easing.premium }}
-          className="font-serif text-[clamp(2.5rem,12vw,6.25rem)] font-light tracking-[0.02em] mb-6 sm:mb-8 leading-[0.92] md:leading-[0.93] lg:leading-[0.94]"
+          className="mb-6 sm:mb-8 flex justify-center"
         >
-          {`${brideInitial}&${groomInitial}`}
-        </motion.h2>
+          <img src="/logo2.png" alt="Logo" loading="lazy" decoding="async" className="w-56 sm:w-72 h-auto" />
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 10 }}

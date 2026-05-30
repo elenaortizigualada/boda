@@ -4,40 +4,7 @@ import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
 import type { KeyboardEvent as ReactKeyboardEvent } from "react"
 import { Plus } from "lucide-react"
-import { MOTION_CONFIG } from "@/lib/constants"
-
-const faqs = [
-  {
-    question: "¿Cuál es el código de vestimenta?",
-    answer:
-      "El código de vestimenta es etiqueta opcional. Se recomienda que los hombres lleven esmoquin o traje oscuro, y que las mujeres vistan traje de noche o cóctel. La ceremonia será al aire libre sobre césped, por lo que aconsejamos calzado adecuado.",
-  },
-  {
-    question: "¿Están invitados los niños?",
-    answer:
-      "Aunque adoramos a los peques, hemos decidido que nuestra boda sea una celebración solo para adultos. Esperamos que así podáis disfrutar de una noche para relajaros y celebrarlo con nosotros.",
-  },
-  {
-    question: "¿A qué hora debo llegar?",
-    answer:
-      "Os pedimos llegar hacia las 15:30 para disfrutar de las bebidas de bienvenida antes de la ceremonia de las 16:00. Así tendréis tiempo para ubicaros con calma.",
-  },
-  {
-    question: "¿Habrá transporte?",
-    answer:
-      "Sí. Habrá autobuses lanzadera entre los hoteles recomendados y Villa Balbiano durante la noche. La última salida desde el lugar será a las 00:30.",
-  },
-  {
-    question: "¿Dónde podemos alojarnos?",
-    answer:
-      "Hemos reservado bloques de habitaciones en Grand Hotel Tremezzo y Hotel Bellagio. Ambos tienen vistas espectaculares al Lago de Como y están a 15 minutos en coche del lugar. Indicad nuestros nombres al reservar para acceder a la tarifa especial.",
-  },
-  {
-    question: "¿Puedo hacer fotos durante la ceremonia?",
-    answer:
-      "Os pedimos una ceremonia sin móviles. Guardad teléfonos y cámaras durante los votos para vivir el momento plenamente. Nuestro fotógrafo capturará todo y compartiremos las fotos después de la boda.",
-  },
-]
+import { MOTION_CONFIG, WEDDING_CONFIG } from "@/lib/constants"
 
 export function FAQSection() {
   const ref = useRef(null)
@@ -46,7 +13,7 @@ export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   const handleQuestionKeyDown = (index: number, event: ReactKeyboardEvent<HTMLButtonElement>) => {
-    const total = faqs.length
+    const total = WEDDING_CONFIG.faqItems.length
 
     if (event.key === "ArrowDown") {
       event.preventDefault()
@@ -90,7 +57,7 @@ export function FAQSection() {
         </motion.div>
 
         <div className="max-w-3xl mx-auto">
-          {faqs.map((faq, index) => (
+          {WEDDING_CONFIG.faqItems.map((faq, index) => (
             <FAQItem
               key={faq.question}
               faq={faq}
@@ -117,7 +84,7 @@ function FAQItem({
   onKeyDown,
   buttonRef,
 }: {
-  faq: (typeof faqs)[0]
+  faq: (typeof WEDDING_CONFIG.faqItems)[number]
   index: number
   isOpen: boolean
   onToggle: () => void

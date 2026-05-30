@@ -174,6 +174,22 @@
   }
 }
 
+@media (max-width: 767px) {
+  body {
+    background-attachment: scroll;
+  }
+
+  .page-atmosphere {
+    opacity: 0.38;
+    filter: blur(16px);
+  }
+
+  .page-grain {
+    opacity: 0.04;
+    background-size: 160px 160px;
+  }
+}
+
 @layer utilities {
   .section-mobile {
     @apply py-14 sm:py-22 lg:py-30;

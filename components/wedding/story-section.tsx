@@ -3,38 +3,7 @@
 import { motion, useInView } from "framer-motion"
 import Image from "next/image"
 import { useRef } from "react"
-import { MOTION_CONFIG } from "@/lib/constants"
-
-const storyMilestones = [
-  {
-    year: "2019",
-    title: "Nuestro Primer Encuentro",
-    description:
-      "Nos conocimos en la inauguración de una galería en París. Fran derramó champán sobre el vestido favorito de Elena, y el resto es historia.",
-    image: "/images/story/2019.jpeg",
-  },
-  {
-    year: "2020",
-    title: "Primer viaje juntos",
-    description:
-      "Nuestra primera aventura nos llevó a la Costa Amalfitana. Entre limoneros y cenas al atardecer, supimos que era algo especial.",
-    image: "/images/story/2020.jpeg",
-  },
-  {
-    year: "2022",
-    title: "Nos Fuimos a Vivir Juntos",
-    description:
-      "Encontramos el piso de nuestros sueños en Londres, con un pequeño jardín y espacio para los libros de Elena y los vinilos de Fran.",
-    image: "/images/story/2022.jpeg",
-  },
-  {
-    year: "2024",
-    title: "La pedida",
-    description:
-      "En una tarde tranquila en Santorini, frente a la caldera al atardecer, Fran se arrodilló. Entre lágrimas de felicidad, Elena dijo que sí.",
-    image: "/images/story/2024.jpeg",
-  },
-]
+import { MOTION_CONFIG, WEDDING_CONFIG } from "@/lib/constants"
 
 export function StorySection() {
   const ref = useRef(null)
@@ -62,7 +31,7 @@ export function StorySection() {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-x-16 lg:gap-y-20">
-          {storyMilestones.map((milestone, index) => (
+          {WEDDING_CONFIG.storyMilestones.map((milestone, index) => (
             <StoryMilestone
               key={milestone.year}
               milestone={milestone}
@@ -79,7 +48,7 @@ function StoryMilestone({
   milestone,
   index,
 }: {
-  milestone: (typeof storyMilestones)[0]
+  milestone: (typeof WEDDING_CONFIG.storyMilestones)[number]
   index: number
 }) {
   const ref = useRef(null)

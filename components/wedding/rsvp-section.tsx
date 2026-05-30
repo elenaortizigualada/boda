@@ -17,10 +17,10 @@ export function RSVPSection() {
   const { guests } = useGuests()
   const [state, handleSubmit] = useForm(WEDDING_CONFIG.formspree.id)
   const [attendance, setAttendance] = useState("yes")
+  const [needsBuses, setNeedsBuses] = useState("")
   const [guestIdentifier, setGuestIdentifier] = useState("")
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
-  const [email, setEmail] = useState("")
 
   // Pre-llenar datos del invitado
   useEffect(() => {
@@ -37,7 +37,6 @@ export function RSVPSection() {
         const [fName, ...lName] = guest.name.split(" ")
         setFirstName(fName)
         setLastName(lName.join(" "))
-        setEmail(guest.email)
       }
     } else if (guestParam) {
       const guestName = guestParam.replace(/\+/g, " ")
@@ -47,7 +46,6 @@ export function RSVPSection() {
         const [fName, ...lName] = guest.name.split(" ")
         setFirstName(fName)
         setLastName(lName.join(" "))
-        setEmail(guest.email)
       }
     }
   }, [guests])
@@ -143,25 +141,6 @@ export function RSVPSection() {
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <Label
-                    htmlFor="email"
-                    className="font-sans text-[10px] uppercase tracking-[0.2em] text-background/75"
-                  >
-                    Correo electrónico
-                  </Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="bg-transparent border-background/25 focus:border-background text-background placeholder:text-background/30 h-12 sm:h-14 text-base transition-colors duration-300 ease-out"
-                  />
-                  <ValidationError field="email" errors={state.errors} />
-                </div>
-
                 <div className="space-y-4">
                   <Label className="font-sans text-[10px] uppercase tracking-[0.2em] text-background/75 block">
                     ¿Asistirás?
@@ -227,6 +206,35 @@ export function RSVPSection() {
                       />
                       <ValidationError field="dietary" errors={state.errors} />
                     </div>
+
+                    <div className="space-y-4">
+                      <div>
+                        <Label className="font-sans text-[10px] uppercase tracking-[0.2em] text-background/75 block mb-2">
+                          ¿Necesitas autobús?
+                        </Label>
+                        <p className="font-sans text-[12px] text-background/60 leading-relaxed">
+                          {WEDDING_CONFIG.texts.busDescription}
+                        </p>
+                      </div>
+                      <RadioGroup
+                        value={needsBuses}
+                        onValueChange={setNeedsBuses}
+                        className="flex flex-col sm:flex-row gap-5 sm:gap-10"
+                      >
+                        <div className="tap-target flex items-center gap-4">
+                          <RadioGroupItem value="yes" id="buses-yes" className="w-5 h-5 border-background/30 text-background" />
+                          <Label htmlFor="buses-yes" className="font-serif text-base cursor-pointer touch-manipulation text-background leading-none">
+                            Sí, necesito
+                          </Label>
+                        </div>
+                        <div className="tap-target flex items-center gap-4">
+                          <RadioGroupItem value="no" id="buses-no" className="w-5 h-5 border-background/30 text-background" />
+                          <Label htmlFor="buses-no" className="font-serif text-base cursor-pointer touch-manipulation text-background leading-none">
+                            No, gracias
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
                   </motion.div>
                 )}
 
@@ -250,6 +258,7 @@ export function RSVPSection() {
                 <input type="hidden" name="_subject" value={WEDDING_CONFIG.formspree.subject} />
                 <input type="hidden" name="_replyto" value={WEDDING_CONFIG.formspree.replyTo} />
                 <input type="hidden" name="attendance" value={attendance} />
+                <input type="hidden" name="needsBuses" value={needsBuses} />
                 {guestIdentifier && <input type="hidden" name="guestIdentifier" value={guestIdentifier} />}
 
                 <button

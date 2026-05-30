@@ -1,84 +1,128 @@
 "use client"
 
 import { motion, useInView } from "framer-motion"
-import Image from "next/image"
 import { useRef } from "react"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, Clock } from "lucide-react"
 import { MOTION_CONFIG, WEDDING_CONFIG } from "@/lib/constants"
 
 export function VenueSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+  type Venue = typeof WEDDING_CONFIG.ceremony | typeof WEDDING_CONFIG.reception
+
+  const VenueCard = ({ venue, index }: { venue: Venue, index: number }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      transition={{
+        duration: MOTION_CONFIG.duration.section,
+        delay: MOTION_CONFIG.stagger.medium * index,
+        ease: MOTION_CONFIG.easing.premium,
+      }}
+      className="space-y-5"
+    >
+      {/* Imagen del lugar */}
+      <div className="overflow-hidden aspect-[16/10] w-full mb-6">
+        <img
+          src={venue.image}
+          alt={venue.name}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover transition-transform duration-700 ease-out hover:scale-[1.03]"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <p className="font-sans text-[9px] uppercase tracking-[0.24em] text-background/50 mb-3">
+          {venue.type}
+        </p>
+        <h3 className="font-serif text-[clamp(1.65rem,7vw,2.5rem)] font-light leading-[1.05] text-balance">
+          {venue.name}
+        </h3>
+      </div>
+
+      {/* Hora */}
+      <div className="flex items-center gap-3 pt-2">
+        <Clock className="w-5 h-5 text-background/60" />
+        <p className="font-sans text-base text-background/85">
+          {venue.time}
+        </p>
+      </div>
+
+      {/* Descripción */}
+      <p className="font-sans text-[13px] sm:text-[14px] text-background/70 leading-relaxed">
+        {venue.description}
+      </p>
+
+      {/* Dirección */}
+      <div className="pt-4 border-t border-background/20">
+        <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-background/55 mb-2">
+          Dirección
+        </p>
+        <p className="font-sans text-[14px] sm:text-base text-background/85 leading-relaxed">
+          {venue.addressLine1}<br />
+          {venue.addressLine2}
+        </p>
+      </div>
+
+      {/* Enlace a mapa */}
+      <a
+        href={venue.mapUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="tap-target group inline-flex items-center gap-2 font-sans text-[10px] uppercase tracking-[0.14em] text-background hover:opacity-70 transition-opacity duration-300 ease-out touch-manipulation mt-2"
+      >
+        <span>Ver en mapa</span>
+        <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 ease-out" />
+      </a>
+    </motion.div>
+  )
 
   return (
     <section id="venue" ref={ref} className="scroll-mt-24 sm:scroll-mt-28 section-mobile bg-foreground text-background">
       <div className="container mx-auto container-mobile">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-14 lg:gap-24 items-center">
-          {/* Venue Image */}
-          <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -24 }}
-            transition={{ duration: MOTION_CONFIG.duration.section, ease: MOTION_CONFIG.easing.premium }}
-            className="relative h-[340px] sm:h-[420px] lg:h-[500px] max-w-[560px] w-full mx-auto lg:mx-0 overflow-hidden rounded-xl order-2 lg:order-1 bg-secondary/20"
-          >
-            <Image
-              src="/images/jardines.jpg" 
-              alt="Jardines del Negralejo"
-              fill
-              sizes="(max-width: 640px) 92vw, (max-width: 1024px) 80vw, 40vw"
-              quality={100}
-              priority
-              className="absolute inset-0 w-full h-full object-cover object-center"
-            />
-            {/* Decorative frame */}
-            <div className="absolute inset-0 rounded-xl border border-background/10 pointer-events-none" />
-          </motion.div>
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+          transition={{ duration: MOTION_CONFIG.duration.reveal, ease: MOTION_CONFIG.easing.premium }}
+          className="mb-16 sm:mb-20"
+        >
+          <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-background/60 mb-6">
+            El gran día
+          </p>
+          <h2 className="font-serif text-[clamp(2.5rem,11vw,4.5rem)] font-light leading-[1.05] tracking-wide text-balance">
+            Dos lugares especiales
+          </h2>
+        </motion.div>
 
-          {/* Venue Details */}
-          <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 24 }}
-            transition={{ duration: MOTION_CONFIG.duration.section, delay: MOTION_CONFIG.stagger.medium, ease: MOTION_CONFIG.easing.premium }}
-            className="order-1 lg:order-2"
-          >
-            <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-background/60 mb-6">
-              El lugar
-            </p>
-            <h2 className="font-serif text-[clamp(2rem,9vw,4.2rem)] font-light leading-[1.06] tracking-wide mb-5 text-balance">
-              {WEDDING_CONFIG.location.name}
-            </h2>
-            <div className="space-y-6 mb-10">
-              <p className="font-sans text-[15px] sm:text-base text-background/80 leading-relaxed max-w-[58ch]">
-                Jardines del Negralejo es una finca en las afueras de Madrid rodeada de jardines exuberantes, diseñada para celebraciones al aire libre con capacidad para grandes fiestas.
-              </p>
-              <p className="font-sans text-[15px] sm:text-base text-background/80 leading-relaxed max-w-[58ch]">
-                Sus espacios exteriores, arbolado centenario y luz natural en cualquier estación lo convierten en el escenario que siempre tuvimos en mente.
-              </p>
-            </div>
+        {/* Venues Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-20">
+          {/* Ceremonia */}
+          <div>
+            <VenueCard venue={WEDDING_CONFIG.ceremony} index={0} />
+          </div>
 
-            <div className="space-y-4 mb-10 pt-8 border-t border-background/20">
-              <div>
-                <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-background/55 mb-2">
-                  Dirección
-                </p>
-                <p className="font-sans text-[15px] sm:text-base text-background/92 leading-relaxed">
-                  {WEDDING_CONFIG.location.addressLine1}<br />
-                  {WEDDING_CONFIG.location.addressLine2}
-                </p>
-              </div>
-            </div>
-
-            <a
-              href={WEDDING_CONFIG.location.mapUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="tap-target group inline-flex items-center gap-3 font-sans text-[11px] uppercase tracking-[0.16em] text-background hover:opacity-70 transition-opacity duration-300 ease-out touch-manipulation"
-            >
-              <span>Ver en el mapa</span>
-              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 ease-out" />
-            </a>
-          </motion.div>
+          {/* Celebración */}
+          <div>
+            <VenueCard venue={WEDDING_CONFIG.reception} index={1} />
+          </div>
         </div>
+
+        {/* Timeline divider on mobile */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{
+            duration: MOTION_CONFIG.duration.reveal,
+            delay: MOTION_CONFIG.stagger.medium * 2,
+          }}
+          className="md:hidden mt-12 pt-12 border-t border-background/20 text-center"
+        >
+          <p className="font-sans text-[12px] uppercase tracking-[0.2em] text-background/50">
+            Nos vemos en la celebración
+          </p>
+        </motion.div>
       </div>
     </section>
   )

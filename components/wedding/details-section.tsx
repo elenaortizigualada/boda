@@ -11,7 +11,7 @@ const details = [
   },
   {
     title: "Hora",
-    content: "La ceremonia comienza a las 12:00",
+    content: `La ceremonia comienza a las ${WEDDING_CONFIG.ceremony.time}`,
   },
   {
     title: "Lugar",

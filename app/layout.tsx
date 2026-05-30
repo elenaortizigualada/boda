@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import type { Viewport } from 'next'
 import { Inter, Cormorant_Garamond } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { WEDDING_CONFIG } from '@/lib/constants'
 import './globals.css'
 
 const inter = Inter({ 
@@ -18,11 +19,11 @@ const cormorant = Cormorant_Garamond({
 })
 
 export const metadata: Metadata = {
-  title: 'Elena & Fran | Invitación de Boda',
-  description: 'Estás cordialmente invitado a celebrar la boda de Elena y Fran',
+  title: WEDDING_CONFIG.seo.title,
+  description: WEDDING_CONFIG.seo.description,
   generator: 'v0.app',
   icons: {
-    icon: '/icon.svg',
+    icon: '/logo2.png',
   },
 }
 

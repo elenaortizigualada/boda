@@ -4,13 +4,38 @@
 
 export const WEDDING_CONFIG = {
   // Información general
-  date: "2027-04-10",
-  time: "12:00",
-  dateLong: "Sábado, 10 de abril de 2027",
-  dateShort: "10.04.2027",
-  dateTime: new Date("2027-04-10T12:00:00"),
+  date: "2027-04-17",
+  time: "13:00",
+  dateLong: "Sábado, 17 de abril de 2027",
+  dateShort: "17.04.2027",
+  dateTime: new Date("2027-04-17T13:00:00"),
   
-  // Ubicación
+  // Ubicaciones
+  ceremony: {
+    name: "Convento de las Bernardas",
+    type: "Ceremonia",
+    time: "13:00",
+    addressLine1: "Plaza de las Bernardas",
+    addressLine2: "28801 Alcalá de Henares, Madrid, España",
+    lat: 40.4955,
+    lng: -3.3617,
+    mapUrl: "https://maps.app.goo.gl/6i6ks8caQzSjJZkt5",
+    image: "/images/venue.jpeg",
+    description: "El convento cisterciense de San Bernardo de Alcalá de Henares fue fundado en 1613 por el cardenal Bernardo de Sandoval y Rojas. Es un edificio barroco, declarado monumento arquitectónico-artístico en 1924.",
+  },
+  reception: {
+    name: "Jardines del Negralejo",
+    type: "Celebración",
+    time: "15:00",
+    addressLine1: "Carr. de Mejorada, km 2,5",
+    addressLine2: "28522 Rivas-Vaciamadrid, Madrid, España",
+    lat: 40.3089,
+    lng: -3.5276,
+    mapUrl: "https://maps.app.goo.gl/aywsjxhHfkAXqHAz8",
+    image: "/images/jardines.jpg",
+    description: "Los Jardines del Negralejo es una finca situada en un bonito enclave rural en la Vega del Henares. Ofrecen la combinación perfecta de espacios y naturaleza para vivir una experiencia única.",
+  },
+  // Ubicación (legacy - mantener para compatibilidad)
   location: {
     name: "Jardines del Negralejo",
     shortLabel: "Jardines del Negralejo, Madrid",
@@ -30,6 +55,111 @@ export const WEDDING_CONFIG = {
     weddingName: "Elena & Fran",
   },
 
+  seo: {
+    title: "Elena & Fran | Invitación de Boda",
+    description: "Estás cordialmente invitado a celebrar la boda de Elena y Fran",
+  },
+
+  texts: {
+    displayDate: "17 de abril de 2027",
+    heroLocation: "Jardines del Negralejo · Madrid",
+    invitationLead: "os invitamos a nuestra boda",
+    busDescription:
+      "Habrá un autobús que nos lleve de la iglesia a la finca. También habrá un autobús desde la finca a Boadilla del Monte, con parada en Vallecas.",
+  },
+
+  timelineEvents: [
+    {
+      time: "13:00",
+      title: "Ceremonia",
+      description: "Intercambio de votos en la iglesia",
+    },
+    {
+      time: "15:00",
+      title: "Cóctel",
+      description: "Cerveza y aperitivos en el jardín",
+    },
+    {
+      time: "16:30",
+      title: "Banquete",
+      description: "Menú en el gran salón",
+    },
+    {
+      time: "18:30",
+      title: "Primer baile",
+      description: "Intento de primer baile sin pisarnos y comienzo de la fiesta",
+    },
+    {
+      time: "00:00",
+      title: "Despedida",
+      description: "Salida de la fiesta y despedida de los invitados",
+    },
+  ],
+
+  storyMilestones: [
+    {
+      year: "2019",
+      title: "Nuestro Primer Encuentro",
+      description:
+        "Nos conocimos en la inauguración de una galería en París. Fran derramó champán sobre el vestido favorito de Elena, y el resto es historia.",
+      image: "/images/story/2019.jpeg",
+    },
+    {
+      year: "2020",
+      title: "Primer viaje juntos",
+      description:
+        "Nuestra primera aventura nos llevó a la Costa Amalfitana. Entre limoneros y cenas al atardecer, supimos que era algo especial.",
+      image: "/images/story/2020.jpeg",
+    },
+    {
+      year: "2022",
+      title: "Nos Fuimos a Vivir Juntos",
+      description:
+        "Encontramos el piso de nuestros sueños en Londres, con un pequeño jardín y espacio para los libros de Elena y los vinilos de Fran.",
+      image: "/images/story/2022.jpeg",
+    },
+    {
+      year: "2024",
+      title: "La pedida",
+      description:
+        "En una tarde tranquila en Santorini, frente a la caldera al atardecer, Fran se arrodilló. Entre lágrimas de felicidad, Elena dijo que sí.",
+      image: "/images/story/2024.jpeg",
+    },
+  ],
+
+  faqItems: [
+    {
+      question: "¿Cuál es el código de vestimenta?",
+      answer:
+        "El código de vestimenta es etiqueta opcional. Se recomienda que los hombres lleven esmoquin o traje oscuro, y que las mujeres vistan traje de noche o cóctel. La ceremonia será al aire libre sobre césped, por lo que aconsejamos calzado adecuado.",
+    },
+    {
+      question: "¿Están invitados los niños?",
+      answer:
+        "Aunque adoramos a los peques, hemos decidido que nuestra boda sea una celebración solo para adultos. Esperamos que así podáis disfrutar de una noche para relajaros y celebrarlo con nosotros.",
+    },
+    {
+      question: "¿A qué hora debo llegar?",
+      answer:
+        "Os pedimos llegar hacia las 15:30 para disfrutar de las bebidas de bienvenida antes de la ceremonia de las 16:00. Así tendréis tiempo para ubicaros con calma.",
+    },
+    {
+      question: "¿Habrá transporte?",
+      answer:
+        "Sí. Habrá autobuses lanzadera entre los hoteles recomendados y Villa Balbiano durante la noche. La última salida desde el lugar será a las 00:30.",
+    },
+    {
+      question: "¿Dónde podemos alojarnos?",
+      answer:
+        "Hemos reservado bloques de habitaciones en Grand Hotel Tremezzo y Hotel Bellagio. Ambos tienen vistas espectaculares al Lago de Como y están a 15 minutos en coche del lugar. Indicad nuestros nombres al reservar para acceder a la tarifa especial.",
+    },
+    {
+      question: "¿Puedo hacer fotos durante la ceremonia?",
+      answer:
+        "Os pedimos una ceremonia sin móviles. Guardad teléfonos y cámaras durante los votos para vivir el momento plenamente. Nuestro fotógrafo capturará todo y compartiremos las fotos después de la boda.",
+    },
+  ],
+
   // Formulario Formspree
   formspree: {
     id: process.env.NEXT_PUBLIC_FORMSPREE_ID || "xzdokovr",
@@ -42,8 +172,8 @@ export const WEDDING_CONFIG = {
 
   // Fechas importantes
   rsvpDeadline: "2026-12-01",
-  eventStartTime: "12:00",
-  eventEndTime: "23:00",
+  eventStartTime: "13:00",
+  eventEndTime: "00:00",
 } as const;
 
 /**

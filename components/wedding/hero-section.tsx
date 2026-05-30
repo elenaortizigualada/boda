@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
-import { MOTION_CONFIG } from "@/lib/constants"
+import { MOTION_CONFIG, WEDDING_CONFIG } from "@/lib/constants"
 
 export function HeroSection() {
   const reduceMotion = useReducedMotion()
@@ -61,7 +61,7 @@ export function HeroSection() {
             transition={{ duration: reduceMotion ? 0.2 : MOTION_CONFIG.duration.section, delay: reduceMotion ? 0 : 0.22, ease: MOTION_CONFIG.easing.smooth }}
             className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.28em] text-white/70"
           >
-            10 de abril de 2027
+            {WEDDING_CONFIG.texts.displayDate}
           </motion.p>
 
           {/* Nombres */}
@@ -71,7 +71,7 @@ export function HeroSection() {
             transition={{ duration: reduceMotion ? 0.2 : MOTION_CONFIG.duration.hero, delay: reduceMotion ? 0 : 0.38, ease: MOTION_CONFIG.easing.premium }}
             className="font-serif text-[clamp(3.8rem,19vw,12rem)] font-light tracking-[0.01em] leading-[0.86] text-white"
           >
-            Elena<br />&amp; Fran
+            {WEDDING_CONFIG.couple.bride}<br />&amp; {WEDDING_CONFIG.couple.groom}
           </motion.h1>
 
           {/* Fila inferior */}
@@ -82,7 +82,7 @@ export function HeroSection() {
             className="flex items-end justify-between gap-8"
           >
             <p className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-white/70">
-              Jardines del Negralejo · Madrid
+              {WEDDING_CONFIG.texts.heroLocation}
             </p>
             <a
               href="#story"

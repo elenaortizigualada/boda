@@ -90,7 +90,6 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
     }
   }, [guests])
   const prefersReducedMotion = useReducedMotion()
-  
   const [phase, setPhase] = useState<EnvelopePhase>("idle")
   const phaseRef = useRef<EnvelopePhase>("idle")
   const hasCompletedRef = useRef(false)
@@ -135,7 +134,6 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
   const cinematicEaseOut = [0.19, 1, 0.22, 1] as const
   const isIdleAnimated = phase === "idle" && !prefersReducedMotion
   const flapOpen = phase === "opening" || phase === "revealing" || phase === "exiting"
-  const sealInitials = `${WEDDING_CONFIG.couple.bride.charAt(0)}&${WEDDING_CONFIG.couple.groom.charAt(0)}`
   const timeline = {
     unsealingMs: 520,
     openingMs: 1800,
@@ -614,18 +612,16 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
                     />
                   )}
                   
-                  {/* Seal initials */}
-                  <span 
-                    className="absolute inset-0 flex items-center justify-center font-serif text-sm sm:text-base"
-                    style={{ 
-                      color: "rgba(255,252,248,0.9)",
-                      fontWeight: 300,
-                      letterSpacing: "0.05em",
-                      textShadow: "0 1px 2px rgba(0,0,0,0.2)",
+                  {/* Seal logo */}
+                  <img
+                    src="/logo2.png"
+                    alt="Logo de la boda"
+                    className="absolute inset-0 w-full h-full object-contain p-[6%]"
+                    style={{
+                      objectPosition: "50% 56%",
+                      filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.2))",
                     }}
-                  >
-                    {sealInitials}
-                  </span>
+                  />
                 </div>
               </motion.div>
             )}
@@ -695,7 +691,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
                 className="font-sans text-[8px] sm:text-[9px] uppercase tracking-[0.3em] sm:tracking-[0.38em] mb-4 sm:mb-5"
                 style={{ color: "#B09F84" }}
               >
-                os invitamos a nuestra boda
+                {WEDDING_CONFIG.texts.invitationLead}
               </p>
               <h2
                 className="font-serif text-[clamp(1.05rem,4.8vw,1.6rem)] text-center leading-[1.2] sm:leading-[1.18]"
@@ -708,7 +704,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
                 className="font-serif text-[11px] sm:text-[13px] italic text-center leading-[1.55]"
                 style={{ color: "#6B5D4D", fontWeight: 300, letterSpacing: "0.02em" }}
               >
-                10 de abril de 2027
+                {WEDDING_CONFIG.texts.displayDate}
               </p>
               <p
                 className="font-sans text-[8px] sm:text-[9px] uppercase tracking-[0.18em] mt-1"

@@ -2,35 +2,7 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
-import { MOTION_CONFIG } from "@/lib/constants"
-
-const timelineEvents = [
-  {
-    time: "12:00",
-    title: "Ceremonia",
-    description: "Intercambio de votos en la iglesia",
-  },
-  {
-    time: "13:30",
-    title: "Cóctel",
-    description: "Cerveza y aperitivos en el jardín",
-  },
-  {
-    time: "15:00",
-    title: "Banquete",
-    description: "Menú en el gran salón",
-  },
-  {
-    time: "17:00",
-    title: "Primer baile",
-    description: "Intento de primer baile sin pisarnos y comienzo de la fiesta",
-  },
-  {
-    time: "00:00",
-    title: "Despedida",
-    description: "Salida de la fiesta y despedida de los invitados",
-  },
-]
+import { MOTION_CONFIG, WEDDING_CONFIG } from "@/lib/constants"
 
 export function TimelineSection() {
   const ref = useRef(null)
@@ -55,8 +27,8 @@ export function TimelineSection() {
         </motion.div>
 
         <div className="max-w-4xl mx-auto">
-          {timelineEvents.map((event, index) => (
-            <TimelineEvent key={event.time} event={event} index={index} isLast={index === timelineEvents.length - 1} />
+          {WEDDING_CONFIG.timelineEvents.map((event, index) => (
+            <TimelineEvent key={event.time} event={event} index={index} isLast={index === WEDDING_CONFIG.timelineEvents.length - 1} />
           ))}
         </div>
       </div>
@@ -69,7 +41,7 @@ function TimelineEvent({
   index,
   isLast,
 }: {
-  event: (typeof timelineEvents)[0]
+  event: (typeof WEDDING_CONFIG.timelineEvents)[number]
   index: number
   isLast: boolean
 }) {

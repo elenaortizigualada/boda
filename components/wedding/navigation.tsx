@@ -13,15 +13,22 @@ const navItems = [
   { label: "Preguntas frecuentes", href: "#faq" },
 ]
 
-export function Navigation() {
+export function Navigation({ isVisible }: { isVisible: boolean }) {
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches
+  )
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const mobileDialogRef = useRef<HTMLDivElement | null>(null)
   const lastFocusedElementRef = useRef<HTMLElement | null>(null)
   const reduceMotion = useReducedMotion()
-  const brideInitial = WEDDING_CONFIG.couple.bride.charAt(0).toUpperCase()
-  const groomInitial = WEDDING_CONFIG.couple.groom.charAt(0).toUpperCase()
-  const initials = `${brideInitial}&${groomInitial}`
+
+  useEffect(() => {
+    const mql = window.matchMedia("(min-width: 1024px)")
+    const update = () => setIsDesktop(mql.matches)
+    mql.addEventListener("change", update)
+    return () => mql.removeEventListener("change", update)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -96,9 +103,13 @@ export function Navigation() {
   return (
     <>
       <motion.header
-        initial={reduceMotion ? false : { y: -100 }}
-        animate={{ y: 0 }}
+        initial={{ y: -100, opacity: 0 }}
+        animate={{
+          y: isDesktop && !isScrolled ? -100 : 0,
+          opacity: isVisible ? 1 : 0,
+        }}
         transition={{ duration: reduceMotion ? 0.2 : MOTION_CONFIG.duration.reveal, ease: MOTION_CONFIG.easing.premium }}
+        style={{ pointerEvents: isVisible ? "auto" : "none" }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
           isScrolled
             ? "bg-background/92 backdrop-blur-md border-b border-border/70"
@@ -109,9 +120,9 @@ export function Navigation() {
           <div className="flex items-center justify-between">
             <a
               href="#main-content"
-              className="tap-target inline-flex items-center font-serif text-[1.65rem] sm:text-3xl font-light tracking-[0.08em] text-foreground touch-manipulation"
+              className="tap-target inline-flex items-center justify-center text-foreground touch-manipulation w-12 h-12 sm:w-14 sm:h-14"
             >
-              {initials}
+              <img src="/logo2.png" alt="Logo" className="w-full h-full object-contain" />
             </a>
 
             {/* Desktop Navigation */}
@@ -184,9 +195,7 @@ export function Navigation() {
             />
             <div className="flex flex-col h-full">
               <div className="relative z-10 flex items-center justify-between container-mobile py-4 sm:py-6">
-                <span className="font-serif text-2xl sm:text-3xl font-light tracking-[0.1em] text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.5)]">
-                  {initials}
-                </span>
+                <img src="/logo2.png" alt="Logo" className="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-[0_4px_18px_rgba(0,0,0,0.5)]" />
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="tap-target p-2 -mr-2 text-white/95 touch-manipulation"
