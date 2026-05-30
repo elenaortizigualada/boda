@@ -351,14 +351,13 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
           <div 
             className="absolute inset-0"
             style={{
-              background: "linear-gradient(175deg, #F9F6F1 0%, #F3EDE4 40%, #EDE5D9 100%)",
+              background: "linear-gradient(175deg, #F2E6D5 0%, #E6D6BF 42%, #DCC8AD 100%)",
               boxShadow: `
-                0 1px 1px rgba(0,0,0,0.02),
-                0 2px 4px rgba(0,0,0,0.02),
-                0 4px 8px rgba(0,0,0,0.03),
-                0 8px 16px rgba(0,0,0,0.03),
-                0 16px 32px rgba(0,0,0,0.04),
-                inset 0 1px 0 rgba(255,255,255,0.8)
+                0 1px 1px rgba(0,0,0,0.03),
+                0 3px 6px rgba(0,0,0,0.05),
+                0 8px 16px rgba(0,0,0,0.07),
+                0 16px 32px rgba(0,0,0,0.08),
+                inset 0 1px 0 rgba(255,249,240,0.7)
               `,
             }}
           >
@@ -395,7 +394,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
             <div 
               className="absolute inset-0 pointer-events-none"
               style={{
-                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.5), inset 0 -1px 0 rgba(0,0,0,0.03)",
+                boxShadow: "inset 0 0 0 1px rgba(106,78,46,0.16), inset 0 -1px 0 rgba(0,0,0,0.08)",
               }}
             />
 
@@ -451,14 +450,14 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
             className="absolute top-0 left-0 w-1/2 h-full pointer-events-none"
             style={{
               clipPath: "polygon(0 0, 100% 50%, 0 100%)",
-              background: "linear-gradient(120deg, #EFE9DF 0%, #E8E0D4 100%)",
+              background: "linear-gradient(120deg, #E4D2BA 0%, #D5BEA1 100%)",
             }}
           />
           <div 
             className="absolute top-0 right-0 w-1/2 h-full pointer-events-none"
             style={{
               clipPath: "polygon(100% 0, 0 50%, 100% 100%)",
-              background: "linear-gradient(240deg, #EFE9DF 0%, #E8E0D4 100%)",
+              background: "linear-gradient(240deg, #E4D2BA 0%, #D5BEA1 100%)",
             }}
           />
 
@@ -467,14 +466,14 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
             className="absolute bottom-0 left-0 right-0 h-[45%] pointer-events-none"
             style={{
               clipPath: "polygon(0 100%, 50% 10%, 100% 100%)",
-              background: "linear-gradient(0deg, #F5EFE6 0%, #EDE6DB 100%)",
+              background: "linear-gradient(0deg, #EAD9C2 0%, #DDC5A8 100%)",
             }}
           >
             {/* Fold shadow at bottom */}
             <div 
               className="absolute inset-0"
               style={{
-                background: "linear-gradient(180deg, rgba(0,0,0,0.02) 0%, transparent 30%)",
+                background: "linear-gradient(180deg, rgba(82,58,32,0.14) 0%, transparent 38%)",
               }}
             />
           </div>
@@ -516,7 +515,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
               className="absolute inset-0"
               style={{
                 clipPath: "polygon(0 0, 50% 95%, 100% 0)",
-                background: "linear-gradient(180deg, #F7F3EC 0%, #F0E9DE 60%, #E8E0D4 100%)",
+                background: "linear-gradient(180deg, #E8D8C0 0%, #DDC7AA 62%, #D0B493 100%)",
                 backfaceVisibility: "hidden",
                 boxShadow: phase === "opening" || phase === "revealing" || phase === "exiting"
                   ? "0 -8px 24px rgba(0,0,0,0.12) inset"
@@ -579,7 +578,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
           <AnimatePresence>
             {phase === "idle" && (
               <motion.div
-                className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-30"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30"
                 initial={{ scale: 0.72, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{
@@ -593,36 +592,52 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
                 <div 
                   className="relative w-12 h-12 sm:w-14 sm:h-14"
                   style={{
-                    background: "radial-gradient(circle at 35% 35%, #D4A574 0%, #B8956A 40%, #8B7355 100%)",
-                    borderRadius: "50%",
+                    background: "radial-gradient(circle at 36% 34%, #C89A62 0%, #A77948 46%, #7B5534 100%)",
+                    borderRadius: "58% 44% 56% 42% / 46% 58% 42% 54%",
                     boxShadow: `
-                      0 2px 4px rgba(0,0,0,0.15),
-                      0 4px 8px rgba(0,0,0,0.1),
-                      inset 0 1px 2px rgba(255,255,255,0.25),
-                      inset 0 -2px 4px rgba(0,0,0,0.15)
+                      0 2px 4px rgba(0,0,0,0.18),
+                      0 5px 10px rgba(0,0,0,0.14),
+                      inset 0 2px 3px rgba(255,237,210,0.22),
+                      inset 0 -3px 6px rgba(64,40,16,0.36)
                     `,
                   }}
                 >
-                  {/* Wax texture */}
-                  {!prefersReducedMotion && (
-                    <div 
-                      className="absolute inset-0 rounded-full opacity-40"
-                      style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='wax'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.08' numOctaves='3' seed='7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23wax)' opacity='0.3'/%3E%3C/svg%3E")`,
-                      }}
-                    />
-                  )}
-                  
-                  {/* Seal logo */}
-                  <img
-                    src="/logo2.png"
-                    alt="Logo de la boda"
-                    className="absolute inset-0 w-full h-full object-contain p-[6%]"
+                  {/* Inner pressed wax core */}
+                  <div
+                    className="absolute left-1/2 top-1/2 w-[64%] h-[64%] -translate-x-1/2 -translate-y-1/2"
                     style={{
-                      objectPosition: "50% 56%",
-                      filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.2))",
+                      borderRadius: "50%",
+                      background: "radial-gradient(circle at 40% 38%, #B98953 0%, #94683C 62%, #6E4A2B 100%)",
+                      boxShadow: "inset 0 1px 2px rgba(255,244,226,0.16), inset 0 -2px 4px rgba(58,34,14,0.44)",
                     }}
                   />
+
+                  {/* Concentric wax rings */}
+                  <div
+                    className="absolute left-1/2 top-1/2 w-[78%] h-[78%] -translate-x-1/2 -translate-y-1/2 border-[1.6px]"
+                    style={{
+                      borderRadius: "50%",
+                      borderColor: "rgba(86,55,27,0.50)",
+                    }}
+                  />
+                  <div
+                    className="absolute left-1/2 top-1/2 w-[92%] h-[92%] -translate-x-1/2 -translate-y-1/2 border-[1.4px]"
+                    style={{
+                      borderRadius: "50%",
+                      borderColor: "rgba(86,55,27,0.42)",
+                    }}
+                  />
+
+                  {/* Monogram in the center */}
+                  <img
+                    src="/logo2.png"
+                    alt="Sello personalizado"
+                    className="absolute left-1/2 top-1/2 w-[80%] h-[80%] -translate-x-1/2 -translate-y-1/2 object-contain"
+                    style={{
+                      filter: "brightness(0.28) sepia(0.2) saturate(1.15) contrast(1.18)",
+                    }}
+                  />
+
                 </div>
               </motion.div>
             )}
@@ -702,7 +717,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
               </h2>
               <div className="w-10 sm:w-14 h-px bg-[#C9B896]/70 my-3 sm:my-4" />
               <p
-                className="font-serif text-[11px] sm:text-[13px] italic text-center leading-[1.55]"
+                className="font-serif text-[12px] sm:text-[15px] italic text-center leading-[1.55]"
                 style={{ color: "#6B5D4D", fontWeight: 300, letterSpacing: "0.02em" }}
               >
                 {WEDDING_CONFIG.texts.displayDate}
