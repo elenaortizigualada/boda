@@ -53,7 +53,7 @@ export function CountdownSection() {
   ]
 
   return (
-    <section className="section-mobile bg-secondary">
+    <section className="bg-secondary pt-12 pb-5 sm:pt-18 sm:pb-8 lg:pt-24 lg:pb-12">
       <div className="container mx-auto container-mobile">
         <motion.div
           ref={ref}
@@ -62,11 +62,11 @@ export function CountdownSection() {
           transition={{ duration: MOTION_CONFIG.duration.section, ease: MOTION_CONFIG.easing.premium }}
           className="text-center"
         >
-          <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-muted-foreground mb-12 sm:mb-16">
+          <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-muted-foreground mb-7 sm:mb-10">
             Cuenta atrás
           </p>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 lg:gap-14 max-w-4xl mx-auto mb-10 sm:mb-14 [font-variant-numeric:tabular-nums]">
+          <div className="grid grid-cols-4 gap-3 sm:gap-8 lg:gap-14 max-w-4xl mx-auto [font-variant-numeric:tabular-nums]">
             {timeUnits.map((unit, index) => (
               <motion.div
                 key={unit.label}
@@ -75,24 +75,15 @@ export function CountdownSection() {
                 transition={{ duration: MOTION_CONFIG.duration.reveal, delay: index * MOTION_CONFIG.stagger.tight, ease: MOTION_CONFIG.easing.premium }}
                 className="text-center"
               >
-                <span className="font-serif text-[clamp(2.1rem,8vw,5.2rem)] font-light text-foreground block mb-3 leading-[1.02] md:leading-[1.04] lg:leading-[1.06]">
+                <span className="font-serif text-[clamp(1.8rem,6.8vw,5.2rem)] font-light text-foreground block mb-2 sm:mb-3 leading-[1.02] md:leading-[1.04] lg:leading-[1.06]">
                   {mounted ? unit.value.toString().padStart(2, "0") : "--"}
                 </span>
-                <span className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.16em] sm:tracking-[0.24em] text-muted-foreground">
+                <span className="font-sans text-[9px] sm:text-[11px] uppercase tracking-[0.12em] sm:tracking-[0.24em] text-muted-foreground">
                   {unit.label}
                 </span>
               </motion.div>
             ))}
           </div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: MOTION_CONFIG.duration.section, delay: 0.18, ease: MOTION_CONFIG.easing.smooth }}
-            className="font-serif text-[clamp(1.3rem,5.8vw,2.4rem)] font-light italic text-muted-foreground leading-[1.2] text-balance"
-          >
-            Hasta que empiece nuestro para siempre
-          </motion.p>
         </motion.div>
       </div>
     </section>

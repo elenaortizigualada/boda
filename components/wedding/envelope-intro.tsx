@@ -13,13 +13,12 @@ interface EnvelopeIntroProps {
 }
 
 type EnvelopePhase = "idle" | "unsealing" | "opening" | "revealing" | "exiting"
-const INTRO_SEEN_KEY = "wedding_intro_seen"
+
 
 export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) {
   const { guests } = useGuests()
   const [guestName, setGuestName] = useState("Nombre del invitado")
   const [isMobileViewport, setIsMobileViewport] = useState(false)
-  const [hasSeenIntro, setHasSeenIntro] = useState(false)
 
   const formatGuestNameForEnvelope = useCallback((name: string) => {
     const normalized = name.trim().replace(/\s+/g, " ")
@@ -160,20 +159,12 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
     onRevealMain()
   }, [onRevealMain])
 
-  const markIntroAsSeen = useCallback(() => {
-    if (typeof window === "undefined") return
-    window.localStorage.setItem(INTRO_SEEN_KEY, "1")
-  }, [])
-
   const startExit = useCallback(() => {
-    markIntroAsSeen()
     setPhase((current) => (current === "exiting" ? current : "exiting"))
-  }, [markIntroAsSeen])
+  }, [])
 
   useEffect(() => {
     if (typeof window === "undefined") return
-
-    setHasSeenIntro(window.localStorage.getItem(INTRO_SEEN_KEY) === "1")
 
     const mediaQuery = window.matchMedia("(max-width: 767px)")
     const syncViewport = () => setIsMobileViewport(mediaQuery.matches)
@@ -182,16 +173,8 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
     return () => mediaQuery.removeEventListener("change", syncViewport)
   }, [])
 
-  useEffect(() => {
-    if (!hasSeenIntro) return
-    revealMainOnce()
-    completeOnce()
-  }, [completeOnce, hasSeenIntro, revealMainOnce])
-
   const handleInteraction = useCallback(() => {
     if (phase !== "idle") return
-
-    markIntroAsSeen()
 
     if (prefersReducedMotion) {
       startExit()
@@ -207,7 +190,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
     })
 
     setPhase("unsealing")
-  }, [phase, markIntroAsSeen, prefersReducedMotion, startExit, cardProgress, exitProgress, timeline.openingMs, timeline.revealingMs, timeline.unsealingMs])
+  }, [phase, prefersReducedMotion, startExit, cardProgress, exitProgress, timeline.openingMs, timeline.revealingMs, timeline.unsealingMs])
 
   const handleSkip = useCallback(() => {
     if (phase === "exiting") return
@@ -293,10 +276,6 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
     mouseX.set(0)
     mouseY.set(0)
   }, [mouseX, mouseY])
-
-  if (hasSeenIntro) {
-    return null
-  }
 
   return (
     <motion.div

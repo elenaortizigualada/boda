@@ -8,9 +8,9 @@ Cada invitado recibe una URL personalizada con su nombre. Al abrir la invitació
 
 ### Opción 1: Por Código de Invitado (Recomendado)
 ```
-https://tudominio.com/?code=1
-https://tudominio.com/?code=2
-https://tudominio.com/?code=3
+https://tudominio.com/?code=k7m2x9n3v5
+https://tudominio.com/?code=q8w1e4r7t2
+https://tudominio.com/?code=m4n7b2c9x1
 ```
 
 **Ventajas:**
@@ -39,7 +39,7 @@ https://tudominio.com/?guest=María+López
 
 ```json
 {
-  "id": 5,
+  "id": "k7m2x9n3v5",
   "name": "Nuevo Invitado",
   "email": "nuevo@example.com",
   "group": "Amigos"
@@ -47,7 +47,7 @@ https://tudominio.com/?guest=María+López
 ```
 
 **Campos:**
-- `id`: Número único (1, 2, 3, etc.)
+- `id`: Código único aleatorio (10 caracteres alfanuméricos)
 - `name`: Nombre completo del invitado
 - `email`: Email para contacto
 - `group`: Grupo/categoría (Familia, Amigos, Trabajo, etc.)
@@ -78,7 +78,7 @@ Perfecto para enviar emails masivos o guardar registro.
 
 ## 📧 Cómo los Invitados ven la Invitación
 
-1. Reciben un email con su link personalizado: `https://tudominio.com/?code=1`
+1. Reciben un email con su link personalizado: `https://tudominio.com/?code=k7m2x9n3v5`
 2. Al abrir, ven su nombre en la carta: **"Juan García"**
 3. Hacen clic para abrir la invitación
 4. Rellenan el RSVP con su nombre, email, asistencia, etc.
@@ -111,7 +111,7 @@ const url = getInvitationUrl(guest, baseUrl)
 const guests = await loadGuests()
 
 // Buscar invitado por código
-const guest = findGuestByCode(guests, "1")
+const guest = findGuestByCode(guests, "k7m2x9n3v5")
 
 // Generar CSV
 const csv = generateInvitationsCsv(guests, baseUrl)
@@ -125,7 +125,7 @@ Cuando alguien confirma su RSVP, recibes:
 
 | Campo | Valor |
 |-------|-------|
-| **guestIdentifier** | Código del invitado (ej: "Code: 1") |
+| **guestIdentifier** | Código del invitado (ej: "Code: k7m2x9n3v5") |
 | **firstName** | Nombre |
 | **lastName** | Apellidos |
 | **email** | Email |
@@ -138,11 +138,11 @@ Cuando alguien confirma su RSVP, recibes:
 
 ## 🔐 Seguridad
 
-- Los códigos de invitados son números simples (no secretos)
-- Si quieres mayor seguridad, puedes:
-  - Cambiar IDs a códigos aleatorios (UUID)
+- Los códigos de invitados son aleatorios y no secuenciales (más difíciles de adivinar)
+- Recomendaciones para reforzar más la seguridad:
   - Agregar validación en backend
-  - Usar tokens de una sola vez
+  - Implementar expiración o rotación de enlaces
+  - Usar tokens de una sola vez para campañas sensibles
 
 ---
 
@@ -151,19 +151,19 @@ Cuando alguien confirma su RSVP, recibes:
 ### Archivo `public/guests.json`:
 ```json
 [
-  { "id": 1, "name": "Juan García", "email": "juan@mail.com", "group": "Familia" },
-  { "id": 2, "name": "María López", "email": "maria@mail.com", "group": "Amigos" }
+  { "id": "k7m2x9n3v5", "name": "Juan García", "email": "juan@mail.com", "group": "Familia" },
+  { "id": "q8w1e4r7t2", "name": "María López", "email": "maria@mail.com", "group": "Amigos" }
 ]
 ```
 
 ### URLs Generadas:
-- Juan: `https://tudominio.com/?code=1`
-- María: `https://tudominio.com/?code=2`
+- Juan: `https://tudominio.com/?code=k7m2x9n3v5`
+- María: `https://tudominio.com/?code=q8w1e4r7t2`
 
 ### Cuando Juan confirma:
 ```
 Email recibido:
-- guestIdentifier: "Code: 1"
+- guestIdentifier: "Code: k7m2x9n3v5"
 - firstName: "Juan"
 - lastName: "García"
 - email: juan@mail.com
