@@ -6,7 +6,7 @@
  * Estructura de un invitado en guests.json
  */
 export interface Guest {
-  id: number
+  id: string
   name: string
   email: string
   group: string

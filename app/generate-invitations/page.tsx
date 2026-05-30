@@ -6,7 +6,7 @@ import { Copy, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface Guest {
-  id: number
+  id: string
   name: string
   email: string
   group: string
@@ -14,7 +14,7 @@ interface Guest {
 
 export default function GenerateInvitationsPage() {
   const [guests, setGuests] = useState<Guest[]>([])
-  const [copiedId, setCopiedId] = useState<number | null>(null)
+  const [copiedId, setCopiedId] = useState<string | null>(null)
   const [baseUrl, setBaseUrl] = useState("")
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function GenerateInvitationsPage() {
     return `${baseUrl}/?code=${guest.id}`
   }
 
-  const copyToClipboard = (url: string, guestId: number) => {
+  const copyToClipboard = (url: string, guestId: string) => {
     navigator.clipboard.writeText(url)
     setCopiedId(guestId)
     setTimeout(() => setCopiedId(null), 2000)

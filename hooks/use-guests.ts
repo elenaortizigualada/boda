@@ -63,7 +63,7 @@ export function useGuests() {
  * Función para buscar un invitado por ID (code)
  */
 export function findGuestByCode(guests: Guest[], code: string | number): Guest | undefined {
-  return guests.find((g) => g.id === parseInt(String(code)))
+  return guests.find((g) => g.id === String(code))
 }
 
 /**
