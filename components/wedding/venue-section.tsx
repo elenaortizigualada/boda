@@ -22,7 +22,7 @@ export function VenueSection() {
       className="space-y-5 border border-border/70 bg-secondary/55 p-5 sm:p-6 rounded-2xl shadow-[0_10px_26px_-22px_rgba(0,0,0,0.28)]"
     >
       {/* Imagen del lugar */}
-      <div className="overflow-hidden aspect-[16/10] w-full mb-6 rounded-xl">
+      <div className="relative z-30 overflow-hidden aspect-[16/10] w-full mb-6 rounded-xl">
         <img
           src={venue.image}
           alt={venue.name}
