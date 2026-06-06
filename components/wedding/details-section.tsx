@@ -15,7 +15,7 @@ const details = [
   },
   {
     title: "Lugar",
-    content: WEDDING_CONFIG.location.shortLabel,
+    content: WEDDING_CONFIG.reception.shortLabel,
   },
   {
     title: "Código de vestimenta",

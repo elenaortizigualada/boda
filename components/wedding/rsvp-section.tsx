@@ -45,7 +45,7 @@ export function RSVPSection() {
       `DTEND:${formatIcsDate(end)}`,
       `SUMMARY:Boda ${WEDDING_CONFIG.couple.weddingName}`,
       `DESCRIPTION:${WEDDING_CONFIG.texts.invitationLead}`,
-      `LOCATION:${WEDDING_CONFIG.location.name}, ${WEDDING_CONFIG.location.city}`,
+      `LOCATION:${WEDDING_CONFIG.reception.name}, ${WEDDING_CONFIG.reception.city}`,
       "END:VEVENT",
       "END:VCALENDAR",
     ]
@@ -90,7 +90,15 @@ export function RSVPSection() {
   }, [guests])
 
   return (
-    <section id="rsvp" className="scroll-mt-24 sm:scroll-mt-28 section-mobile-relaxed bg-foreground text-background invitation-texture">
+    <section id="rsvp" className="scroll-mt-24 sm:scroll-mt-28 section-mobile-relaxed section-divider-top bg-foreground text-background invitation-texture relative overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-16 sm:h-20"
+        style={{
+          background:
+            "linear-gradient(to bottom, color-mix(in oklab, var(--background) 70%, transparent) 0%, transparent 100%)",
+        }}
+      />
       <div className="container mx-auto container-mobile">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-22">
           {/* Left column - Header */}
@@ -122,6 +130,7 @@ export function RSVPSection() {
             initial={{ opacity: 0, y: 18 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
             transition={{ duration: MOTION_CONFIG.duration.reveal, delay: MOTION_CONFIG.stagger.medium, ease: MOTION_CONFIG.easing.premium }}
+            className="border border-background/20 bg-background/[0.04] backdrop-blur-[1px] p-5 sm:p-7 lg:p-8"
           >
             {state.succeeded ? (
               <motion.div
@@ -149,7 +158,7 @@ export function RSVPSection() {
                       {MESSAGES.rsvp.successCalendarCta}
                     </button>
                     <a
-                      href={WEDDING_CONFIG.location.mapUrl}
+                      href={WEDDING_CONFIG.reception.mapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="tap-target w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-background/45 text-background/90 hover:border-background hover:text-background transition-all duration-300 font-sans text-[10px] uppercase tracking-[0.16em]"

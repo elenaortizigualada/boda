@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
-import { MOTION_CONFIG, WEDDING_CONFIG } from "@/lib/constants"
+import { formatWeddingDisplayDate, MOTION_CONFIG, WEDDING_CONFIG } from "@/lib/constants"
 
 export function HeroSection() {
   const reduceMotion = useReducedMotion()
@@ -61,7 +61,7 @@ export function HeroSection() {
             transition={{ duration: reduceMotion ? 0.2 : MOTION_CONFIG.duration.section, delay: reduceMotion ? 0 : 0.22, ease: MOTION_CONFIG.easing.smooth }}
             className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.28em] text-white/70"
           >
-            {WEDDING_CONFIG.texts.displayDate}
+            {formatWeddingDisplayDate()}
           </motion.p>
 
           {/* Nombres */}
@@ -82,7 +82,7 @@ export function HeroSection() {
             className="flex items-end justify-between gap-8"
           >
             <p className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-white/70">
-              {WEDDING_CONFIG.texts.heroLocation}
+              {`${WEDDING_CONFIG.reception.name} · ${WEDDING_CONFIG.reception.city}`}
             </p>
             <a
               href="#story"

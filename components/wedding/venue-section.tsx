@@ -19,10 +19,10 @@ export function VenueSection() {
         delay: MOTION_CONFIG.stagger.medium * index,
         ease: MOTION_CONFIG.easing.premium,
       }}
-      className="space-y-5"
+      className="space-y-5 border border-border/70 bg-secondary/55 p-5 sm:p-6 rounded-2xl shadow-[0_10px_26px_-22px_rgba(0,0,0,0.28)]"
     >
       {/* Imagen del lugar */}
-      <div className="overflow-hidden aspect-[16/10] w-full mb-6">
+      <div className="overflow-hidden aspect-[16/10] w-full mb-6 rounded-xl">
         <img
           src={venue.image}
           alt={venue.name}
@@ -33,7 +33,7 @@ export function VenueSection() {
       </div>
 
       <div className="space-y-2">
-        <p className="font-sans text-[9px] uppercase tracking-[0.24em] text-background/50 mb-3">
+        <p className="font-sans text-[9px] uppercase tracking-[0.24em] text-muted-foreground mb-3">
           {venue.type}
         </p>
         <h3 className="font-serif text-[clamp(1.65rem,7vw,2.5rem)] font-light leading-[1.05] text-balance">
@@ -43,23 +43,23 @@ export function VenueSection() {
 
       {/* Hora */}
       <div className="flex items-center gap-3 pt-2">
-        <Clock className="w-5 h-5 text-background/60" />
-        <p className="font-sans text-base text-background/85">
+        <Clock className="w-5 h-5 text-muted-foreground/80" />
+        <p className="font-sans text-base text-foreground/85">
           {venue.time}
         </p>
       </div>
 
       {/* Descripción */}
-      <p className="font-sans text-[14px] sm:text-[15px] text-background/72 leading-relaxed max-w-[62ch]">
+      <p className="font-sans text-[14px] sm:text-[15px] text-muted-foreground leading-relaxed max-w-[62ch]">
         {venue.description}
       </p>
 
       {/* Dirección */}
-      <div className="pt-5 border-t border-background/20">
-        <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-background/55 mb-2">
+      <div className="pt-5 border-t border-border">
+        <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-muted-foreground mb-2">
           Dirección
         </p>
-        <p className="font-sans text-[14px] sm:text-base text-background/85 leading-relaxed">
+        <p className="font-sans text-[14px] sm:text-base text-foreground/85 leading-relaxed">
           {venue.addressLine1}<br />
           {venue.addressLine2}
         </p>
@@ -70,7 +70,7 @@ export function VenueSection() {
         href={venue.mapUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="tap-target group inline-flex items-center gap-2 font-sans text-[10px] uppercase tracking-[0.14em] text-background hover:opacity-70 transition-opacity duration-300 ease-out touch-manipulation mt-2"
+        className="tap-target group inline-flex items-center gap-2 font-sans text-[10px] uppercase tracking-[0.14em] text-foreground hover:opacity-70 transition-opacity duration-300 ease-out touch-manipulation mt-2"
       >
         <span>Ver en mapa</span>
         <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 ease-out" />
@@ -79,7 +79,7 @@ export function VenueSection() {
   )
 
   return (
-    <section id="venue" ref={ref} className="scroll-mt-24 sm:scroll-mt-28 section-mobile bg-foreground text-background">
+    <section id="venue" ref={ref} className="scroll-mt-24 sm:scroll-mt-28 section-mobile section-divider-top bg-background text-foreground">
       <div className="container mx-auto container-mobile">
         {/* Header */}
         <motion.div
@@ -88,7 +88,7 @@ export function VenueSection() {
           transition={{ duration: MOTION_CONFIG.duration.reveal, ease: MOTION_CONFIG.easing.premium }}
           className="mb-16 sm:mb-20"
         >
-          <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-background/60 mb-6">
+          <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-muted-foreground mb-6">
             El gran día
           </p>
           <h2 className="font-serif text-[clamp(2.5rem,11vw,4.5rem)] font-light leading-[1.05] tracking-wide text-balance">
@@ -117,9 +117,9 @@ export function VenueSection() {
             duration: MOTION_CONFIG.duration.reveal,
             delay: MOTION_CONFIG.stagger.medium * 2,
           }}
-          className="md:hidden mt-12 pt-12 border-t border-background/20 text-center"
+          className="md:hidden mt-12 pt-12 border-t border-border text-center"
         >
-          <p className="font-sans text-[12px] uppercase tracking-[0.2em] text-background/50">
+          <p className="font-sans text-[12px] uppercase tracking-[0.2em] text-muted-foreground">
             Nos vemos en la celebración
           </p>
         </motion.div>

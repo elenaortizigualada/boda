@@ -62,7 +62,7 @@ export function Footer() {
           transition={{ duration: MOTION_CONFIG.duration.reveal, delay: MOTION_CONFIG.stagger.medium + 0.04, ease: MOTION_CONFIG.easing.smooth }}
           className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.22em] sm:tracking-[0.26em] text-muted-foreground/70 text-balance"
         >
-          {WEDDING_CONFIG.location.shortLabel}
+          {WEDDING_CONFIG.reception.shortLabel}
         </motion.p>
       </motion.div>
     </footer>

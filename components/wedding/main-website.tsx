@@ -9,7 +9,6 @@ import { DetailsSection } from "./details-section"
 import { VenueSection } from "./venue-section"
 import { TimelineSection } from "./timeline-section"
 import { CountdownSection } from "./countdown-section"
-import { GallerySection } from "./gallery-section"
 import { RSVPSection } from "./rsvp-section"
 import { FAQSection } from "./faq-section"
 import { Footer } from "./footer"
@@ -47,7 +46,6 @@ export function MainWebsite({ isVisible }: MainWebsiteProps) {
           <DetailsSection />
           <TimelineSection />
           <VenueSection />
-          <GallerySection />
           <RSVPSection />
           <FAQSection />
           <Footer />

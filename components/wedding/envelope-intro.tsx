@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react"
 import { motion, AnimatePresence, animate, useMotionValue, useMotionTemplate, useTransform, useReducedMotion } from "framer-motion"
 import { useGuests, findGuestByCode, findGuestByName } from "@/hooks/use-guests"
-import { WEDDING_CONFIG } from "@/lib/constants"
+import { formatWeddingDisplayDate, WEDDING_CONFIG } from "@/lib/constants"
 
 
 
@@ -720,13 +720,13 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
                 className="font-serif text-[12px] sm:text-[15px] italic text-center leading-[1.55]"
                 style={{ color: "#6B5D4D", fontWeight: 300, letterSpacing: "0.02em" }}
               >
-                {WEDDING_CONFIG.texts.displayDate}
+                {formatWeddingDisplayDate()}
               </p>
               <p
                 className="font-sans text-[8px] sm:text-[9px] uppercase tracking-[0.18em] mt-1"
                 style={{ color: "#9A8B75" }}
               >
-                {WEDDING_CONFIG.location.name}
+                {WEDDING_CONFIG.reception.name}
               </p>
             </div>
 

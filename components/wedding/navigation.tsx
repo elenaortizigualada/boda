@@ -9,7 +9,6 @@ const navItems = [
   { label: "Detalles del día", href: "#details" },
   { label: "El lugar", href: "#venue" },
   { label: "Cronograma", href: "#timeline" },
-  { label: "Galería", href: "#gallery" },
   { label: "Preguntas frecuentes", href: "#faq" },
 ]
 

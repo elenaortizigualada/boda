@@ -5,40 +5,28 @@
 export const WEDDING_CONFIG = {
   // Información general
   date: "2027-04-17",
-  time: "13:00",
   dateLong: "Sábado, 17 de abril de 2027",
   dateShort: "17.04.2027",
-  dateTime: new Date("2027-04-17T13:00:00"),
+  dateTime: new Date("2027-04-17T12:00:00"),
   
   // Ubicaciones
   ceremony: {
-    name: "Convento de las Bernardas",
+    name: "Parroquia Santa María la Mayor",
     type: "Ceremonia",
-    time: "13:00",
-    addressLine1: "Plaza de las Bernardas",
+    time: "12:00",
+    addressLine1: "C. Libreros, 25",
     addressLine2: "28801 Alcalá de Henares, Madrid, España",
     lat: 40.4955,
     lng: -3.3617,
     mapUrl: "https://maps.app.goo.gl/6i6ks8caQzSjJZkt5",
-    image: "/images/venue.jpeg",
-    description: "El convento cisterciense de San Bernardo de Alcalá de Henares fue fundado en 1613 por el cardenal Bernardo de Sandoval y Rojas. Es un edificio barroco, declarado monumento arquitectónico-artístico en 1924.",
+    image: "/images/iglesia.jpg",
+    description: "La Parroquia Santa María la Mayor es un edificio histórico situado en el corazón de Alcalá de Henares. Su arquitectura y su ambiente acogedor la convierten en el lugar perfecto para nuestra ceremonia.",
   },
   reception: {
     name: "Jardines del Negralejo",
-    type: "Celebración",
-    time: "15:00",
-    addressLine1: "Carr. de Mejorada, km 2,5",
-    addressLine2: "28522 Rivas-Vaciamadrid, Madrid, España",
-    lat: 40.3089,
-    lng: -3.5276,
-    mapUrl: "https://maps.app.goo.gl/aywsjxhHfkAXqHAz8",
-    image: "/images/jardines.jpg",
-    description: "Los Jardines del Negralejo es una finca situada en un bonito enclave rural en la Vega del Henares. Ofrecen la combinación perfecta de espacios y naturaleza para vivir una experiencia única.",
-  },
-  // Ubicación (legacy - mantener para compatibilidad)
-  location: {
-    name: "Jardines del Negralejo",
     shortLabel: "Jardines del Negralejo, Madrid",
+    type: "Celebración",
+    time: "14:30",
     city: "Madrid",
     country: "España",
     addressLine1: "Carr. de Mejorada, km 2,5",
@@ -46,6 +34,8 @@ export const WEDDING_CONFIG = {
     lat: 40.3089,
     lng: -3.5276,
     mapUrl: "https://maps.app.goo.gl/aywsjxhHfkAXqHAz8",
+    image: "/images/jardines.jpg",
+    description: "Los Jardines del Negralejo es una finca situada en un bonito enclave rural en la Vega del Henares. Ofrecen la combinación perfecta de espacios y naturaleza para vivir una experiencia única.",
   },
 
   // Pareja
@@ -61,33 +51,31 @@ export const WEDDING_CONFIG = {
   },
 
   texts: {
-    displayDate: "17 de abril de 2027",
-    heroLocation: "Jardines del Negralejo · Madrid",
     invitationLead: "os invitamos a nuestra boda",
     introTapHint: "Toca para abrir",
     introSkipLabel: "Saltar introducción",
     busDescription:
-      "Habrá un autobús que nos lleve de la iglesia a la finca. También habrá un autobús desde la finca a Boadilla del Monte, con parada en Vallecas.",
+      "Estamos coordinando autobuses para facilitar el traslado entre ceremonia y celebración. Próximamente compartiremos horarios, paradas y detalles finales.",
   },
 
   timelineEvents: [
     {
-      time: "13:00",
+      time: "12:00",
       title: "Ceremonia",
       description: "Intercambio de votos en la iglesia",
     },
     {
-      time: "15:00",
+      time: "14:30",
       title: "Cóctel",
       description: "Cerveza y aperitivos en el jardín",
     },
     {
-      time: "16:30",
+      time: "16:00",
       title: "Banquete",
       description: "Menú en el gran salón",
     },
     {
-      time: "18:30",
+      time: "18:00",
       title: "Primer baile",
       description: "Intento de primer baile sin pisarnos y comienzo de la fiesta",
     },
@@ -100,32 +88,68 @@ export const WEDDING_CONFIG = {
 
   storyMilestones: [
     {
-      year: "2019",
-      title: "Nuestro Primer Encuentro",
+      year: "2021",
+      title: "El comienzo",
       description:
-        "Nos conocimos en la inauguración de una galería en París. Fran derramó champán sobre el vestido favorito de Elena, y el resto es historia.",
-      image: "/images/story/2019.jpeg",
-    },
-    {
-      year: "2020",
-      title: "Primer viaje juntos",
-      description:
-        "Nuestra primera aventura nos llevó a la Costa Amalfitana. Entre limoneros y cenas al atardecer, supimos que era algo especial.",
-      image: "/images/story/2020.jpeg",
+        "Todo empezó en Accenture, cuando Elena se incorporó al equipo donde trabajaba Fran. Lo que entonces eran reuniones, cafés y jornadas interminables, acabó siendo el inicio de algo mucho más importante.",
+      images: [],
     },
     {
       year: "2022",
-      title: "Nos Fuimos a Vivir Juntos",
+      title: "De compañeros a algo más",
       description:
-        "Encontramos el piso de nuestros sueños en Londres, con un pequeño jardín y espacio para los libros de Elena y los vinilos de Fran.",
-      image: "/images/story/2022.jpeg",
+        "Entre proyectos, muchas horas compartidas y para qué negarlo, la insistencia de Fran, la amistad fue dejando paso al cariño empezando nuestra historia juntos.",
+      images: ["/images/story/2022-companeros-a-algo-mas.jpeg"],
     },
     {
-      year: "2024",
-      title: "La pedida",
+      year: "2023",
+      title: "Primeras aventuras",
       description:
-        "En una tarde tranquila en Santorini, frente a la caldera al atardecer, Fran se arrodilló. Entre lágrimas de felicidad, Elena dijo que sí.",
-      image: "/images/story/2024.jpeg",
+        "Llegaron los primeros viajes, las primeras escapadas y un montón de recuerdos compartidos. Menorca fue uno de esos lugares que siempre recordaremos con especial cariño.",
+      images: ["/images/story/2023-primeras-aventuras.jpeg"],
+    },
+    {
+      title: "Una experiencia única",
+      year: "2024",
+      description:
+        "Tuvimos la oportunidad de vivir y trabajar juntos durante seis meses en México. Fue una aventura increíble que nos hizo crecer, descubrir nuevos lugares y confirmar que éramos un gran equipo dentro y fuera de la oficina.",
+      images: [
+        "/images/story/2024-experiencia-mexico.jpeg",
+        "/images/story/2024-experiencia-mexico-2.jpeg",
+      ],
+    },
+    {
+      year: "2025",
+      title: "Nuestro hogar",
+      description:
+        "Después de muchas ilusiones y algún que otro quebradero de cabeza, compramos nuestra casa. Nuestro primer hogar y el lugar donde empezamos a construir muchos de nuestros planes de futuro.",
+      images: ["/images/story/2025-nuestro-hogar.jpeg"],
+    },
+    {
+      year: "Por el camino...",
+      title: "Recuerdos alrededor del mundo",
+      description:
+        "Hemos tenido la suerte de recorrer juntos medio mundo: México, Costa Rica, Bahamas, Miami, Japón y muchos otros rincones que nos han regalado recuerdos inolvidables.",
+      images: [
+        "/images/story/por-el-camino-recuerdos.jpeg",
+        "/images/story/por-el-camino-2.jpeg",
+        "/images/story/por-el-camino-3.jpeg",
+        "/images/story/por-el-camino-4.jpeg",
+      ],
+    },
+    {
+      year: "2026",
+      title: "El \"sí\" más importante",
+      description:
+        "Fran le pidió matrimonio a Elena y, afortunadamente para él, la respuesta fue un sí.",
+      images: [],
+    },
+    {
+      year: "2027",
+      title: "Un nuevo capítulo",
+      description:
+        "Y aquí estamos. Rodeados de las personas que más queremos, celebrando el comienzo de nuestra mayor aventura: nuestra vida juntos.",
+      images: ["/images/story/2027-nuevo-capitulo.jpeg"],
     },
   ],
 
@@ -133,7 +157,7 @@ export const WEDDING_CONFIG = {
     {
       question: "¿Cuál es el código de vestimenta?",
       answer:
-        "El código de vestimenta es etiqueta opcional. Se recomienda que los hombres lleven esmoquin o traje oscuro, y que las mujeres vistan traje de noche o cóctel. La ceremonia será al aire libre sobre césped, por lo que aconsejamos calzado adecuado.",
+        "El código de vestimenta es etiqueta opcional. Se recomienda traje oscuro o esmoquin para los hombres y vestido de cóctel o noche para las mujeres. Como la ceremonia es en iglesia y la celebración en finca, os sugerimos un calzado cómodo para ambos entornos.",
     },
     {
       question: "¿Están invitados los niños?",
@@ -143,17 +167,17 @@ export const WEDDING_CONFIG = {
     {
       question: "¿A qué hora debo llegar?",
       answer:
-        "Os pedimos llegar hacia las 15:30 para disfrutar de las bebidas de bienvenida antes de la ceremonia de las 16:00. Así tendréis tiempo para ubicaros con calma.",
+        "La ceremonia comienza a las 12:00. Os recomendamos llegar con al menos 20 minutos de antelación para poder aparcar y acceder con tranquilidad.",
     },
     {
       question: "¿Habrá transporte?",
       answer:
-        "Sí. Habrá autobuses lanzadera entre los hoteles recomendados y Villa Balbiano durante la noche. La última salida desde el lugar será a las 00:30.",
+        "Sí. Estamos organizando transporte para facilitar los desplazamientos durante el día. Compartiremos rutas, horarios y puntos de salida en cuanto estén cerrados.",
     },
     {
       question: "¿Dónde podemos alojarnos?",
       answer:
-        "Hemos reservado bloques de habitaciones en Grand Hotel Tremezzo y Hotel Bellagio. Ambos tienen vistas espectaculares al Lago de Como y están a 15 minutos en coche del lugar. Indicad nuestros nombres al reservar para acceder a la tarifa especial.",
+        "Si venís de fuera, os recomendamos alojaros en Madrid o en Alcalá de Henares para tener mejor acceso tanto a la ceremonia como a la celebración. Si lo necesitáis, os ayudaremos encantados con sugerencias según vuestra zona de salida.",
     },
     {
       question: "¿Puedo hacer fotos durante la ceremonia?",
@@ -174,9 +198,15 @@ export const WEDDING_CONFIG = {
 
   // Fechas importantes
   rsvpDeadline: "2026-12-01",
-  eventStartTime: "13:00",
-  eventEndTime: "00:00",
 } as const;
+
+const DISPLAY_DATE_FORMATTER = new Intl.DateTimeFormat("es-ES", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+export const formatWeddingDisplayDate = () => DISPLAY_DATE_FORMATTER.format(WEDDING_CONFIG.dateTime);
 
 /**
  * Colores y estilos
