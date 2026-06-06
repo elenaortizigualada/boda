@@ -20,7 +20,7 @@ export function StorySection() {
           className="mb-16 sm:mb-20 lg:mb-24"
         >
           <div className="flex items-center gap-5 mb-6">
-            <span className="w-12 sm:w-20 h-px bg-foreground/20" />
+            <span className="w-12 sm:w-20 h-px line-gold-bg" />
             <p className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
               Nuestra historia
             </p>
@@ -90,7 +90,7 @@ function StoryMilestone({
         {hasImages && <StoryGallery images={milestone.images} title={milestone.title} className="mt-0" />}
       </div>
 
-      {!isLast && <div className="mt-12 sm:mt-14 h-px bg-foreground/10" />}
+      {!isLast && <div className="mt-12 sm:mt-14 h-px line-gold-bg" />}
     </motion.article>
   )
 }

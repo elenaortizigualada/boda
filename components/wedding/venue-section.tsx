@@ -55,7 +55,7 @@ export function VenueSection() {
       </p>
 
       {/* Dirección */}
-      <div className="pt-5 border-t border-border">
+      <div className="pt-5 border-t line-gold-border">
         <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-muted-foreground mb-2">
           Dirección
         </p>
@@ -88,9 +88,12 @@ export function VenueSection() {
           transition={{ duration: MOTION_CONFIG.duration.reveal, ease: MOTION_CONFIG.easing.premium }}
           className="mb-16 sm:mb-20"
         >
-          <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-muted-foreground mb-6">
-            El gran día
-          </p>
+          <div className="flex items-center gap-5 mb-6">
+            <span className="w-12 sm:w-20 h-px line-gold-bg" />
+            <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-muted-foreground">
+              El gran día
+            </p>
+          </div>
           <h2 className="font-serif text-[clamp(2.5rem,11vw,4.5rem)] font-light leading-[1.05] tracking-wide text-balance">
             Dos lugares especiales
           </h2>
@@ -117,7 +120,7 @@ export function VenueSection() {
             duration: MOTION_CONFIG.duration.reveal,
             delay: MOTION_CONFIG.stagger.medium * 2,
           }}
-          className="md:hidden mt-12 pt-12 border-t border-border text-center"
+          className="md:hidden mt-12 pt-12 border-t line-gold-border text-center"
         >
           <p className="font-sans text-[12px] uppercase tracking-[0.2em] text-muted-foreground">
             Nos vemos en la celebración

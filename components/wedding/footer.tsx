@@ -49,11 +49,11 @@ export function Footer() {
           transition={{ duration: MOTION_CONFIG.duration.reveal, delay: MOTION_CONFIG.stagger.medium, ease: MOTION_CONFIG.easing.premium }}
           className="flex items-center justify-center gap-3 sm:gap-6 mb-6 sm:mb-8"
         >
-          <span className="w-10 sm:w-20 h-px bg-border/80" />
+          <span className="w-10 sm:w-20 h-px line-gold-bg" />
           <p className="font-serif text-[clamp(1.15rem,4.6vw,1.7rem)] italic text-muted-foreground/85 tracking-[0.01em] leading-[1.15] md:leading-[1.2] lg:leading-[1.28]">
             {WEDDING_CONFIG.dateShort}
           </p>
-          <span className="w-10 sm:w-20 h-px bg-border/80" />
+          <span className="w-10 sm:w-20 h-px line-gold-bg" />
         </motion.div>
 
         <motion.p

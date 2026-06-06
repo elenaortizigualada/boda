@@ -2,26 +2,31 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
+import { CalendarDays, Clock3, MapPin, Shirt, type LucideIcon } from "lucide-react"
 import { MOTION_CONFIG, WEDDING_CONFIG } from "@/lib/constants"
 
 const details = [
   {
     title: "Fecha",
     content: WEDDING_CONFIG.dateLong,
+    icon: CalendarDays,
   },
   {
     title: "Hora",
     content: `La ceremonia comienza a las ${WEDDING_CONFIG.ceremony.time}`,
+    icon: Clock3,
   },
   {
     title: "Lugar",
     content: WEDDING_CONFIG.reception.shortLabel,
+    icon: MapPin,
   },
   {
     title: "Código de vestimenta",
     content: "Etiqueta opcional",
+    icon: Shirt,
   },
-]
+] satisfies Array<{ title: string; content: string; icon: LucideIcon }>
 
 export function DetailsSection() {
   const ref = useRef(null)
@@ -37,15 +42,18 @@ export function DetailsSection() {
           transition={{ duration: MOTION_CONFIG.duration.section, ease: MOTION_CONFIG.easing.premium }}
           className="mb-12 sm:mb-18 lg:mb-28"
         >
-          <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-muted-foreground mb-6">
-            Detalles
-          </p>
+          <div className="flex items-center gap-5 mb-6">
+            <span className="w-12 sm:w-20 h-px line-gold-bg" />
+            <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-muted-foreground">
+              Detalles
+            </p>
+          </div>
           <h2 className="font-serif text-[clamp(2rem,9vw,4.4rem)] font-light leading-[1.06] tracking-wide max-w-3xl text-balance">
             Todo lo que necesitas saber
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border max-w-6xl mx-auto mt-2 sm:mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px line-gold-bg max-w-6xl mx-auto mt-2 sm:mt-4">
           {details.map((detail, index) => (
             <DetailCard key={detail.title} detail={detail} index={index} />
           ))}
@@ -73,6 +81,9 @@ function DetailCard({
       transition={{ duration: MOTION_CONFIG.duration.reveal, delay: index * MOTION_CONFIG.stagger.tight, ease: MOTION_CONFIG.easing.premium }}
       className="bg-background p-7 sm:p-9 lg:p-11 text-center group hover:bg-secondary transition-colors duration-300 ease-out"
     >
+      <div className="mb-5 flex justify-center">
+        <detail.icon className="h-6 w-6 text-muted-foreground/80" aria-hidden="true" strokeWidth={1.7} />
+      </div>
       <h3 className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.18em] sm:tracking-[0.24em] text-muted-foreground mb-3">
         {detail.title}
       </h3>

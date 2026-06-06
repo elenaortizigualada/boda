@@ -108,9 +108,12 @@ export function RSVPSection() {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
             transition={{ duration: MOTION_CONFIG.duration.reveal, ease: MOTION_CONFIG.easing.premium }}
           >
-            <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-background/75 mb-6">
-              Confirmación
-            </p>
+            <div className="flex items-center gap-5 mb-6">
+              <span className="w-12 sm:w-20 h-px line-gold-bg" />
+              <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-background/75">
+                Confirmación
+              </p>
+            </div>
             <h2 className="font-serif text-[clamp(2rem,9vw,4.2rem)] font-light leading-[1.07] tracking-wide mb-6 text-balance">
               Esperamos contar contigo
             </h2>
