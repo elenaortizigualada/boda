@@ -71,7 +71,7 @@ export function CountdownDisplay({ overlay = false, showLabel = true }: { overla
           className="text-center"
         >
           {showLabel && (
-            <p className={`font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] mb-7 sm:mb-10 ${overlay ? "text-white/75" : "text-muted-foreground"}`}>
+            <p className={`font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] mb-7 sm:mb-10 ${overlay ? "text-white/90 drop-shadow-[0_2px_7px_rgba(0,0,0,0.7)]" : "text-muted-foreground"}`}>
               Cuenta atrás
             </p>
           )}
@@ -85,10 +85,10 @@ export function CountdownDisplay({ overlay = false, showLabel = true }: { overla
                 transition={{ duration: MOTION_CONFIG.duration.reveal, delay: index * MOTION_CONFIG.stagger.tight, ease: MOTION_CONFIG.easing.premium }}
                 className="text-center"
               >
-                <span className={`font-serif ${overlay ? "text-[clamp(2.1rem,7.5vw,5.8rem)]" : "text-[clamp(1.8rem,6.8vw,5.2rem)]"} font-light block mb-2 sm:mb-3 leading-[1.02] md:leading-[1.04] lg:leading-[1.06] ${overlay ? "text-white" : "text-foreground"}`}>
+                <span className={`font-serif ${overlay ? "text-[clamp(2.35rem,8vw,5.8rem)] drop-shadow-[0_3px_9px_rgba(0,0,0,0.72)]" : "text-[clamp(1.8rem,6.8vw,5.2rem)]"} font-light block mb-2 sm:mb-3 leading-[1.02] md:leading-[1.04] lg:leading-[1.06] ${overlay ? "text-white" : "text-foreground"}`}>
                   {mounted ? unit.value.toString().padStart(2, "0") : "--"}
                 </span>
-                <span className={`font-sans text-[9px] sm:text-[11px] uppercase tracking-[0.12em] sm:tracking-[0.24em] ${overlay ? "text-white/70" : "text-muted-foreground"}`}>
+                <span className={`font-sans text-[9px] sm:text-[11px] uppercase tracking-[0.12em] sm:tracking-[0.24em] ${overlay ? "text-white/90 drop-shadow-[0_2px_6px_rgba(0,0,0,0.72)]" : "text-muted-foreground"}`}>
                   {unit.label}
                 </span>
               </motion.div>

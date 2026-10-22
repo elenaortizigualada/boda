@@ -19,8 +19,22 @@ const cormorant = Cormorant_Garamond({
 })
 
 export const metadata: Metadata = {
-  title: WEDDING_CONFIG.seo.title,
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  title: '¡Nos casamos! | Elena & Fran',
   description: WEDDING_CONFIG.seo.description,
+  openGraph: {
+    title: '¡NOS CASAMOS!!!',
+    description: 'Elena y Fran se casan el 17 de abril de 2027',
+    type: 'website',
+    locale: 'es_ES',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: '¡Nos casamos! Elena y Fran' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '¡NOS CASAMOS!!!',
+    description: 'Elena y Fran se casan el 17 de abril de 2027',
+    images: ['/opengraph-image'],
+  },
   generator: 'v0.app',
   icons: {
     icon: '/logo2.png',
