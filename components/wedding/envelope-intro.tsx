@@ -616,7 +616,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
 
         {/* === INVITATION CARD (overlay layer) === */}
         <motion.div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 w-[86vw] max-w-[780px] max-h-[72svh] aspect-[3496/2480] sm:w-[74vw] sm:max-w-[780px] md:max-w-[780px] pointer-events-none opacity-0"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 w-[90vw] max-w-[820px] aspect-[3496/2480] sm:w-[78vw] sm:max-w-[760px] md:w-[760px] pointer-events-none overflow-hidden opacity-0"
           style={{
             y: phase === "exiting" ? exitCardY : cardY,
             opacity: phase === "exiting" ? exitCardOpacity : cardOpacity,
