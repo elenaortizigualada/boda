@@ -54,7 +54,7 @@ export function HeroSection() {
             initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: reduceMotion ? 0.2 : MOTION_CONFIG.duration.section, delay: reduceMotion ? 0 : 0.22, ease: MOTION_CONFIG.easing.smooth }}
-            className="w-full text-center font-sans text-[16px] sm:text-[21px] font-semibold uppercase tracking-[0.2em] text-white/90"
+            className="w-full text-center font-sans text-[18px] sm:text-[24px] font-semibold uppercase tracking-[0.2em] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.72)]"
           >
             {formatWeddingDisplayDate()}
           </motion.p>
