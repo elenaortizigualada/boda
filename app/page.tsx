@@ -40,7 +40,7 @@ export default function WeddingPage() {
     <Suspense fallback={
       <div 
         className="fixed inset-0 flex items-center justify-center"
-        style={{ background: "#F6F3EE" }}
+        style={{ background: "#F6F1E7" }}
       >
         <div 
           className="w-1 h-1 rounded-full animate-pulse"
