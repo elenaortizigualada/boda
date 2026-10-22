@@ -18,7 +18,7 @@ export const WEDDING_CONFIG = {
     addressLine2: "28801 Alcalá de Henares, Madrid, España",
     lat: 40.4955,
     lng: -3.3617,
-    mapUrl: "https://maps.app.goo.gl/6i6ks8caQzSjJZkt5",
+    mapUrl: "https://www.google.com/maps/place/Parroquia+Santa+Mar%C3%ADa+la+Mayor/@40.4846415,-3.3649968,17z/data=!3m1!4b1!4m6!3m5!1s0xd42496ad81531f1:0x8309f7a054ebec9!8m2!3d40.4846374!4d-3.3624219!16s%2Fg%2F11cs6k1_v4?entry=ttu&g_ep=EgoyMDI2MTAxOS4wIKXMDSoASAFQAw%3D%3D",
     image: "/images/iglesia.jpg",
     description: "La Parroquia Santa María la Mayor es un edificio histórico situado en el corazón de Alcalá de Henares. Su arquitectura y su ambiente acogedor la convierten en el lugar perfecto para nuestra ceremonia.",
   },
@@ -33,9 +33,9 @@ export const WEDDING_CONFIG = {
     addressLine2: "28522 Rivas-Vaciamadrid, Madrid, España",
     lat: 40.3089,
     lng: -3.5276,
-    mapUrl: "https://maps.app.goo.gl/aywsjxhHfkAXqHAz8",
+    mapUrl: "https://www.google.com/maps/place/Jardines+del+Negralejo/@40.4085747,-3.5188537,17z/data=!3m1!4b1!4m6!3m5!1s0xd423b214854bab3:0x664516d941116999!8m2!3d40.4085706!4d-3.5162788!16s%2Fg%2F11thnjv_ym?entry=tts&g_ep=EgoyMDI2MDUwNi4wIPu8ASoASAFQAw%3D%3D&skid=2be0418b-9e9c-4236-8eb4-8c3cbb2313c6",
     image: "/images/jardines.jpg",
-    description: "Los Jardines del Negralejo es una finca situada en un bonito enclave rural en la Vega del Henares. Ofrecen la combinación perfecta de espacios y naturaleza para vivir una experiencia única.",
+    description: "Los Jardines del Negralejo son una finca situada en un bonito enclave rural en la Vega del Henares.",
   },
 
   // Pareja
@@ -66,23 +66,18 @@ export const WEDDING_CONFIG = {
     },
     {
       time: "14:30",
-      title: "Cóctel",
-      description: "Cerveza y aperitivos en el jardín",
-    },
-    {
-      time: "16:00",
       title: "Banquete",
-      description: "Menú en el gran salón",
+      description: "Celebración en los jardines",
     },
     {
       time: "18:00",
-      title: "Primer baile",
-      description: "Intento de primer baile sin pisarnos y comienzo de la fiesta",
+      title: "Baile",
+      description: "Comienza la fiesta",
     },
     {
       time: "00:00",
-      title: "Despedida",
-      description: "Salida de la fiesta y despedida de los invitados",
+      title: "Nos despedimos",
+      description: "Hasta la próxima aventura",
     },
   ],
 
@@ -160,11 +155,6 @@ export const WEDDING_CONFIG = {
         "El código de vestimenta es etiqueta opcional. Se recomienda traje oscuro o esmoquin para los hombres y vestido de cóctel o noche para las mujeres. Como la ceremonia es en iglesia y la celebración en finca, os sugerimos un calzado cómodo para ambos entornos.",
     },
     {
-      question: "¿Están invitados los niños?",
-      answer:
-        "Aunque adoramos a los peques, hemos decidido que nuestra boda sea una celebración solo para adultos. Esperamos que así podáis disfrutar de una noche para relajaros y celebrarlo con nosotros.",
-    },
-    {
       question: "¿A qué hora debo llegar?",
       answer:
         "La ceremonia comienza a las 12:00. Os recomendamos llegar con al menos 20 minutos de antelación para poder aparcar y acceder con tranquilidad.",
@@ -173,6 +163,11 @@ export const WEDDING_CONFIG = {
       question: "¿Habrá transporte?",
       answer:
         "Sí. Estamos organizando transporte para facilitar los desplazamientos durante el día. Compartiremos rutas, horarios y puntos de salida en cuanto estén cerrados.",
+    },
+    {
+      question: "¿Hay aparcamiento disponible?",
+      answer:
+        "La iglesia no cuenta con aparcamiento propio, aunque se puede aparcar en las calles cercanas. Aun así, tened en cuenta que está situada en el centro histórico de Alcalá de Henares y puede llevar un poco de tiempo encontrar aparcamiento. En la finca sí hay aparcamiento disponible.",
     },
     {
       question: "¿Dónde podemos alojarnos?",

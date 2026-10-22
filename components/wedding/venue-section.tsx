@@ -81,24 +81,6 @@ export function VenueSection() {
   return (
     <section id="venue" ref={ref} className="scroll-mt-24 sm:scroll-mt-28 section-mobile section-divider-top bg-background text-foreground">
       <div className="container mx-auto container-mobile">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-          transition={{ duration: MOTION_CONFIG.duration.reveal, ease: MOTION_CONFIG.easing.premium }}
-          className="mb-16 sm:mb-20"
-        >
-          <div className="flex items-center gap-5 mb-6">
-            <span className="w-12 sm:w-20 h-px line-gold-bg" />
-            <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-muted-foreground">
-              El gran día
-            </p>
-          </div>
-          <h2 className="font-serif text-[clamp(2.5rem,11vw,4.5rem)] font-light leading-[1.05] tracking-wide text-balance">
-            Dos lugares especiales
-          </h2>
-        </motion.div>
-
         {/* Venues Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-20">
           {/* Ceremonia */}

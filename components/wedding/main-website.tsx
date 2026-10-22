@@ -6,11 +6,8 @@ import { Navigation } from "./navigation"
 import { HeroSection } from "./hero-section"
 import { StorySection } from "./story-section"
 import { DetailsSection } from "./details-section"
-import { VenueSection } from "./venue-section"
-import { TimelineSection } from "./timeline-section"
-import { CountdownSection } from "./countdown-section"
-import { RSVPSection } from "./rsvp-section"
 import { FAQSection } from "./faq-section"
+import { GiftSection } from "./gift-section"
 import { Footer } from "./footer"
 
 interface MainWebsiteProps {
@@ -32,21 +29,11 @@ export function MainWebsite({ isVisible }: MainWebsiteProps) {
         style={{ pointerEvents: isVisible ? "auto" : "none" }}
         aria-hidden={!isVisible}
       >
-        <motion.div
-          aria-hidden="true"
-          className="page-grain"
-          initial={false}
-          animate={{ opacity: isVisible ? 1 : 0 }}
-          transition={{ duration: isVisible ? 1.1 : 0.2, ease: MOTION_CONFIG.easing.smooth }}
-        />
         <main id="main-content" className="min-h-screen" tabIndex={-1}>
           <HeroSection />
-          <CountdownSection />
           <StorySection />
           <DetailsSection />
-          <TimelineSection />
-          <VenueSection />
-          <RSVPSection />
+          <GiftSection />
           <FAQSection />
           <Footer />
         </main>

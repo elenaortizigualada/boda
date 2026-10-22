@@ -114,13 +114,11 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
   const cardScale   = useTransform(cardProgress, [0, 0.45, 1],             [1, 0.994, 0.982])
   const cardRotateX = useTransform(cardProgress, [0, 0.5, 0.72, 1],        [0, -0.2, -1.8, -2.6])
   const cardBoxShadow = useTransform(cardProgress, [0, 0.35, 0.65, 1], [
-    "0 2px 4px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.01)",
-    "0 8px 22px rgba(0,0,0,0.07), 0 3px 8px rgba(0,0,0,0.04)",
-    "0 18px 44px rgba(0,0,0,0.13), 0 7px 18px rgba(0,0,0,0.09)",
-    "0 24px 56px rgba(0,0,0,0.15), 0 9px 24px rgba(0,0,0,0.10)",
+    "none",
+    "none",
+    "none",
+    "none",
   ])
-  const frontOccluderOpacity = useTransform(cardProgress, [0, 0.7, 0.9, 1], [1, 1, 0.84, 0.25])
-  const frontOccluderY = useTransform(cardProgress, [0, 0.78, 1], [0, 0, -2])
   const exitCardRotateY = useTransform(exitProgress, [0, 1], [0, 176])
   const exitCardRotateZ = useTransform(exitProgress, [0, 1], [0, 180])
   const exitCardY = useTransform(exitProgress, [0, 1], ["-84%", "-106%"])
@@ -142,7 +140,8 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
     return {
       unsealingMs: Math.round(520 * speedMultiplier),
       openingMs: Math.round(1800 * speedMultiplier),
-      revealingMs: Math.round(360 * speedMultiplier),
+      // Mantener la invitación visible un poco más antes de retirarla.
+      revealingMs: Math.round(1400 * speedMultiplier),
       exitMs: Math.round(1100 * speedMultiplier),
     } as const
   }, [isMobileViewport])
@@ -269,7 +268,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
       style={{
         opacity: phase === "exiting" ? overlayOpacity : 1,
         filter: phase === "exiting" ? overlayBlur : "none",
-        background: "#F6F3EE",
+        background: "#F6F1E7",
       }}
       transition={{ duration: prefersReducedMotion ? 0.2 : 0.98, ease: [0.18, 1, 0.28, 1] }}
     >
@@ -307,30 +306,9 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
         }
         whileTap={prefersReducedMotion ? undefined : { scale: 0.992 }}
       >
-        {/* Ground shadow - realistic diffuse shadow */}
-        <motion.div
-          className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
-          style={{
-            width: "120%",
-            height: "40px",
-            bottom: "-25px",
-            background: "radial-gradient(ellipse at center, rgba(60,50,40,0.12) 0%, rgba(60,50,40,0.04) 40%, transparent 70%)",
-            filter: "blur(8px)",
-          }}
-          animate={{
-            scaleX: phase === "exiting" ? 1.12 : isIdleAnimated ? [1, 1.02, 1] : 1,
-            opacity: phase === "exiting" ? 0 : isIdleAnimated ? [1, 0.9, 1] : 1,
-          }}
-          transition={
-            isIdleAnimated
-              ? { duration: 3.8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }
-              : { duration: prefersReducedMotion ? 0.2 : 0.6, ease: cinematicEase }
-          }
-        />
-
         {/* Main envelope container */}
         <motion.div 
-          className="relative w-[90vw] max-w-[420px] aspect-[1.45/1] sm:w-[82vw] sm:max-w-[380px] md:w-[420px]"
+          className="relative w-[90vw] max-w-[820px] aspect-[3496/2480] sm:w-[78vw] sm:max-w-[760px] md:w-[760px]"
           style={{ transformStyle: "preserve-3d" }}
           animate={{
             y:
@@ -351,14 +329,8 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
           <div 
             className="absolute inset-0"
             style={{
-              background: "linear-gradient(175deg, #F2E6D5 0%, #E6D6BF 42%, #DCC8AD 100%)",
-              boxShadow: `
-                0 1px 1px rgba(0,0,0,0.03),
-                0 3px 6px rgba(0,0,0,0.05),
-                0 8px 16px rgba(0,0,0,0.07),
-                0 16px 32px rgba(0,0,0,0.08),
-                inset 0 1px 0 rgba(255,249,240,0.7)
-              `,
+          background: "#7F8F5D",
+              boxShadow: "none",
             }}
           >
             {/* Cotton paper texture - subtle fiber pattern */}
@@ -366,7 +338,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
               <div 
                 className="absolute inset-0 opacity-[0.35] mix-blend-multiply pointer-events-none"
                 style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='cotton'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03' numOctaves='4' seed='1' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23F5F0E8' surfaceScale='1.5'%3E%3CfeDistantLight azimuth='135' elevation='55'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23cotton)'/%3E%3C/svg%3E")`,
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='cotton'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03' numOctaves='4' seed='1' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23DDE5C9' surfaceScale='1.5'%3E%3CfeDistantLight azimuth='135' elevation='55'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23cotton)'/%3E%3C/svg%3E")`,
                   backgroundSize: "200px 200px",
                 }}
               />
@@ -404,7 +376,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
               style={{
                 height: "52%",
                 zIndex: 23,
-                background: "linear-gradient(180deg, #1B1308 0%, #2D1F10 45%, #3A2B18 70%, transparent 100%)",
+                background: "linear-gradient(180deg, #334127 0%, #465637 45%, #61734A 70%, transparent 100%)",
               }}
               initial={{ opacity: 0 }}
               animate={{ opacity: flapOpen ? 1 : 0 }}
@@ -423,24 +395,25 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
             />
 
             <motion.div
-              className="absolute left-1/2 -translate-x-1/2 top-[8.5%] sm:top-[10%] text-center pointer-events-none w-[84%] sm:w-[78%]"
+              className="absolute left-1/2 -translate-x-1/2 top-[10%] sm:top-[12%] text-center pointer-events-none w-[68%]"
               initial={false}
               animate={{ opacity: phase === "idle" || phase === "unsealing" ? 1 : 0 }}
               transition={{ duration: 0.45, ease: "easeOut" }}
               style={{ zIndex: 26 }}
             >
               <p
-                className={`leading-[1.15] break-words whitespace-pre-line ${guestNameFontClass}`}
+                className="leading-[1.15] break-words whitespace-pre-line"
                 style={{
                   fontFamily: '"Cormorant Garamond", "Times New Roman", serif',
-                  fontStyle: "normal",
-                  color: "#4C3F31",
+                  fontStyle: "italic",
+                  color: "#3B2F2B",
                   fontWeight: 500,
                   letterSpacing: "0.02em",
+                  fontSize: "clamp(2rem, 3.2vw, 4rem)",
                   textShadow: "0 1px 0 rgba(255,255,255,0.35), 0 0.5px 0.8px rgba(76,63,49,0.16)",
                 }}
               >
-                {guestNameLines.join("\n")}
+                {guestName}
               </p>
             </motion.div>
           </div>
@@ -450,30 +423,30 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
             className="absolute top-0 left-0 w-1/2 h-full pointer-events-none"
             style={{
               clipPath: "polygon(0 0, 100% 50%, 0 100%)",
-              background: "linear-gradient(120deg, #E4D2BA 0%, #D5BEA1 100%)",
+              background: "#7F8F5D",
             }}
           />
           <div 
             className="absolute top-0 right-0 w-1/2 h-full pointer-events-none"
             style={{
               clipPath: "polygon(100% 0, 0 50%, 100% 100%)",
-              background: "linear-gradient(240deg, #E4D2BA 0%, #D5BEA1 100%)",
+              background: "#7F8F5D",
             }}
           />
 
           {/* === BOTTOM FLAP (V-shape tuck) === */}
           <div 
-            className="absolute bottom-0 left-0 right-0 h-[45%] pointer-events-none"
+            className="absolute bottom-0 left-0 right-0 h-[42%] pointer-events-none"
             style={{
-              clipPath: "polygon(0 100%, 50% 10%, 100% 100%)",
-              background: "linear-gradient(0deg, #EAD9C2 0%, #DDC5A8 100%)",
+              clipPath: "polygon(0 100%, 50% 0, 100% 100%)",
+              background: "#7F8F5D",
             }}
           >
             {/* Fold shadow at bottom */}
             <div 
               className="absolute inset-0"
               style={{
-                background: "linear-gradient(180deg, rgba(82,58,32,0.14) 0%, transparent 38%)",
+                background: "transparent",
               }}
             />
           </div>
@@ -515,11 +488,9 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
               className="absolute inset-0"
               style={{
                 clipPath: "polygon(0 0, 50% 95%, 100% 0)",
-                background: "linear-gradient(180deg, #E8D8C0 0%, #DDC7AA 62%, #D0B493 100%)",
+                background: "#7F8F5D",
                 backfaceVisibility: "hidden",
-                boxShadow: phase === "opening" || phase === "revealing" || phase === "exiting"
-                  ? "0 -8px 24px rgba(0,0,0,0.12) inset"
-                  : "none",
+                boxShadow: "none",
               }}
             >
               {/* Paper texture on flap */}
@@ -545,7 +516,7 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
               <div 
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
+                  boxShadow: "none",
                 }}
               />
             </div>
@@ -554,13 +525,12 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
             <div 
               className="absolute inset-0"
               style={{
-                clipPath: "polygon(0 0, 50% 95%, 100% 0)",
-                background: "linear-gradient(180deg, #DDD4C6 0%, #D5CCC0 100%)",
+                // Al abrirse, la cara interior debe verse con la punta hacia arriba.
+                clipPath: "polygon(0 100%, 50% 5%, 100% 100%)",
+                background: "#7F8F5D",
                 transform: "rotateX(180deg)",
                 backfaceVisibility: "hidden",
-                boxShadow: phase === "opening" || phase === "revealing" || phase === "exiting"
-                  ? "0 8px 20px rgba(0,0,0,0.08)"
-                  : "none",
+                boxShadow: "none",
               }}
             >
               {!prefersReducedMotion && (
@@ -644,28 +614,9 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
           </AnimatePresence>
         </motion.div>
 
-        {/* Front occluder - keeps the card visually inside the envelope mouth while emerging */}
-        <motion.div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 pointer-events-none w-[90vw] max-w-[420px] aspect-[1.45/1] sm:w-[82vw] sm:max-w-[380px] md:w-[420px]"
-          style={{
-            y: frontOccluderY,
-            opacity: frontOccluderOpacity,
-            zIndex: 34,
-          }}
-        >
-          <div
-            className="absolute inset-x-0 bottom-0 h-[45%]"
-            style={{
-              clipPath: "polygon(0 100%, 50% 10%, 100% 100%)",
-              background: "linear-gradient(0deg, #F5EFE6 0%, #EEE6DB 100%)",
-              boxShadow: "inset 0 10px 20px rgba(0,0,0,0.04)",
-            }}
-          />
-        </motion.div>
-
         {/* === INVITATION CARD (overlay layer) === */}
         <motion.div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 w-[82vw] max-w-[300px] aspect-[1.5/1] sm:w-[74vw] sm:max-w-[330px] md:max-w-[370px] pointer-events-none"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 w-[86vw] max-w-[780px] max-h-[72svh] aspect-[3496/2480] sm:w-[74vw] sm:max-w-[780px] md:max-w-[780px] pointer-events-none opacity-0"
           style={{
             y: phase === "exiting" ? exitCardY : cardY,
             opacity: phase === "exiting" ? exitCardOpacity : cardOpacity,
@@ -675,88 +626,19 @@ export function EnvelopeIntro({ onRevealMain, onComplete }: EnvelopeIntroProps) 
             boxShadow: cardBoxShadow,
             rotateZ: phase === "exiting" ? exitCardRotateZ : 0,
             filter: phase === "exiting" ? exitCardFilter : "none",
-            background: "linear-gradient(165deg, #FFFEFB 0%, #FAF7F3 60%, #F5F1EB 100%)",
+            background: "#F5F0E5",
             transformStyle: "preserve-3d",
             zIndex: 32,
           }}
           initial={false}
         >
-          <div className="absolute inset-0" style={{ backfaceVisibility: "hidden", transformStyle: "preserve-3d" }}>
-            {!prefersReducedMotion && (
-              <div
-                className="absolute inset-0 opacity-20"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='card'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='3' seed='5'/%3E%3CfeDiffuseLighting in='SourceGraphic' lighting-color='%23FFF' surfaceScale='1'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23card)'/%3E%3C/svg%3E")`,
-                }}
-              />
-            )}
-
-            {!prefersReducedMotion && (
-              <motion.div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  opacity: phase === "exiting" ? exitCardFrontSheenOpacity : 0,
-                  background:
-                    "linear-gradient(122deg, transparent 22%, rgba(255,255,255,0.44) 46%, rgba(255,255,255,0.18) 58%, transparent 74%)",
-                }}
-              />
-            )}
-
-            <div className="relative h-full flex flex-col items-center justify-center p-5 sm:p-7">
-              <p
-                className="font-sans text-[8px] sm:text-[9px] uppercase tracking-[0.3em] sm:tracking-[0.38em] mb-4 sm:mb-5"
-                style={{ color: "#B09F84" }}
-              >
-                {WEDDING_CONFIG.texts.invitationLead}
-              </p>
-              <h2
-                className="font-serif text-[clamp(1.05rem,4.8vw,1.6rem)] text-center leading-[1.2] sm:leading-[1.18]"
-                style={{ color: "#3D352A", fontWeight: 300, letterSpacing: "0.01em" }}
-              >
-                {WEDDING_CONFIG.couple.weddingName}
-              </h2>
-              <div className="w-10 sm:w-14 h-px bg-[#C9B896]/70 my-3 sm:my-4" />
-              <p
-                className="font-serif text-[12px] sm:text-[15px] italic text-center leading-[1.55]"
-                style={{ color: "#6B5D4D", fontWeight: 300, letterSpacing: "0.02em" }}
-              >
-                {formatWeddingDisplayDate()}
-              </p>
-              <p
-                className="font-sans text-[8px] sm:text-[9px] uppercase tracking-[0.18em] mt-1"
-                style={{ color: "#9A8B75" }}
-              >
-                {WEDDING_CONFIG.reception.name}
-              </p>
-            </div>
-
-            {/* Double border frame — premium invitation signature */}
-            <div
-              className="absolute pointer-events-none"
-              style={{ inset: "8px", border: "1px solid rgba(201,184,150,0.22)" }}
-            />
-            <div
-              className="absolute pointer-events-none"
-              style={{ inset: "12px", border: "0.5px solid rgba(201,184,150,0.12)" }}
-            />
-          </div>
-
-          <div
-            className="absolute inset-0 flex items-center justify-center"
-            style={{
-              transform: "rotateY(180deg)",
-              backfaceVisibility: "hidden",
-              background: "linear-gradient(165deg, #f4f1eb 0%, #ebe4d7 100%)",
-              border: "1px solid rgba(90,77,62,0.12)",
-            }}
-          >
-            <p
-              className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.28em]"
-              style={{ color: "rgba(74,62,49,0.65)" }}
-            >
-              Bienvenidos
-            </p>
-          </div>
+          <img
+            src="/images/invitation-card.png"
+            alt="Tarjeta de invitación de Elena y Fran"
+            className="absolute inset-0 h-full w-full object-contain"
+            draggable={false}
+            style={{ backfaceVisibility: "hidden", transformStyle: "preserve-3d" }}
+          />
         </motion.div>
 
         {/* Minimal tap indicator */}

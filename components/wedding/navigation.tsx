@@ -5,10 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import { WEDDING_CONFIG, MOTION_CONFIG } from "@/lib/constants"
 
 const navItems = [
-  { label: "Nuestra historia", href: "#story" },
-  { label: "Detalles del día", href: "#details" },
-  { label: "El lugar", href: "#venue" },
-  { label: "Cronograma", href: "#timeline" },
+  { label: "Información", href: "#details" },
   { label: "Preguntas frecuentes", href: "#faq" },
 ]
 
@@ -182,7 +179,7 @@ export function Navigation({ isVisible }: { isVisible: boolean }) {
 
             {/* Botón de confirmación - escritorio */}
             <a
-              href="#rsvp"
+              href="/rsvp"
               className="hidden lg:inline-flex items-center justify-center px-8 py-3 border border-foreground text-foreground hover:bg-foreground hover:text-background transition-all duration-500 font-sans text-[11px] uppercase tracking-[0.2em]"
             >
               Confirmar asistencia
@@ -291,7 +288,7 @@ export function Navigation({ isVisible }: { isVisible: boolean }) {
                     className="pt-5"
                   >
                     <a
-                      href="#rsvp"
+                      href="/rsvp"
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="tap-target inline-flex items-center justify-center px-8 sm:px-12 py-3 border border-white/80 text-white hover:bg-white hover:text-black transition-colors duration-300 font-sans text-[11px] sm:text-sm uppercase tracking-[0.16em] sm:tracking-[0.2em] touch-manipulation"
                     >

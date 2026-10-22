@@ -17,7 +17,8 @@ export function RSVPSection() {
   const { guests } = useGuests()
   const [state, handleSubmit] = useForm(WEDDING_CONFIG.formspree.id)
   const [attendance, setAttendance] = useState("yes")
-  const [needsBuses, setNeedsBuses] = useState("")
+  const [usesBus, setUsesBus] = useState("")
+  const [busPassengers, setBusPassengers] = useState("")
   const [guestIdentifier, setGuestIdentifier] = useState("")
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
@@ -90,14 +91,11 @@ export function RSVPSection() {
   }, [guests])
 
   return (
-    <section id="rsvp" className="scroll-mt-24 sm:scroll-mt-28 section-mobile-relaxed section-divider-top bg-foreground text-background invitation-texture relative overflow-hidden">
+    <section id="rsvp" className="rsvp-light scroll-mt-24 sm:scroll-mt-28 section-mobile-relaxed section-divider-top bg-background text-foreground relative overflow-hidden">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-16 sm:h-20"
-        style={{
-          background:
-            "linear-gradient(to bottom, color-mix(in oklab, var(--background) 70%, transparent) 0%, transparent 100%)",
-        }}
+        style={{ background: "transparent" }}
       />
       <div className="container mx-auto container-mobile">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-22">
@@ -110,19 +108,15 @@ export function RSVPSection() {
           >
             <div className="flex items-center gap-5 mb-6">
               <span className="w-12 sm:w-20 h-px line-gold-bg" />
-              <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-background/75">
+              <p className="font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-foreground/75">
                 Confirmación
               </p>
             </div>
             <h2 className="font-serif text-[clamp(2rem,9vw,4.2rem)] font-light leading-[1.07] tracking-wide mb-6 text-balance">
-              Esperamos contar contigo
+              Nos encantaría contar contigo
             </h2>
-            <p className="font-sans text-[15px] sm:text-base text-background/82 leading-relaxed mb-8 max-w-[58ch]">
-              Queremos saber si podrás celebrar con nosotros.
-              {` ${MESSAGES.rsvp.deadline}`}
-            </p>
             <div className="hidden lg:block">
-              <p className="font-serif text-2xl sm:text-3xl italic text-background/65">
+                  <p className="font-serif text-2xl sm:text-3xl italic text-foreground/65">
                 {WEDDING_CONFIG.couple.weddingName}
               </p>
             </div>
@@ -133,7 +127,7 @@ export function RSVPSection() {
             initial={{ opacity: 0, y: 18 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
             transition={{ duration: MOTION_CONFIG.duration.reveal, delay: MOTION_CONFIG.stagger.medium, ease: MOTION_CONFIG.easing.premium }}
-            className="border border-background/20 bg-background/[0.04] backdrop-blur-[1px] p-5 sm:p-7 lg:p-8"
+            className="border border-foreground/20 bg-background/60 p-5 sm:p-7 lg:p-8"
           >
             {state.succeeded ? (
               <motion.div
@@ -143,7 +137,7 @@ export function RSVPSection() {
               >
                 <div className="max-w-md">
                   <p className="font-serif text-3xl sm:text-4xl font-light mb-5">{MESSAGES.rsvp.successTitle}</p>
-                  <p className="font-sans text-sm text-background/80 leading-relaxed mb-7">
+                  <p className="font-sans text-sm text-foreground/80 leading-relaxed mb-7">
                     {MESSAGES.rsvp.successMessage.split("\n").map((line, i) => (
                       <span key={i}>
                         {line}
@@ -156,7 +150,7 @@ export function RSVPSection() {
                     <button
                       type="button"
                       onClick={handleAddToCalendar}
-                      className="tap-target w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-background text-background hover:bg-background hover:text-foreground transition-all duration-300 font-sans text-[10px] uppercase tracking-[0.16em]"
+                      className="tap-target w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-foreground text-foreground hover:bg-foreground hover:text-background transition-all duration-300 font-sans text-[10px] uppercase tracking-[0.16em]"
                     >
                       {MESSAGES.rsvp.successCalendarCta}
                     </button>
@@ -164,12 +158,13 @@ export function RSVPSection() {
                       href={WEDDING_CONFIG.reception.mapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="tap-target w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-background/45 text-background/90 hover:border-background hover:text-background transition-all duration-300 font-sans text-[10px] uppercase tracking-[0.16em]"
+                      className="tap-target w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-foreground/45 text-foreground/90 hover:border-foreground hover:text-foreground transition-all duration-300 font-sans text-[10px] uppercase tracking-[0.16em]"
                     >
                       {MESSAGES.rsvp.successMapsCta}
                     </a>
                   </div>
                 </div>
+
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-7">
@@ -222,13 +217,19 @@ export function RSVPSection() {
                     <div className="tap-target flex items-center gap-4">
                       <RadioGroupItem value="yes" id="yes" className="w-5 h-5 border-background/30 text-background" />
                       <Label htmlFor="yes" className="font-serif text-lg cursor-pointer touch-manipulation text-background leading-none">
-                        Sí, encantado
+                        Sí
                       </Label>
                     </div>
                     <div className="tap-target flex items-center gap-4">
                       <RadioGroupItem value="no" id="no" className="w-5 h-5 border-background/30 text-background" />
                       <Label htmlFor="no" className="font-serif text-lg cursor-pointer touch-manipulation text-background leading-none">
-                        No podré asistir
+                        No
+                      </Label>
+                    </div>
+                    <div className="tap-target flex items-center gap-4">
+                      <RadioGroupItem value="maybe" id="maybe" className="w-5 h-5 border-background/30 text-background" />
+                      <Label htmlFor="maybe" className="font-serif text-lg cursor-pointer touch-manipulation text-background leading-none">
+                        No lo sé aún
                       </Label>
                     </div>
                   </RadioGroup>
@@ -243,21 +244,17 @@ export function RSVPSection() {
                   >
                     <div className="space-y-3">
                       <Label
-                        htmlFor="guests"
+                        htmlFor="companions"
                         className="font-sans text-[10px] uppercase tracking-[0.2em] text-background/75"
                       >
-                        Número de invitados
+                        Nombres de tus acompañantes
                       </Label>
                       <Input
-                        id="guests"
-                        name="guests"
-                        type="number"
-                        min="1"
-                        max="5"
-                        defaultValue="1"
-                        className="bg-transparent border-background/25 focus:border-background text-background h-12 sm:h-14 text-base w-full sm:max-w-32 transition-colors duration-300 ease-out"
+                        id="companions"
+                        name="companions"
+                        className="bg-transparent border-background/25 focus:border-background text-background h-12 sm:h-14 text-base transition-colors duration-300 ease-out"
                       />
-                      <ValidationError field="guests" errors={state.errors} />
+                      <ValidationError field="companions" errors={state.errors} />
                     </div>
 
                     <div className="space-y-3">
@@ -265,7 +262,7 @@ export function RSVPSection() {
                         htmlFor="dietary"
                         className="font-sans text-[10px] uppercase tracking-[0.2em] text-background/75"
                       >
-                        Requisitos alimentarios
+                        ¿Tienes alguna restricción alimentaria?
                       </Label>
                       <Textarea
                         id="dietary"
@@ -277,33 +274,58 @@ export function RSVPSection() {
                     </div>
 
                     <div className="space-y-4">
-                      <div>
-                        <Label className="font-sans text-[10px] uppercase tracking-[0.2em] text-background/75 block mb-2">
-                          ¿Necesitas autobús?
-                        </Label>
-                        <p className="font-sans text-[13px] sm:text-[14px] text-background/68 leading-relaxed max-w-[60ch]">
-                          {WEDDING_CONFIG.texts.busDescription}
-                        </p>
-                      </div>
+                      <Label className="font-sans text-[10px] uppercase tracking-[0.2em] text-background/75 block">
+                        ¿Harás uso del autocar de la iglesia a la finca?
+                      </Label>
                       <RadioGroup
-                        value={needsBuses}
-                        onValueChange={setNeedsBuses}
+                        value={usesBus}
+                        onValueChange={(value) => {
+                          setUsesBus(value)
+                          if (value === "no") setBusPassengers("")
+                        }}
                         className="flex flex-col sm:flex-row gap-5 sm:gap-10"
                       >
                         <div className="tap-target flex items-center gap-4">
-                          <RadioGroupItem value="yes" id="buses-yes" className="w-5 h-5 border-background/30 text-background" />
-                          <Label htmlFor="buses-yes" className="font-serif text-base cursor-pointer touch-manipulation text-background leading-none">
-                            Sí, necesito
+                          <RadioGroupItem value="yes" id="bus-yes" className="w-5 h-5 border-background/30 text-background" />
+                          <Label htmlFor="bus-yes" className="font-serif text-lg cursor-pointer touch-manipulation text-background leading-none">
+                            Sí
                           </Label>
                         </div>
                         <div className="tap-target flex items-center gap-4">
-                          <RadioGroupItem value="no" id="buses-no" className="w-5 h-5 border-background/30 text-background" />
-                          <Label htmlFor="buses-no" className="font-serif text-base cursor-pointer touch-manipulation text-background leading-none">
-                            No, gracias
+                          <RadioGroupItem value="no" id="bus-no" className="w-5 h-5 border-background/30 text-background" />
+                          <Label htmlFor="bus-no" className="font-serif text-lg cursor-pointer touch-manipulation text-background leading-none">
+                            No
                           </Label>
                         </div>
                       </RadioGroup>
+
+                      {usesBus === "yes" && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          className="space-y-3 pt-1"
+                        >
+                          <Label
+                            htmlFor="busPassengers"
+                            className="font-sans text-[10px] uppercase tracking-[0.2em] text-background/75"
+                          >
+                            ¿Cuántas personas utilizarán el autocar?
+                          </Label>
+                          <Input
+                            id="busPassengers"
+                            name="busPassengers"
+                            type="number"
+                            min="1"
+                            value={busPassengers}
+                            onChange={(e) => setBusPassengers(e.target.value)}
+                            required
+                            className="bg-transparent border-background/25 focus:border-background text-background placeholder:text-background/30 h-12 sm:h-14 text-base transition-colors duration-300 ease-out"
+                          />
+                          <ValidationError field="busPassengers" errors={state.errors} />
+                        </motion.div>
+                      )}
                     </div>
+
                   </motion.div>
                 )}
 
@@ -312,12 +334,11 @@ export function RSVPSection() {
                     htmlFor="message"
                     className="font-sans text-[10px] uppercase tracking-[0.2em] text-background/75"
                   >
-                    Mensaje (opcional)
+                    Preguntas o comentarios
                   </Label>
                   <Textarea
                     id="message"
                     name="message"
-                    placeholder="Comparte tus buenos deseos..."
                     className="bg-transparent border-background/25 focus:border-background text-background placeholder:text-background/30 min-h-28 sm:min-h-32 text-base transition-colors duration-300 ease-out"
                   />
                   <ValidationError field="message" errors={state.errors} />
@@ -327,7 +348,7 @@ export function RSVPSection() {
                 <input type="hidden" name="_subject" value={WEDDING_CONFIG.formspree.subject} />
                 <input type="hidden" name="_replyto" value={WEDDING_CONFIG.formspree.replyTo} />
                 <input type="hidden" name="attendance" value={attendance} />
-                <input type="hidden" name="needsBuses" value={needsBuses} />
+                <input type="hidden" name="usesBus" value={usesBus} />
                 {guestIdentifier && <input type="hidden" name="guestIdentifier" value={guestIdentifier} />}
 
                 <button
